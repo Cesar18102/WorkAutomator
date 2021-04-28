@@ -1,0 +1,11 @@
+/WorkAutomatorServer/.vs
+/WorkAutomatorServer/packages
+
+/WorkAutomatorServer/WorkAutomatorServer/bin
+/WorkAutomatorServer/WorkAutomatorServer/obj
+
+/WorkAutomatorServer/WorkAutomatorLogic/bin
+/WorkAutomatorServer/WorkAutomatorLogic/obj
+
+/WorkAutomatorServer/WorkAutomatorDataAccess/bin
+/WorkAutomatorServer/WorkAutomatorDataAccess/obj
