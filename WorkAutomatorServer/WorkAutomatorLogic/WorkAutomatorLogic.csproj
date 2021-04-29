@@ -108,6 +108,11 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\WorkAutomatorDataAccess\WorkAutomatorDataAccess.csproj">
+      <Project>{e33fae6e-06bb-44d1-ae93-7dcd8247542a}</Project>
+      <Name>WorkAutomatorDataAccess</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

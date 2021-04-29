@@ -1,7 +1,6 @@
 ﻿using Autofac;
 
-using BusinessLogic.ServiceContracts;
-using BusinessLogic.Services;
+using WorkAutomatorLogic.ServiceInterfaces;
 using WorkAutomatorLogic.Services;
 
 namespace WorkAutomatorLogic

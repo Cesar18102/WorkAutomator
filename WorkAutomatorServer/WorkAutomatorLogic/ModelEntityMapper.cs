@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 
+using WorkAutomatorDataAccess.Entities;
 using WorkAutomatorLogic.Models;
 
 namespace WorkAutomatorLogic

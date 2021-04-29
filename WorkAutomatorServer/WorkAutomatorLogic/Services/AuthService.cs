@@ -25,7 +25,7 @@ namespace WorkAutomatorLogic.Services
 
         public async Task<AccountModel> SignUp(SignUpFormModel signUpForm)
         {
-            if (await AccountRepo.GetByLogin(signUpForm.Login) != null)
+            /*if (await AccountRepo.GetByLogin(signUpForm.Login) != null)
                 throw new LoginDuplicationException();
 
             string password = null;
@@ -45,12 +45,13 @@ namespace WorkAutomatorLogic.Services
 
             AccountEntity inserted = await AccountRepo.Insert(accountEntity);
 
-            /return ModelEntityMapper.Mapper.Map<AccountModel>(inserted);
+            /return ModelEntityMapper.Mapper.Map<AccountModel>(inserted);*/
+            return null;
         }
 
         public async Task<SessionModel> LogIn(LogInFormModel logInForm)
         {
-            AccountEntity account = await AccountRepo.FirstOrDefault(acc => acc.Login, logInForm.Login);
+            /*AccountEntity account = await AccountRepo.FirstOrDefault(acc => acc.Login, logInForm.Login);
 
             if (account == null)
                 throw new AccountNotFoundException();
@@ -61,7 +62,8 @@ namespace WorkAutomatorLogic.Services
             if (logInForm.PasswordSalted.ToUpper() != saltedPasswordHash.ToUpper())
                 throw new WrongPasswordException();
 
-            return SessionService.CreateSessionFor(account.Id);
+            return SessionService.CreateSessionFor(account.Id);*/
+            return null;
         }
     }
 }
