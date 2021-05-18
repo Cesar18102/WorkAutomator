@@ -76,23 +76,76 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\AccountEntity.cs" />
+    <Compile Include="Entities\CheckPointEntity.cs" />
+    <Compile Include="Entities\CheckPointEventEntity.cs" />
+    <Compile Include="Entities\CompanyEntity.cs" />
+    <Compile Include="Entities\CompanyPlanUniquePointEntity.cs" />
+    <Compile Include="Entities\DataTypeEntity.cs" />
+    <Compile Include="Entities\DbPermissionEntity.cs" />
+    <Compile Include="Entities\DbPermissionTypeEntity.cs" />
+    <Compile Include="Entities\DetectorEntity.cs" />
+    <Compile Include="Entities\DetectorDataEntity.cs" />
+    <Compile Include="Entities\DetectorDataPrefabEntity.cs" />
+    <Compile Include="Entities\DetectorFaultEntity.cs" />
+    <Compile Include="Entities\DetectorFaultEventEntity.cs" />
+    <Compile Include="Entities\DetectorFaultPrefabEntity.cs" />
+    <Compile Include="Entities\DetectorInteractionEventEntity.cs" />
+    <Compile Include="Entities\DetectorPrefabEntity.cs" />
+    <Compile Include="Entities\DetectorSettingsPrefabEntity.cs" />
+    <Compile Include="Entities\DetectorSettingsValueEntity.cs" />
+    <Compile Include="Entities\EnterLeavePointEntity.cs" />
+    <Compile Include="Entities\EnterLeavePointEventEntity.cs" />
     <Compile Include="Entities\EntityBase.cs" />
+    <Compile Include="Entities\ManufactoryEntity.cs" />
+    <Compile Include="Entities\ManufactoryPlanPointEntity.cs" />
+    <Compile Include="Entities\PipelineEntity.cs" />
+    <Compile Include="Entities\PipelineItemEntity.cs" />
+    <Compile Include="Entities\PipelineItemConnectionEntity.cs" />
+    <Compile Include="Entities\PipelineItemInteractionEventEntity.cs" />
+    <Compile Include="Entities\PipelineItemPrefabEntity.cs" />
+    <Compile Include="Entities\PipelineItemSettingsPrefabEntity.cs" />
+    <Compile Include="Entities\PipelineItemSettingsValueEntity.cs" />
+    <Compile Include="Entities\PipelineItemStorageConnectionEntity.cs" />
+    <Compile Include="Entities\ResourceEntity.cs" />
+    <Compile Include="Entities\ResourceStorageCellEntity.cs" />
+    <Compile Include="Entities\RoleEntity.cs" />
+    <Compile Include="Entities\StorageCellEntity.cs" />
+    <Compile Include="Entities\StorageCellEventEntity.cs" />
+    <Compile Include="Entities\StorageCellPrefabEntity.cs" />
+    <Compile Include="Entities\TaskEntity.cs" />
+    <Compile Include="Entities\UnitEntity.cs" />
+    <Compile Include="Entities\VisualizerTypeEntity.cs" />
     <Compile Include="Exceptions\DatabaseActionValidationException.cs" />
     <Compile Include="Exceptions\EntityNotFoundException.cs" />
     <Compile Include="Exceptions\InvalidDataException.cs" />
+    <Compile Include="Migrations\202105180055328_init.cs" />
+    <Compile Include="Migrations\202105180055328_init.designer.cs">
+      <DependentUpon>202105180055328_init.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202105180058278_name fix.cs" />
+    <Compile Include="Migrations\202105180058278_name fix.designer.cs">
+      <DependentUpon>202105180058278_name fix.cs</DependentUpon>
+    </Compile>
     <Compile Include="RepoDependencyHolder.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="RepoInterfaces\IRepo.cs" />
     <Compile Include="Repos\RepoBase.cs" />
     <Compile Include="WorkAutomatorDBContext.cs" />
     <Compile Include="WorkAutomatorDBInitializer.cs" />
-    <Compile Include="Entities\Account.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202105180055328_init.resx">
+      <DependentUpon>202105180055328_init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202105180058278_name fix.resx">
+      <DependentUpon>202105180058278_name fix.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

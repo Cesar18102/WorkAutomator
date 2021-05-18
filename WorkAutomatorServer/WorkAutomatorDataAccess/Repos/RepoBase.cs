@@ -73,14 +73,14 @@ namespace WorkAutomatorDataAccess.Repos
                 TEntity found = db.Set<TEntity>().FirstOrDefault(entity => entity.Id == id);
 
                 if (found == null)
-                    throw new EntityNotFoundException(($"{typeof(TEntity).Name} with Id = {id}");
+                    throw new EntityNotFoundException($"{typeof(TEntity).Name} with Id = {id}");
 
                 db.Set<TEntity>().Remove(found);
                 await db.SaveChangesAsync();
             }
         }
 
-        public virtual TEntity Get(int id)
+        public virtual async Task<TEntity> Get(int id)
         {
             using (WorkAutomatorDBContext db = new WorkAutomatorDBContext())
             {
@@ -103,7 +103,7 @@ namespace WorkAutomatorDataAccess.Repos
             }
         }
 
-        public virtual async Task<IList<TEntity>> GetAll()
+        public virtual async Task<IList<TEntity>> Get()
         {
             using (WorkAutomatorDBContext db = new WorkAutomatorDBContext())
             {
