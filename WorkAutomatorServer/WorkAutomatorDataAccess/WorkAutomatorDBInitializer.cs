@@ -1,6 +1,6 @@
 ﻿using System.Data.Entity;
 
-namespace WorkAutomatorDataAccess.DataContext
+namespace WorkAutomatorDataAccess
 {
     internal class WorkAutomatorDBInitializer : DropCreateDatabaseIfModelChanges<WorkAutomatorDBContext>
     {

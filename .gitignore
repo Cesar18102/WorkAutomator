@@ -9,3 +9,6 @@
 
 /WorkAutomatorServer/WorkAutomatorDataAccess/bin
 /WorkAutomatorServer/WorkAutomatorDataAccess/obj
+
+/WorkAutomatorServer/DataAccessTests/bin
+/WorkAutomatorServer/DataAccessTests/obj

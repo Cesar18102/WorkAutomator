@@ -4,73 +4,89 @@ using System.Reflection;
 using System.Data.Entity;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 using WorkAutomatorDataAccess.Entities;
 using WorkAutomatorDataAccess.Exceptions;
+using WorkAutomatorDataAccess.RepoInterfaces;
+using System.Linq.Expressions;
 
 namespace WorkAutomatorDataAccess.Repos
 {
-    internal class RepoBase<TEntity> where TEntity : EntityBase
+    internal class RepoBase<TContext, TEntity> : IRepo<TEntity> 
+        where TContext : DbContext, new()
+        where TEntity : EntityBase
     {
-        //protected TEntity ProtectedExecute(Func<TEntity, TEntity> executor, TEntity entity)
-        //{
-            //try { return executor(entity); }
-            //catch (DatabaseActionValidationException ex)
-            //{
-            //    InvalidDataException<TModel> invalidDataException = new InvalidDataException<TModel>();
-            //    foreach (ValidationResult validationResult in ex.Errors)
-            //    {
-            //        string wrongField = validationResult.MemberNames.First();
-
-            //        IEnumerable<PropertyMap> propertyMaps = Mapper.ConfigurationProvider.FindTypeMapFor<TModel, TEntity>().PropertyMaps;
-            //        PropertyMap propertyMap = propertyMaps.First(pmap => pmap.DestinationMember.Name == wrongField);
-
-            //        string dtoWrongFieldName = propertyMap.SourceMember.Name;
-            //        string messageUpdated = validationResult.ErrorMessage.Replace(wrongField, "'" + dtoWrongFieldName + "'");
-
-            //        InvalidFieldInfo<TModel> invalidFieldInfo = new InvalidFieldInfo<TModel>(dtoWrongFieldName, messageUpdated);
-            //        invalidDataException.InvalidFieldInfos.Add(invalidFieldInfo);
-            //    }
-
-            //    throw invalidDataException;
-            //}
-        //}
-
-        protected virtual TEntity SingleInclude(TEntity entity) => entity;
         protected virtual IQueryable<TEntity> SetInclude(IQueryable<TEntity> entities) => entities;
+
+        public virtual async Task<TEntity> Get(int id)
+        {
+            return await this.FirstOrDefault(e => e.id == id);
+        }
+
+        public async Task<TEntity> FirstOrDefault(Expression<Func<TEntity, bool>> predicate)
+        {
+            using (TContext db = new TContext())
+            {
+                return await SetInclude(
+                    db.Set<TEntity>().Where(predicate)
+                ).FirstOrDefaultAsync();
+            }
+        }
+
+        public virtual async Task<IList<TEntity>> Get(Expression<Func<TEntity, bool>> predicate)
+        {
+            using (TContext db = new TContext())
+            {
+                return await SetInclude(
+                    db.Set<TEntity>().Where(predicate)
+                ).ToListAsync();
+            }
+        }
+
+        public virtual async Task<IList<TEntity>> Get()
+        {
+            using (TContext db = new TContext())
+            {
+                return await SetInclude(
+                    db.Set<TEntity>()
+                ).ToListAsync();
+            }
+        }
 
         public virtual async Task<TEntity> Create(TEntity entity)
         {
-            using(WorkAutomatorDBContext db = new WorkAutomatorDBContext())
+            using(TContext db = new TContext())
             {
                 TEntity added = db.Set<TEntity>().Add(entity);
                 await db.SaveChangesAsync();
-                return SingleInclude(added);
+                return await this.Get(added.id);
             }
         }
 
         public virtual async Task<TEntity> Update(TEntity entity)
         {
-            using(WorkAutomatorDBContext db = new WorkAutomatorDBContext())
+            using(TContext db = new TContext())
             {
-                TEntity updatingEntity = db.Set<TEntity>().FirstOrDefault(e => e.Id == entity.Id);
+                TEntity updatingEntity = db.Set<TEntity>().FirstOrDefault(e => e.id == entity.id);
 
                 if (updatingEntity == null)
-                    throw new EntityNotFoundException($"{typeof(TEntity).Name} with Id = {entity.Id}");
+                    throw new EntityNotFoundException($"{typeof(TEntity).Name} with Id = {entity.id}");
 
                 CopyProperties(entity, updatingEntity);
                 await db.SaveChangesAsync();
 
-                return SingleInclude(updatingEntity);
+                return await this.Get(updatingEntity.id);
             }
         }
 
         public virtual async Task Delete(int id)
         {
-            using (WorkAutomatorDBContext db = new WorkAutomatorDBContext())
+            using (TContext db = new TContext())
             {
-                TEntity found = db.Set<TEntity>().FirstOrDefault(entity => entity.Id == id);
+                TEntity found = db.Set<TEntity>().FirstOrDefault(entity => entity.id == id);
 
                 if (found == null)
                     throw new EntityNotFoundException($"{typeof(TEntity).Name} with Id = {id}");
@@ -80,35 +96,32 @@ namespace WorkAutomatorDataAccess.Repos
             }
         }
 
-        public virtual async Task<TEntity> Get(int id)
+        public async Task Clear()
         {
-            using (WorkAutomatorDBContext db = new WorkAutomatorDBContext())
+            using (TContext db = new TContext())
             {
-                TEntity found = db.Set<TEntity>().FirstOrDefault(entity => entity.Id == id);
-                return found == null ? null : SingleInclude(found);
+                db.Set<TEntity>().RemoveRange(db.Set<TEntity>());
+                await db.SaveChangesAsync();
             }
         }
 
-        public virtual async Task<IList<TEntity>> Get(Predicate<TEntity> predicate)
+        protected TEntity ProtectedExecute(Func<TEntity, TEntity> executor, TEntity entity)
         {
-            using (WorkAutomatorDBContext db = new WorkAutomatorDBContext())
+            try { return executor(entity); }
+            catch (DatabaseActionValidationException ex)
             {
-                List<TEntity> entities = db.Set<TEntity>().ToList();
+                InvalidDataException<TEntity> invalidDataException = new InvalidDataException<TEntity>();
 
-                return await SetInclude(
-                    db.Set<TEntity>().Where(
-                        entity => predicate(entity)
-                    )
-                ).ToListAsync();
-            }
-        }
+                foreach (ValidationResult validationResult in ex.Errors)
+                {
+                    foreach (string invalidFieldName in validationResult.MemberNames)
+                    {
+                        InvalidFieldInfo<TEntity> invalidFieldInfo = new InvalidFieldInfo<TEntity>(invalidFieldName, validationResult.ErrorMessage);
+                        invalidDataException.InvalidFieldInfos.Add(invalidFieldInfo);
+                    }
+                }
 
-        public virtual async Task<IList<TEntity>> Get()
-        {
-            using (WorkAutomatorDBContext db = new WorkAutomatorDBContext())
-            {
-                List<TEntity> entities = db.Set<TEntity>().ToList();
-                return await SetInclude(db.Set<TEntity>()).ToListAsync();
+                throw invalidDataException;
             }
         }
 

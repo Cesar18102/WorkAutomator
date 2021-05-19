@@ -1,15 +1,35 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Reflection;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+
+using System.Linq;
+using System.Linq.Expressions;
+
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
+
+using Autofac;
 
 using WorkAutomatorDataAccess.Entities;
+using WorkAutomatorDataAccess.Exceptions;
+using WorkAutomatorDataAccess.RepoInterfaces;
 
 namespace WorkAutomatorDataAccess
 {
+    internal class WorkAutomatorDBContextTest : WorkAutomatorDBContext
+    {
+        public WorkAutomatorDBContextTest() : base("WorkAutomatorDBContextTest") { }
+    }
+
     internal class WorkAutomatorDBContext : DbContext
     {
-        public WorkAutomatorDBContext() : base("WorkAutomatorDBContext")
-        {
-
-        }
+        public WorkAutomatorDBContext() : base("WorkAutomatorDBContext") { }
+        public WorkAutomatorDBContext(string connectionStringName) : base(connectionStringName) { }
 
         public virtual DbSet<AccountEntity> Account { get; set; }
         public virtual DbSet<CheckPointEntity> CheckPoint { get; set; }
@@ -50,6 +70,100 @@ namespace WorkAutomatorDataAccess
         public virtual DbSet<TaskEntity> Task { get; set; }
         public virtual DbSet<UnitEntity> Unit { get; set; }
         public virtual DbSet<VisualizerTypeEntity> VisualizerType { get; set; }
+
+        public override async Task<int> SaveChangesAsync()
+        {
+            return await System.Threading.Tasks.Task.Run<int>(SaveChanges);
+        }
+
+        public override int SaveChanges()
+        {
+            DbEntityEntry[] changedEntries = ChangeTracker.Entries().Where(entry =>
+                entry.State == EntityState.Added ||
+                entry.State == EntityState.Modified
+            ).ToArray();
+
+            List<ValidationResult> errors = new List<ValidationResult>();
+
+            foreach (DbEntityEntry entry in changedEntries)
+            {
+                Validator.TryValidateObject(
+                    entry.Entity, new ValidationContext(entry.Entity), 
+                    errors, true
+                );
+
+                Type entityType = entry.Entity.GetType();
+
+                PropertyInfo[] indexes = entityType.GetProperties().Where(
+                    p =>
+                    {
+                        IndexAttribute index = p.GetCustomAttribute<IndexAttribute>();
+                        return index != null && index.IsUnique;
+                    }
+                ).ToArray();
+
+                if (indexes.Length == 0)
+                    continue;
+
+                ParameterExpression parameter = Expression.Parameter(entityType);
+
+                Expression body = Expression.Equal(
+                    Expression.Property(parameter, indexes.First()),
+                    Expression.Constant(indexes.First().GetValue(entry.Entity))
+                );
+
+                foreach(PropertyInfo index in indexes.Skip(1))
+                {
+                    body = Expression.Or(
+                        body, 
+                        Expression.Equal(
+                            Expression.Property(parameter, index),
+                            Expression.Constant(index.GetValue(entry.Entity))
+                        )
+                    );
+                }
+
+                LambdaExpression expression = Expression.Lambda(body, parameter);
+
+                Type repoType = typeof(IRepo<>).MakeGenericType(entityType);
+
+                RepoDependencyHolder.ContextType repoKey = this is WorkAutomatorDBContextTest ?
+                    RepoDependencyHolder.ContextType.TEST : RepoDependencyHolder.ContextType.REAL;
+
+                var repo = RepoDependencyHolder.Dependencies.ResolveKeyed(repoKey, repoType);
+
+                MethodInfo firstOrDefaultMethod = repoType.GetMethods().First(
+                    method => method.Name == "FirstOrDefault"
+                );
+
+                object task = firstOrDefaultMethod.Invoke(repo, new object[] { expression });
+                object awaiter = typeof(Task<>).MakeGenericType(entityType).GetMethod("GetAwaiter").Invoke(task, new object[] { });
+                object result = typeof(TaskAwaiter<>).MakeGenericType(entityType).GetMethod("GetResult").Invoke(awaiter, new object[] { });
+
+                if (result == null)
+                    continue;
+
+                errors.Add(new ValidationResult("Unique attribute value duplication"));
+            }
+
+            if (errors.Count != 0)
+            {
+                foreach (DbEntityEntry entry in changedEntries)
+                {
+                    if (entry.State == EntityState.Added)
+                        entry.State = EntityState.Detached;
+                    else if (entry.State == EntityState.Modified)
+                    {
+                        entry.CurrentValues.SetValues(entry.OriginalValues);
+                        entry.State = EntityState.Unchanged;
+                    }
+                }
+
+                throw new DatabaseActionValidationException(errors);
+            }
+
+            return base.SaveChanges();
+        }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -198,7 +312,7 @@ namespace WorkAutomatorDataAccess
                 });
 
             modelBuilder.Entity<AccountEntity>()
-                .HasMany(e => e.check_point_event)
+                .HasMany(e => e.CheckPointEvents)
                 .WithRequired(e => e.account)
                 .HasForeignKey(e => e.account_id)
                 .WillCascadeOnDelete(false);
@@ -208,25 +322,25 @@ namespace WorkAutomatorDataAccess
                 .WithRequired(e => e.Owner);
 
             modelBuilder.Entity<AccountEntity>()
-                .HasMany(e => e.detector_interaction_event)
+                .HasMany(e => e.DetectorInteractionEvents)
                 .WithRequired(e => e.account)
                 .HasForeignKey(e => e.account_id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<AccountEntity>()
-                .HasMany(e => e.enter_leave_point_event)
+                .HasMany(e => e.EnterLeavePointEvents)
                 .WithRequired(e => e.account)
                 .HasForeignKey(e => e.account_id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<AccountEntity>()
-                .HasMany(e => e.pipeline_item_interaction_event)
+                .HasMany(e => e.PipelineItemInteractionEvents)
                 .WithRequired(e => e.account)
                 .HasForeignKey(e => e.account_id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<AccountEntity>()
-                .HasMany(e => e.storage_cell_event)
+                .HasMany(e => e.StorageCellEvents)
                 .WithRequired(e => e.account)
                 .HasForeignKey(e => e.account_id)
                 .WillCascadeOnDelete(false);
@@ -262,67 +376,67 @@ namespace WorkAutomatorDataAccess
                 .IsUnicode(false);
 
             modelBuilder.Entity<CompanyEntity>()
-                .HasMany(e => e.account)
+                .HasMany(e => e.Members)
+                .WithOptional(e => e.Company)
+                .HasForeignKey(e => e.company_id)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<CompanyEntity>()
+                .HasMany(e => e.CompanyPlanUniquePoints)
                 .WithRequired(e => e.company)
                 .HasForeignKey(e => e.company_id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<CompanyEntity>()
-                .HasMany(e => e.company_plan_unique_point)
+                .HasMany(e => e.DetectorPrefabs)
                 .WithRequired(e => e.company)
                 .HasForeignKey(e => e.company_id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<CompanyEntity>()
-                .HasMany(e => e.detector_prefab)
+                .HasMany(e => e.Manufactories)
                 .WithRequired(e => e.company)
                 .HasForeignKey(e => e.company_id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<CompanyEntity>()
-                .HasMany(e => e.manufactory)
+                .HasMany(e => e.PipelineItemPrefab)
                 .WithRequired(e => e.company)
                 .HasForeignKey(e => e.company_id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<CompanyEntity>()
-                .HasMany(e => e.pipeline_item_prefab)
+                .HasMany(e => e.Pipelines)
                 .WithRequired(e => e.company)
                 .HasForeignKey(e => e.company_id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<CompanyEntity>()
-                .HasMany(e => e.pipeline)
+                .HasMany(e => e.Resources)
                 .WithRequired(e => e.company)
                 .HasForeignKey(e => e.company_id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<CompanyEntity>()
-                .HasMany(e => e.resource)
+                .HasMany(e => e.Roles)
                 .WithRequired(e => e.company)
                 .HasForeignKey(e => e.company_id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<CompanyEntity>()
-                .HasMany(e => e.role)
+                .HasMany(e => e.StorageCellPrefabs)
                 .WithRequired(e => e.company)
                 .HasForeignKey(e => e.company_id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<CompanyEntity>()
-                .HasMany(e => e.storage_cell_prefab)
+                .HasMany(e => e.Tasks)
                 .WithRequired(e => e.company)
                 .HasForeignKey(e => e.company_id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<CompanyEntity>()
-                .HasMany(e => e.task)
-                .WithRequired(e => e.company)
-                .HasForeignKey(e => e.company_id)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<CompanyEntity>()
-                .HasMany(e => e.unit)
+                .HasMany(e => e.Units)
                 .WithRequired(e => e.company)
                 .HasForeignKey(e => e.company_id)
                 .WillCascadeOnDelete(false);

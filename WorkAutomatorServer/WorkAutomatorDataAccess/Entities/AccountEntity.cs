@@ -14,20 +14,20 @@ namespace WorkAutomatorDataAccess.Entities
             Roles = new HashSet<RoleEntity>();
             Bosses = new HashSet<AccountEntity>();
             Subs = new HashSet<AccountEntity>();
-            check_point_event = new HashSet<CheckPointEventEntity>();
-            detector_interaction_event = new HashSet<DetectorInteractionEventEntity>();
-            enter_leave_point_event = new HashSet<EnterLeavePointEventEntity>();
-            pipeline_item_interaction_event = new HashSet<PipelineItemInteractionEventEntity>();
-            storage_cell_event = new HashSet<StorageCellEventEntity>();
+            CheckPointEvents = new HashSet<CheckPointEventEntity>();
+            DetectorInteractionEvents = new HashSet<DetectorInteractionEventEntity>();
+            EnterLeavePointEvents = new HashSet<EnterLeavePointEventEntity>();
+            PipelineItemInteractionEvents = new HashSet<PipelineItemInteractionEventEntity>();
+            StorageCellEvents = new HashSet<StorageCellEventEntity>();
             AssignedTasks = new HashSet<TaskEntity>();
             TasksToReview = new HashSet<TaskEntity>();
         }
 
-        
-        public int company_id { get; set; }
+        public int? company_id { get; set; }
 
         [Required]
         [StringLength(256)]
+        [Index(IsUnique = true)]
         public string login { get; set; }
 
         [Required]
@@ -42,7 +42,9 @@ namespace WorkAutomatorDataAccess.Entities
         [StringLength(256)]
         public string last_name { get; set; }
 
-        public virtual CompanyEntity company { get; set; }
+        public virtual CompanyEntity Company { get; set; }
+        public virtual CompanyEntity OwnedCompany { get; set; }
+
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RoleEntity> Roles { get; set; }
@@ -54,22 +56,19 @@ namespace WorkAutomatorDataAccess.Entities
         public virtual ICollection<AccountEntity> Bosses { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CheckPointEventEntity> check_point_event { get; set; }
+        public virtual ICollection<CheckPointEventEntity> CheckPointEvents { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual CompanyEntity OwnedCompany { get; set; }
+        public virtual ICollection<DetectorInteractionEventEntity> DetectorInteractionEvents { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DetectorInteractionEventEntity> detector_interaction_event { get; set; }
+        public virtual ICollection<EnterLeavePointEventEntity> EnterLeavePointEvents { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<EnterLeavePointEventEntity> enter_leave_point_event { get; set; }
+        public virtual ICollection<PipelineItemInteractionEventEntity> PipelineItemInteractionEvents { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PipelineItemInteractionEventEntity> pipeline_item_interaction_event { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<StorageCellEventEntity> storage_cell_event { get; set; }
+        public virtual ICollection<StorageCellEventEntity> StorageCellEvents { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TaskEntity> AssignedTasks { get; set; }

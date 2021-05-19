@@ -127,6 +127,18 @@
     <Compile Include="Migrations\202105180058278_name fix.designer.cs">
       <DependentUpon>202105180058278_name fix.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202105181834447_company is not required for user.cs" />
+    <Compile Include="Migrations\202105181834447_company is not required for user.designer.cs">
+      <DependentUpon>202105181834447_company is not required for user.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202105182137367_temp.cs" />
+    <Compile Include="Migrations\202105182137367_temp.designer.cs">
+      <DependentUpon>202105182137367_temp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202105182242349_login unique.cs" />
+    <Compile Include="Migrations\202105182242349_login unique.designer.cs">
+      <DependentUpon>202105182242349_login unique.cs</DependentUpon>
+    </Compile>
     <Compile Include="RepoDependencyHolder.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="RepoInterfaces\IRepo.cs" />
@@ -145,6 +157,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202105180058278_name fix.resx">
       <DependentUpon>202105180058278_name fix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202105181834447_company is not required for user.resx">
+      <DependentUpon>202105181834447_company is not required for user.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202105182137367_temp.resx">
+      <DependentUpon>202105182137367_temp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202105182242349_login unique.resx">
+      <DependentUpon>202105182242349_login unique.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

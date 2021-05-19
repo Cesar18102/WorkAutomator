@@ -12,20 +12,20 @@ namespace WorkAutomatorDataAccess.Entities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public CompanyEntity()
         {
-            account = new HashSet<AccountEntity>();
-            company_plan_unique_point = new HashSet<CompanyPlanUniquePointEntity>();
-            detector_prefab = new HashSet<DetectorPrefabEntity>();
-            manufactory = new HashSet<ManufactoryEntity>();
-            pipeline_item_prefab = new HashSet<PipelineItemPrefabEntity>();
-            pipeline = new HashSet<PipelineEntity>();
-            resource = new HashSet<ResourceEntity>();
-            role = new HashSet<RoleEntity>();
-            storage_cell_prefab = new HashSet<StorageCellPrefabEntity>();
-            task = new HashSet<TaskEntity>();
-            unit = new HashSet<UnitEntity>();
+            Members = new HashSet<AccountEntity>();
+            CompanyPlanUniquePoints = new HashSet<CompanyPlanUniquePointEntity>();
+            DetectorPrefabs = new HashSet<DetectorPrefabEntity>();
+            Manufactories = new HashSet<ManufactoryEntity>();
+            PipelineItemPrefab = new HashSet<PipelineItemPrefabEntity>();
+            Pipelines = new HashSet<PipelineEntity>();
+            Resources = new HashSet<ResourceEntity>();
+            Roles = new HashSet<RoleEntity>();
+            StorageCellPrefabs = new HashSet<StorageCellPrefabEntity>();
+            Tasks = new HashSet<TaskEntity>();
+            Units = new HashSet<UnitEntity>();
         }
 
-        
+
         [Required]
         [StringLength(1024)]
         public string name { get; set; }
@@ -37,38 +37,38 @@ namespace WorkAutomatorDataAccess.Entities
         public string plan_image_url { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AccountEntity> account { get; set; }
+        public virtual ICollection<AccountEntity> Members { get; set; }
 
         public virtual AccountEntity Owner { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CompanyPlanUniquePointEntity> company_plan_unique_point { get; set; }
+        public virtual ICollection<CompanyPlanUniquePointEntity> CompanyPlanUniquePoints { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DetectorPrefabEntity> detector_prefab { get; set; }
+        public virtual ICollection<DetectorPrefabEntity> DetectorPrefabs { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ManufactoryEntity> manufactory { get; set; }
+        public virtual ICollection<ManufactoryEntity> Manufactories { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PipelineItemPrefabEntity> pipeline_item_prefab { get; set; }
+        public virtual ICollection<PipelineItemPrefabEntity> PipelineItemPrefab { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PipelineEntity> pipeline { get; set; }
+        public virtual ICollection<PipelineEntity> Pipelines { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ResourceEntity> resource { get; set; }
+        public virtual ICollection<ResourceEntity> Resources { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<RoleEntity> role { get; set; }
+        public virtual ICollection<RoleEntity> Roles { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<StorageCellPrefabEntity> storage_cell_prefab { get; set; }
+        public virtual ICollection<StorageCellPrefabEntity> StorageCellPrefabs { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<TaskEntity> task { get; set; }
+        public virtual ICollection<TaskEntity> Tasks { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UnitEntity> unit { get; set; }
+        public virtual ICollection<UnitEntity> Units { get; set; }
     }
 }
