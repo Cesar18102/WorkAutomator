@@ -1,9 +1,11 @@
 ﻿using System;
-using System.Linq;
 using System.Reflection;
 using System.Data.Entity;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+
+using System.Linq;
+using System.Linq.Expressions;
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -11,7 +13,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using WorkAutomatorDataAccess.Entities;
 using WorkAutomatorDataAccess.Exceptions;
 using WorkAutomatorDataAccess.RepoInterfaces;
-using System.Linq.Expressions;
+using WorkAutomatorDataAccess.Aspects;
 
 namespace WorkAutomatorDataAccess.Repos
 {
@@ -56,6 +58,7 @@ namespace WorkAutomatorDataAccess.Repos
             }
         }
 
+        [ProtectedExecuteAspect]
         public virtual async Task<TEntity> Create(TEntity entity)
         {
             using(TContext db = new TContext())
@@ -102,26 +105,6 @@ namespace WorkAutomatorDataAccess.Repos
             {
                 db.Set<TEntity>().RemoveRange(db.Set<TEntity>());
                 await db.SaveChangesAsync();
-            }
-        }
-
-        protected TEntity ProtectedExecute(Func<TEntity, TEntity> executor, TEntity entity)
-        {
-            try { return executor(entity); }
-            catch (DatabaseActionValidationException ex)
-            {
-                InvalidDataException<TEntity> invalidDataException = new InvalidDataException<TEntity>();
-
-                foreach (ValidationResult validationResult in ex.Errors)
-                {
-                    foreach (string invalidFieldName in validationResult.MemberNames)
-                    {
-                        InvalidFieldInfo<TEntity> invalidFieldInfo = new InvalidFieldInfo<TEntity>(invalidFieldName, validationResult.ErrorMessage);
-                        invalidDataException.InvalidFieldInfos.Add(invalidFieldInfo);
-                    }
-                }
-
-                throw invalidDataException;
             }
         }
 

@@ -137,8 +137,16 @@ namespace WorkAutomatorDataAccess
                 );
 
                 object task = firstOrDefaultMethod.Invoke(repo, new object[] { expression });
-                object awaiter = typeof(Task<>).MakeGenericType(entityType).GetMethod("GetAwaiter").Invoke(task, new object[] { });
-                object result = typeof(TaskAwaiter<>).MakeGenericType(entityType).GetMethod("GetResult").Invoke(awaiter, new object[] { });
+
+                object awaiter = typeof(Task<>)
+                    .MakeGenericType(entityType)
+                    .GetMethod(nameof(Task<object>.GetAwaiter))
+                    .Invoke(task, new object[] { });
+
+                object result = typeof(TaskAwaiter<>)
+                    .MakeGenericType(entityType)
+                    .GetMethod(nameof(TaskAwaiter<object>.GetResult))
+                    .Invoke(awaiter, new object[] { });
 
                 if (result == null)
                     continue;

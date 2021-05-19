@@ -53,7 +53,7 @@ namespace DataAccessTests
                     else
                         Assert.Fail("Succeed to insert, but should be not");
                 }
-                catch(DatabaseActionValidationException ex)
+                catch(DatabaseActionValidationException)
                 {
                     if (entityToInsert.Value)
                         Assert.Fail("Failed to insert, but should be successful");
