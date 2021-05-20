@@ -11,12 +11,12 @@ namespace WorkAutomatorDataAccess.Entities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public PipelineItemEntity()
         {
-            detector = new HashSet<DetectorEntity>();
+            Detectors = new HashSet<DetectorEntity>();
             pipeline_item_interaction_event = new HashSet<PipelineItemInteractionEventEntity>();
-            pipeline_item_settings_value = new HashSet<PipelineItemSettingsValueEntity>();
-            pipeline_item_connection = new HashSet<PipelineItemConnectionEntity>();
-            pipeline_item_connection1 = new HashSet<PipelineItemConnectionEntity>();
-            pipeline_item_storage_connection = new HashSet<PipelineItemStorageConnectionEntity>();
+            PipelineItemSettingsValues = new HashSet<PipelineItemSettingsValueEntity>();
+            InputPipelineItemConnections = new HashSet<PipelineItemConnectionEntity>();
+            OutputPipelineItemConnections = new HashSet<PipelineItemConnectionEntity>();
+            PipelineItemStorageConnections = new HashSet<PipelineItemStorageConnectionEntity>();
             PermissionsGranted = new HashSet<RoleEntity>();
         }
 
@@ -32,28 +32,28 @@ namespace WorkAutomatorDataAccess.Entities
         public double y { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DetectorEntity> detector { get; set; }
+        public virtual ICollection<DetectorEntity> Detectors { get; set; }
 
-        public virtual ManufactoryEntity manufactory { get; set; }
+        public virtual ManufactoryEntity Manufactory { get; set; }
 
         public virtual PipelineEntity pipeline { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PipelineItemInteractionEventEntity> pipeline_item_interaction_event { get; set; }
 
-        public virtual PipelineItemPrefabEntity pipeline_item_prefab { get; set; }
+        public virtual PipelineItemPrefabEntity PipelineItemPrefab { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PipelineItemSettingsValueEntity> pipeline_item_settings_value { get; set; }
+        public virtual ICollection<PipelineItemSettingsValueEntity> PipelineItemSettingsValues { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PipelineItemConnectionEntity> pipeline_item_connection { get; set; }
+        public virtual ICollection<PipelineItemConnectionEntity> InputPipelineItemConnections { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PipelineItemConnectionEntity> pipeline_item_connection1 { get; set; }
+        public virtual ICollection<PipelineItemConnectionEntity> OutputPipelineItemConnections { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PipelineItemStorageConnectionEntity> pipeline_item_storage_connection { get; set; }
+        public virtual ICollection<PipelineItemStorageConnectionEntity> PipelineItemStorageConnections { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RoleEntity> PermissionsGranted { get; set; }

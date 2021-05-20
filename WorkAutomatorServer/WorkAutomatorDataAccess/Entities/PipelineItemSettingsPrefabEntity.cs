@@ -26,7 +26,7 @@ namespace WorkAutomatorDataAccess.Entities
         [Column(TypeName = "text")]
         public string option_description { get; set; }
 
-        public virtual DataTypeEntity data_type { get; set; }
+        public virtual DataTypeEntity DataType { get; set; }
 
         public virtual PipelineItemPrefabEntity pipeline_item_prefab { get; set; }
 

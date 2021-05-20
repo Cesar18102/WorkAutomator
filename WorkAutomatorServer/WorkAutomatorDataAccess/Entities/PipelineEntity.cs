@@ -12,15 +12,15 @@ namespace WorkAutomatorDataAccess.Entities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public PipelineEntity()
         {
-            pipeline_item = new HashSet<PipelineItemEntity>();
+            PipelineItems = new HashSet<PipelineItemEntity>();
         }
 
         
         public int company_id { get; set; }
 
-        public virtual CompanyEntity company { get; set; }
+        public virtual CompanyEntity Company { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PipelineItemEntity> pipeline_item { get; set; }
+        public virtual ICollection<PipelineItemEntity> PipelineItems { get; set; }
     }
 }

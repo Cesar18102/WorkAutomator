@@ -1,5 +1,7 @@
-﻿using Autofac;
-using System;
+﻿using System;
+
+using Autofac;
+
 using WorkAutomatorDataAccess.Entities;
 using WorkAutomatorDataAccess.RepoInterfaces;
 using WorkAutomatorDataAccess.Repos;
@@ -32,6 +34,13 @@ namespace WorkAutomatorDataAccess
 
             RegisterRepo<AccountRepo, AccountEntity>(builder);
             RegisterRepo<CompanyRepo, CompanyEntity>(builder);
+            RegisterRepo<StorageRepo, StorageCellEntity>(builder);
+            RegisterRepo<ResourceRepo, ResourceEntity>(builder);
+            RegisterRepo<ManufactoryRepo, ManufactoryEntity>(builder);
+            RegisterRepo<RoleRepo, RoleEntity>(builder);
+            RegisterRepo<PipelineRepo, PipelineEntity>(builder);
+            RegisterRepo<PipelineItemRepo, PipelineItemEntity>(builder);
+            RegisterRepo<DetectorRepo, DetectorEntity>(builder);
 
             return builder.Build();
         }

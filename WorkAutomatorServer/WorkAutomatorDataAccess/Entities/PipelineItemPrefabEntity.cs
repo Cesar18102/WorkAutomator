@@ -12,7 +12,7 @@ namespace WorkAutomatorDataAccess.Entities
         public PipelineItemPrefabEntity()
         {
             pipeline_item = new HashSet<PipelineItemEntity>();
-            pipeline_item_settings_prefab = new HashSet<PipelineItemSettingsPrefabEntity>();
+            PipelineItemSettingsPrefabs = new HashSet<PipelineItemSettingsPrefabEntity>();
         }
 
         
@@ -43,6 +43,6 @@ namespace WorkAutomatorDataAccess.Entities
         public virtual ICollection<PipelineItemEntity> pipeline_item { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PipelineItemSettingsPrefabEntity> pipeline_item_settings_prefab { get; set; }
+        public virtual ICollection<PipelineItemSettingsPrefabEntity> PipelineItemSettingsPrefabs { get; set; }
     }
 }

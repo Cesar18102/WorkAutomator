@@ -17,7 +17,7 @@ namespace WorkAutomatorDataAccess.Repos
                            .Include(company => company.Members.SelectMany(member => member.Roles))
                            .Include(company => company.CompanyPlanUniquePoints)
                            .Include(company => company.CompanyPlanUniquePoints.SelectMany(p => p.EnterLeavePoints))
-                           .Include(company => company.Manufactories.Select(m => m.ManufactoryPlanPoints))
+                           .Include(company => company.Manufactories.Select(m => m.ManufactoryPlanPoints.Select(p => p.CompanyPlanUniquePoint)))
                            .Include(company => company.Manufactories.Select(m => m.CheckPoints))
                            .Include(company => company.Pipelines)
                            .Include(company => company.PipelineItemPrefabs)

@@ -14,9 +14,9 @@ namespace WorkAutomatorDataAccess.Entities
         {
             CheckPoints = new HashSet<CheckPointEntity>();
             ManufactoryPlanPoints = new HashSet<ManufactoryPlanPointEntity>();
-            pipeline_item = new HashSet<PipelineItemEntity>();
+            PipelineItems = new HashSet<PipelineItemEntity>();
             PermissionsGranted = new HashSet<RoleEntity>();
-            storage_cell = new HashSet<StorageCellEntity>();
+            StorageCells = new HashSet<StorageCellEntity>();
         }
 
         
@@ -25,18 +25,18 @@ namespace WorkAutomatorDataAccess.Entities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CheckPointEntity> CheckPoints { get; set; }
 
-        public virtual CompanyEntity company { get; set; }
+        public virtual CompanyEntity Company { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ManufactoryPlanPointEntity> ManufactoryPlanPoints { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PipelineItemEntity> pipeline_item { get; set; }
+        public virtual ICollection<PipelineItemEntity> PipelineItems { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RoleEntity> PermissionsGranted { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<StorageCellEntity> storage_cell { get; set; }
+        public virtual ICollection<StorageCellEntity> StorageCells { get; set; }
     }
 }

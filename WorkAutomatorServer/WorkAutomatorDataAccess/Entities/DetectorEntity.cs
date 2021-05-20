@@ -13,9 +13,9 @@ namespace WorkAutomatorDataAccess.Entities
         public DetectorEntity()
         {
             detector_interaction_event = new HashSet<DetectorInteractionEventEntity>();
-            detector_fault = new HashSet<DetectorFaultEntity>();
-            detector_data = new HashSet<DetectorDataEntity>();
-            detector_settings_value = new HashSet<DetectorSettingsValueEntity>();
+            DetectorFaults = new HashSet<DetectorFaultEntity>();
+            DetectorDatas = new HashSet<DetectorDataEntity>();
+            DetectorSettingsValues = new HashSet<DetectorSettingsValueEntity>();
             PermissionsGranted = new HashSet<RoleEntity>();
         }
 
@@ -28,15 +28,15 @@ namespace WorkAutomatorDataAccess.Entities
         public virtual ICollection<DetectorInteractionEventEntity> detector_interaction_event { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DetectorFaultEntity> detector_fault { get; set; }
+        public virtual ICollection<DetectorFaultEntity> DetectorFaults { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DetectorDataEntity> detector_data { get; set; }
+        public virtual ICollection<DetectorDataEntity> DetectorDatas { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DetectorSettingsValueEntity> detector_settings_value { get; set; }
+        public virtual ICollection<DetectorSettingsValueEntity> DetectorSettingsValues { get; set; }
 
-        public virtual DetectorPrefabEntity detector_prefab { get; set; }
+        public virtual DetectorPrefabEntity DetectorPrefab { get; set; }
 
         public virtual PipelineItemEntity pipeline_item { get; set; }
 

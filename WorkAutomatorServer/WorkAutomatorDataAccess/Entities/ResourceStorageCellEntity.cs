@@ -15,7 +15,7 @@ namespace WorkAutomatorDataAccess.Entities
 
         public double amount { get; set; }
 
-        public virtual ResourceEntity resource { get; set; }
+        public virtual ResourceEntity Resource { get; set; }
 
         public virtual StorageCellEntity storage_cell { get; set; }
     }

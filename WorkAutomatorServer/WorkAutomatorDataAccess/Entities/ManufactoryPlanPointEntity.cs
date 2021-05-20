@@ -13,7 +13,7 @@ namespace WorkAutomatorDataAccess.Entities
 
         public int company_plan_unique_point_id { get; set; }
 
-        public virtual CompanyPlanUniquePointEntity company_plan_unique_point { get; set; }
+        public virtual CompanyPlanUniquePointEntity CompanyPlanUniquePoint { get; set; }
 
         public virtual ManufactoryEntity manufactory { get; set; }
     }

@@ -30,7 +30,7 @@ namespace WorkAutomatorDataAccess.Entities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AccountEntity> Accounts { get; set; }
 
-        public virtual CompanyEntity company { get; set; }
+        public virtual CompanyEntity Company { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DbPermissionEntity> DbPermissions { get; set; }

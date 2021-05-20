@@ -21,7 +21,7 @@ namespace WorkAutomatorDataAccess.Entities
 
         public int db_permission_type_id { get; set; }
 
-        public virtual DbPermissionTypeEntity db_permission_type { get; set; }
+        public virtual DbPermissionTypeEntity DbPermissionType { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RoleEntity> Granted { get; set; }

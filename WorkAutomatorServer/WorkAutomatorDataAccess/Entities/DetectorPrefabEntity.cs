@@ -12,9 +12,9 @@ namespace WorkAutomatorDataAccess.Entities
         public DetectorPrefabEntity()
         {
             detector = new HashSet<DetectorEntity>();
-            detector_data_prefab = new HashSet<DetectorDataPrefabEntity>();
-            detector_fault_prefab = new HashSet<DetectorFaultPrefabEntity>();
-            detector_settings_prefab = new HashSet<DetectorSettingsPrefabEntity>();
+            DetectorDataPrefabs = new HashSet<DetectorDataPrefabEntity>();
+            DetectorFaultPrefabs = new HashSet<DetectorFaultPrefabEntity>();
+            DetectorSettingsPrefabs = new HashSet<DetectorSettingsPrefabEntity>();
         }
 
         
@@ -34,12 +34,12 @@ namespace WorkAutomatorDataAccess.Entities
         public virtual ICollection<DetectorEntity> detector { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DetectorDataPrefabEntity> detector_data_prefab { get; set; }
+        public virtual ICollection<DetectorDataPrefabEntity> DetectorDataPrefabs { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DetectorFaultPrefabEntity> detector_fault_prefab { get; set; }
+        public virtual ICollection<DetectorFaultPrefabEntity> DetectorFaultPrefabs { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DetectorSettingsPrefabEntity> detector_settings_prefab { get; set; }
+        public virtual ICollection<DetectorSettingsPrefabEntity> DetectorSettingsPrefabs { get; set; }
     }
 }

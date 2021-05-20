@@ -12,7 +12,7 @@ namespace WorkAutomatorDataAccess.Entities
         public StorageCellEntity()
         {
             pipeline_item_storage_connection = new HashSet<PipelineItemStorageConnectionEntity>();
-            resource_storage_cell = new HashSet<ResourceStorageCellEntity>();
+            ResourcesAtStorageCell = new HashSet<ResourceStorageCellEntity>();
             PermissionsGranted = new HashSet<RoleEntity>();
             storage_cell_event = new HashSet<StorageCellEventEntity>();
         }
@@ -26,13 +26,13 @@ namespace WorkAutomatorDataAccess.Entities
 
         public double y { get; set; }
 
-        public virtual ManufactoryEntity manufactory { get; set; }
+        public virtual ManufactoryEntity Manufactory { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PipelineItemStorageConnectionEntity> pipeline_item_storage_connection { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ResourceStorageCellEntity> resource_storage_cell { get; set; }
+        public virtual ICollection<ResourceStorageCellEntity> ResourcesAtStorageCell { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RoleEntity> PermissionsGranted { get; set; }
@@ -40,6 +40,6 @@ namespace WorkAutomatorDataAccess.Entities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<StorageCellEventEntity> storage_cell_event { get; set; }
 
-        public virtual StorageCellPrefabEntity storage_cell_prefab { get; set; }
+        public virtual StorageCellPrefabEntity StorageCellPrefab { get; set; }
     }
 }

@@ -29,8 +29,8 @@ namespace WorkAutomatorDataAccess.Entities
 
         public virtual CompanyPlanUniquePointEntity company_plan_unique_point2 { get; set; }
 
-        public virtual ManufactoryEntity manufactory1 { get; set; }
+        public virtual ManufactoryEntity ManufactoryFrom { get; set; }
 
-        public virtual ManufactoryEntity manufactory2 { get; set; }
+        public virtual ManufactoryEntity ManufactoryTo { get; set; }
     }
 }

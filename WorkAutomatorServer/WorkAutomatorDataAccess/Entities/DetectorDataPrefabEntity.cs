@@ -31,7 +31,7 @@ namespace WorkAutomatorDataAccess.Entities
         [StringLength(256)]
         public string argument_name { get; set; }
 
-        public virtual DataTypeEntity data_type { get; set; }
+        public virtual DataTypeEntity DataType { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DetectorDataEntity> detector_data { get; set; }

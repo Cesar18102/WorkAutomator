@@ -17,6 +17,6 @@ namespace WorkAutomatorDataAccess.Entities
 
         public virtual PipelineItemEntity pipeline_item { get; set; }
 
-        public virtual StorageCellEntity storage_cell { get; set; }
+        public virtual StorageCellEntity StorageCell { get; set; }
     }
 }

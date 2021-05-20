@@ -403,7 +403,7 @@ namespace WorkAutomatorDataAccess
 
             modelBuilder.Entity<CompanyEntity>()
                 .HasMany(e => e.Manufactories)
-                .WithRequired(e => e.company)
+                .WithRequired(e => e.Company)
                 .HasForeignKey(e => e.company_id)
                 .WillCascadeOnDelete(false);
 
@@ -415,19 +415,19 @@ namespace WorkAutomatorDataAccess
 
             modelBuilder.Entity<CompanyEntity>()
                 .HasMany(e => e.Pipelines)
-                .WithRequired(e => e.company)
+                .WithRequired(e => e.Company)
                 .HasForeignKey(e => e.company_id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<CompanyEntity>()
                 .HasMany(e => e.Resources)
-                .WithRequired(e => e.company)
+                .WithRequired(e => e.Company)
                 .HasForeignKey(e => e.company_id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<CompanyEntity>()
                 .HasMany(e => e.Roles)
-                .WithRequired(e => e.company)
+                .WithRequired(e => e.Company)
                 .HasForeignKey(e => e.company_id)
                 .WillCascadeOnDelete(false);
 
@@ -475,7 +475,7 @@ namespace WorkAutomatorDataAccess
 
             modelBuilder.Entity<CompanyPlanUniquePointEntity>()
                 .HasMany(e => e.manufactory_plan_point)
-                .WithRequired(e => e.company_plan_unique_point)
+                .WithRequired(e => e.CompanyPlanUniquePoint)
                 .HasForeignKey(e => e.company_plan_unique_point_id)
                 .WillCascadeOnDelete(false);
 
@@ -485,19 +485,19 @@ namespace WorkAutomatorDataAccess
 
             modelBuilder.Entity<DataTypeEntity>()
                 .HasMany(e => e.detector_data_prefab)
-                .WithRequired(e => e.data_type)
+                .WithRequired(e => e.DataType)
                 .HasForeignKey(e => e.field_data_type_id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<DataTypeEntity>()
                 .HasMany(e => e.detector_settings_prefab)
-                .WithRequired(e => e.data_type)
+                .WithRequired(e => e.DataType)
                 .HasForeignKey(e => e.option_data_type_id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<DataTypeEntity>()
                 .HasMany(e => e.pipeline_item_settings_prefab)
-                .WithRequired(e => e.data_type)
+                .WithRequired(e => e.DataType)
                 .HasForeignKey(e => e.option_data_type_id)
                 .WillCascadeOnDelete(false);
 
@@ -520,7 +520,7 @@ namespace WorkAutomatorDataAccess
 
             modelBuilder.Entity<DbPermissionTypeEntity>()
                 .HasMany(e => e.db_permission)
-                .WithRequired(e => e.db_permission_type)
+                .WithRequired(e => e.DbPermissionType)
                 .HasForeignKey(e => e.db_permission_type_id)
                 .WillCascadeOnDelete(false);
 
@@ -531,19 +531,19 @@ namespace WorkAutomatorDataAccess
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<DetectorEntity>()
-                .HasMany(e => e.detector_fault)
+                .HasMany(e => e.DetectorFaults)
                 .WithRequired(e => e.detector)
                 .HasForeignKey(e => e.detector_id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<DetectorEntity>()
-                .HasMany(e => e.detector_data)
+                .HasMany(e => e.DetectorDatas)
                 .WithRequired(e => e.detector)
                 .HasForeignKey(e => e.detector_id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<DetectorEntity>()
-                .HasMany(e => e.detector_settings_value)
+                .HasMany(e => e.DetectorSettingsValues)
                 .WithRequired(e => e.detector)
                 .HasForeignKey(e => e.detector_id)
                 .WillCascadeOnDelete(false);
@@ -622,24 +622,24 @@ namespace WorkAutomatorDataAccess
 
             modelBuilder.Entity<DetectorPrefabEntity>()
                 .HasMany(e => e.detector)
+                .WithRequired(e => e.DetectorPrefab)
+                .HasForeignKey(e => e.detector_prefab_id)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<DetectorPrefabEntity>()
+                .HasMany(e => e.DetectorDataPrefabs)
                 .WithRequired(e => e.detector_prefab)
                 .HasForeignKey(e => e.detector_prefab_id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<DetectorPrefabEntity>()
-                .HasMany(e => e.detector_data_prefab)
+                .HasMany(e => e.DetectorFaultPrefabs)
                 .WithRequired(e => e.detector_prefab)
                 .HasForeignKey(e => e.detector_prefab_id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<DetectorPrefabEntity>()
-                .HasMany(e => e.detector_fault_prefab)
-                .WithRequired(e => e.detector_prefab)
-                .HasForeignKey(e => e.detector_prefab_id)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<DetectorPrefabEntity>()
-                .HasMany(e => e.detector_settings_prefab)
+                .HasMany(e => e.DetectorSettingsPrefabs)
                 .WithRequired(e => e.detector_prefab)
                 .HasForeignKey(e => e.detector_prefab_id)
                 .WillCascadeOnDelete(false);
@@ -674,13 +674,13 @@ namespace WorkAutomatorDataAccess
 
             modelBuilder.Entity<ManufactoryEntity>()
                 .HasMany(e => e.CheckPoints)
-                .WithRequired(e => e.manufactory1)
+                .WithRequired(e => e.ManufactoryFrom)
                 .HasForeignKey(e => e.manufactory1_id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<ManufactoryEntity>()
                 .HasMany(e => e.CheckPoints)
-                .WithRequired(e => e.manufactory2)
+                .WithRequired(e => e.ManufactoryTo)
                 .HasForeignKey(e => e.manufactory2_id)
                 .WillCascadeOnDelete(false);
 
@@ -691,8 +691,8 @@ namespace WorkAutomatorDataAccess
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<ManufactoryEntity>()
-                .HasMany(e => e.pipeline_item)
-                .WithRequired(e => e.manufactory)
+                .HasMany(e => e.PipelineItems)
+                .WithRequired(e => e.Manufactory)
                 .HasForeignKey(e => e.manufactory_id)
                 .WillCascadeOnDelete(false);
 
@@ -707,19 +707,19 @@ namespace WorkAutomatorDataAccess
                 });
 
             modelBuilder.Entity<ManufactoryEntity>()
-                .HasMany(e => e.storage_cell)
-                .WithRequired(e => e.manufactory)
+                .HasMany(e => e.StorageCells)
+                .WithRequired(e => e.Manufactory)
                 .HasForeignKey(e => e.manufactory_id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<PipelineEntity>()
-                .HasMany(e => e.pipeline_item)
+                .HasMany(e => e.PipelineItems)
                 .WithRequired(e => e.pipeline)
                 .HasForeignKey(e => e.pipeline_id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<PipelineItemEntity>()
-                .HasMany(e => e.detector)
+                .HasMany(e => e.Detectors)
                 .WithRequired(e => e.pipeline_item)
                 .HasForeignKey(e => e.pipeline_item_id)
                 .WillCascadeOnDelete(false);
@@ -731,25 +731,25 @@ namespace WorkAutomatorDataAccess
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<PipelineItemEntity>()
-                .HasMany(e => e.pipeline_item_settings_value)
+                .HasMany(e => e.PipelineItemSettingsValues)
                 .WithRequired(e => e.pipeline_item)
                 .HasForeignKey(e => e.pipeline_item_id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<PipelineItemEntity>()
-                .HasMany(e => e.pipeline_item_connection)
+                .HasMany(e => e.InputPipelineItemConnections)
                 .WithRequired(e => e.SourcePipelineItem)
                 .HasForeignKey(e => e.pipeline_item1_id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<PipelineItemEntity>()
-                .HasMany(e => e.pipeline_item_connection1)
+                .HasMany(e => e.OutputPipelineItemConnections)
                 .WithRequired(e => e.TargetPipelineItem)
                 .HasForeignKey(e => e.pipeline_item2_id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<PipelineItemEntity>()
-                .HasMany(e => e.pipeline_item_storage_connection)
+                .HasMany(e => e.PipelineItemStorageConnections)
                 .WithRequired(e => e.pipeline_item)
                 .HasForeignKey(e => e.pipeline_item_id)
                 .WillCascadeOnDelete(false);
@@ -782,12 +782,12 @@ namespace WorkAutomatorDataAccess
 
             modelBuilder.Entity<PipelineItemPrefabEntity>()
                 .HasMany(e => e.pipeline_item)
-                .WithRequired(e => e.pipeline_item_prefab)
+                .WithRequired(e => e.PipelineItemPrefab)
                 .HasForeignKey(e => e.pipeline_item_prefab_id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<PipelineItemPrefabEntity>()
-                .HasMany(e => e.pipeline_item_settings_prefab)
+                .HasMany(e => e.PipelineItemSettingsPrefabs)
                 .WithRequired(e => e.pipeline_item_prefab)
                 .HasForeignKey(e => e.pipeline_item_prefab_id)
                 .WillCascadeOnDelete(false);
@@ -824,7 +824,7 @@ namespace WorkAutomatorDataAccess
 
             modelBuilder.Entity<ResourceEntity>()
                 .HasMany(e => e.resource_storage_cell)
-                .WithRequired(e => e.resource)
+                .WithRequired(e => e.Resource)
                 .HasForeignKey(e => e.resource_id)
                 .WillCascadeOnDelete(false);
 
@@ -834,12 +834,12 @@ namespace WorkAutomatorDataAccess
 
             modelBuilder.Entity<StorageCellEntity>()
                 .HasMany(e => e.pipeline_item_storage_connection)
-                .WithRequired(e => e.storage_cell)
+                .WithRequired(e => e.StorageCell)
                 .HasForeignKey(e => e.storage_cell_id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<StorageCellEntity>()
-                .HasMany(e => e.resource_storage_cell)
+                .HasMany(e => e.ResourcesAtStorageCell)
                 .WithRequired(e => e.storage_cell)
                 .HasForeignKey(e => e.storage_cell_id)
                 .WillCascadeOnDelete(false);
@@ -870,7 +870,7 @@ namespace WorkAutomatorDataAccess
 
             modelBuilder.Entity<StorageCellPrefabEntity>()
                 .HasMany(e => e.storage_cell)
-                .WithRequired(e => e.storage_cell_prefab)
+                .WithRequired(e => e.StorageCellPrefab)
                 .HasForeignKey(e => e.storage_cell_prefab_id)
                 .WillCascadeOnDelete(false);
 

@@ -30,7 +30,7 @@ namespace WorkAutomatorDataAccess.Entities
         [StringLength(1024)]
         public string image_url { get; set; }
 
-        public virtual CompanyEntity company { get; set; }
+        public virtual CompanyEntity Company { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ResourceStorageCellEntity> resource_storage_cell { get; set; }

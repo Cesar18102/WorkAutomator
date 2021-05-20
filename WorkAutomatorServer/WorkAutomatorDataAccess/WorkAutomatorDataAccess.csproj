@@ -133,7 +133,14 @@
     <Compile Include="RepoInterfaces\IRepo.cs" />
     <Compile Include="Repos\AccountRepo.cs" />
     <Compile Include="Repos\CompanyRepo.cs" />
+    <Compile Include="Repos\DetectorRepo.cs" />
+    <Compile Include="Repos\ManufactoryRepo.cs" />
+    <Compile Include="Repos\PipelineItemRepo.cs" />
+    <Compile Include="Repos\PipelineRepo.cs" />
     <Compile Include="Repos\RepoBase.cs" />
+    <Compile Include="Repos\ResourceRepo.cs" />
+    <Compile Include="Repos\RoleRepo.cs" />
+    <Compile Include="Repos\StorageRepo.cs" />
     <Compile Include="WorkAutomatorDBContext.cs" />
     <Compile Include="WorkAutomatorDBInitializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
