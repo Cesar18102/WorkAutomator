@@ -14,12 +14,10 @@ namespace WorkAutomatorDataAccess.Repos
         protected override IQueryable<DetectorEntity> SetInclude(IQueryable<DetectorEntity> entities)
         {
             return entities.Include(detector => detector.DetectorPrefab)
-                           .Include(detector => detector.DetectorPrefab.DetectorSettingsPrefabs.Select(settings => settings.DataType))
-                           .Include(detector => detector.DetectorPrefab.DetectorDataPrefabs.Select(data => data.DataType))
-                           .Include(detector => detector.DetectorPrefab.DetectorFaultPrefabs)
                            .Include(detector => detector.DetectorSettingsValues)
                            .Include(detector => detector.DetectorDatas)
-                           .Include(detector => detector.DetectorFaults);
+                           .Include(detector => detector.DetectorFaults)
+                           .Include(detector => detector.PipelineItem);
         }
     }
 }

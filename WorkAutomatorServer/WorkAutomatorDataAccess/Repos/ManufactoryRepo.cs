@@ -13,13 +13,11 @@ namespace WorkAutomatorDataAccess.Repos
 
         protected override IQueryable<ManufactoryEntity> SetInclude(IQueryable<ManufactoryEntity> entities)
         {
-            return entities.Include(manufactory => manufactory.PipelineItems.Select(pi => pi.PipelineItemPrefab))
-                           .Include(manufactory => manufactory.StorageCells.Select(sc => sc.StorageCellPrefab))
+            return entities.Include(manufactory => manufactory.PipelineItems)
+                           .Include(manufactory => manufactory.StorageCells)
                            .Include(manufactory => manufactory.CheckPoints)
-                           .Include(manufactory => manufactory.CheckPoints.Select(p => p.ManufactoryFrom))
-                           .Include(manufactory => manufactory.CheckPoints.Select(p => p.ManufactoryTo))
-                           .Include(manufactory => manufactory.ManufactoryPlanPoints.Select(p => p.CompanyPlanUniquePoint))
-                           .Include(manufactory => manufactory.Company);
+                           .Include(manufactory => manufactory.EnterLeavePoints)
+                           .Include(manufactory => manufactory.ManufactoryPlanPoints.Select(p => p.CompanyPlanUniquePoint));
         }
     }
 }

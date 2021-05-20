@@ -13,8 +13,7 @@ namespace WorkAutomatorDataAccess.Repos
 
         protected override IQueryable<ResourceEntity> SetInclude(IQueryable<ResourceEntity> entities)
         {
-            return entities.Include(resource => resource.Unit)
-                           .Include(resource => resource.Company);
+            return entities.Include(resource => resource.Unit);
         }
     }
 }

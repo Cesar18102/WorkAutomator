@@ -13,13 +13,12 @@ namespace WorkAutomatorDataAccess.Repos
 
         protected override IQueryable<PipelineEntity> SetInclude(IQueryable<PipelineEntity> entities)
         {
-            return entities.Include(pipeline => pipeline.Company)
-                           .Include(pipeline => pipeline.PipelineItems)
+            return entities.Include(pipeline => pipeline.PipelineItems)
                            .Include(pipeline => pipeline.PipelineItems.Select(item => item.Manufactory))
                            .Include(pipeline => pipeline.PipelineItems.Select(item => item.PipelineItemPrefab))
                            .Include(pipeline => pipeline.PipelineItems.SelectMany(item => item.InputPipelineItemConnections))
                            .Include(pipeline => pipeline.PipelineItems.SelectMany(item => item.OutputPipelineItemConnections))
-                           .Include(pipeline => pipeline.PipelineItems.SelectMany(item => item.PipelineItemStorageConnections.Select(connection => connection.StorageCell)));
+                           .Include(pipeline => pipeline.PipelineItems.SelectMany(item => item.PipelineItemStorageConnections));
         }
     }
 }

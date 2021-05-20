@@ -14,11 +14,11 @@ namespace WorkAutomatorDataAccess.Repos
         protected override IQueryable<PipelineItemEntity> SetInclude(IQueryable<PipelineItemEntity> entities)
         {
             return entities.Include(item => item.Manufactory)
-                           .Include(item => item.PipelineItemPrefab.PipelineItemSettingsPrefabs.Select(settings => settings.DataType))
-                           .Include(item => item.PipelineItemSettingsValues)
+                           .Include(item => item.PipelineItemPrefab)
+                           .Include(item => item.PipelineItemSettingsValues.Select(value => value.PipelineItemSettingsPrefab.DataType))
                            .Include(item => item.InputPipelineItemConnections)
                            .Include(item => item.OutputPipelineItemConnections)
-                           .Include(item => item.PipelineItemStorageConnections.Select(connection => connection.StorageCell));
+                           .Include(item => item.PipelineItemStorageConnections);
         }
     }
 }

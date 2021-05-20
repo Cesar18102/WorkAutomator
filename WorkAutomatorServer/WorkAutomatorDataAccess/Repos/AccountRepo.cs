@@ -16,15 +16,20 @@ namespace WorkAutomatorDataAccess.Repos
         {
             return entities.Include(account => account.Subs)
                            .Include(account => account.Bosses)
-                           .Include(account => account.OwnedCompany)
                            .Include(account => account.Company)
+                           .Include(account => account.OwnedCompany)
                            .Include(account => account.AssignedTasks)
                            .Include(account => account.AssignedTasks.Select(t => t.Assignee))
                            .Include(account => account.AssignedTasks.Select(t => t.Reviewer))
                            .Include(account => account.TasksToReview)
                            .Include(account => account.TasksToReview.Select(t => t.Assignee))
                            .Include(account => account.TasksToReview.Select(t => t.Reviewer))
-                           .Include(account => account.Roles);
+                           .Include(account => account.Roles)
+                           .Include(account => account.CheckPointEvents)
+                           .Include(account => account.EnterLeavePointEvents)
+                           .Include(account => account.DetectorInteractionEvents)
+                           .Include(account => account.PipelineItemInteractionEvents)
+                           .Include(account => account.StorageCellEvents);
         }
 
         public override async Task Delete(int id)

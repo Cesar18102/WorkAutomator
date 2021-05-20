@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Linq;
+using System.Reflection;
+using System.Collections.Generic;
 
 using Autofac;
 
 using WorkAutomatorDataAccess.Entities;
 using WorkAutomatorDataAccess.RepoInterfaces;
 using WorkAutomatorDataAccess.Repos;
+using WorkAutomatorDataAccess.Repos.PrefabRepos;
 
 namespace WorkAutomatorDataAccess
 {
@@ -28,6 +32,8 @@ namespace WorkAutomatorDataAccess
             }
         }
 
+        private static List<Type> RegisteredEntityTypes = new List<Type>();
+
         private static IContainer BuildDependencies()
         {
             ContainerBuilder builder = new ContainerBuilder();
@@ -41,6 +47,21 @@ namespace WorkAutomatorDataAccess
             RegisterRepo<PipelineRepo, PipelineEntity>(builder);
             RegisterRepo<PipelineItemRepo, PipelineItemEntity>(builder);
             RegisterRepo<DetectorRepo, DetectorEntity>(builder);
+            RegisterRepo<DetectorPrefabRepo, DetectorPrefabEntity>(builder);
+            RegisterRepo<PipelineItemPrefabRepo, PipelineItemPrefabEntity>(builder);
+
+            Type[] entityTypes = Assembly.GetAssembly(typeof(EntityBase)).GetTypes().Where(
+                type => typeof(EntityBase).IsAssignableFrom(type) && !type.IsAbstract && !RegisteredEntityTypes.Contains(type)
+            ).ToArray();
+
+            foreach(Type entityType in entityTypes)
+            {
+                MethodInfo registerBaseRepoGenericMethod = typeof(RepoDependencyHolder).GetRuntimeMethods().First(
+                    m => m.Name == nameof(RegisterBaseRepoForEntityType)
+                );
+
+                registerBaseRepoGenericMethod.MakeGenericMethod(entityType).Invoke(null, new object[] { builder });
+            }
 
             return builder.Build();
         }
@@ -60,6 +81,8 @@ namespace WorkAutomatorDataAccess
                    .UsingConstructor(new Type[] { typeof(Type) })
                    .WithParameter(new TypedParameter(typeof(Type), typeof(WorkAutomatorDBContextTest)))
                    .SingleInstance();
+
+            RegisteredEntityTypes.Add(typeof(TEntity));
         }
 
         private static void RegisterRepo<TRepo, TEntity>(ContainerBuilder builder)
@@ -83,6 +106,8 @@ namespace WorkAutomatorDataAccess
                    .UsingConstructor(new Type[] { typeof(Type) })
                    .WithParameter(new TypedParameter(typeof(Type), typeof(WorkAutomatorDBContextTest)))
                    .SingleInstance();
+
+            RegisteredEntityTypes.Add(typeof(TEntity));
         }
     }
 }

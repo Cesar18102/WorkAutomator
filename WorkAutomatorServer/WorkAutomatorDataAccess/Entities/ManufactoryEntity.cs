@@ -13,6 +13,7 @@ namespace WorkAutomatorDataAccess.Entities
         public ManufactoryEntity()
         {
             CheckPoints = new HashSet<CheckPointEntity>();
+            EnterLeavePoints = new HashSet<EnterLeavePointEntity>();
             ManufactoryPlanPoints = new HashSet<ManufactoryPlanPointEntity>();
             PipelineItems = new HashSet<PipelineItemEntity>();
             PermissionsGranted = new HashSet<RoleEntity>();
@@ -24,6 +25,9 @@ namespace WorkAutomatorDataAccess.Entities
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CheckPointEntity> CheckPoints { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<EnterLeavePointEntity> EnterLeavePoints { get; set; }
 
         public virtual CompanyEntity Company { get; set; }
 

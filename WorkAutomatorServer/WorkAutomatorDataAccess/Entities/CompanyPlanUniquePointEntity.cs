@@ -11,9 +11,9 @@ namespace WorkAutomatorDataAccess.Entities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public CompanyPlanUniquePointEntity()
         {
-            check_point = new HashSet<CheckPointEntity>();
+            CheckPoints = new HashSet<CheckPointEntity>();
             EnterLeavePoints = new HashSet<EnterLeavePointEntity>();
-            manufactory_plan_point = new HashSet<ManufactoryPlanPointEntity>();
+            ManufactoryPlanPoints = new HashSet<ManufactoryPlanPointEntity>();
         }
 
         
@@ -24,7 +24,7 @@ namespace WorkAutomatorDataAccess.Entities
         public double y { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CheckPointEntity> check_point { get; set; }
+        public virtual ICollection<CheckPointEntity> CheckPoints { get; set; }
 
         public virtual CompanyEntity company { get; set; }
 
@@ -32,6 +32,6 @@ namespace WorkAutomatorDataAccess.Entities
         public virtual ICollection<EnterLeavePointEntity> EnterLeavePoints { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ManufactoryPlanPointEntity> manufactory_plan_point { get; set; }
+        public virtual ICollection<ManufactoryPlanPointEntity> ManufactoryPlanPoints { get; set; }
     }
 }

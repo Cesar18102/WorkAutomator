@@ -18,6 +18,6 @@ namespace WorkAutomatorDataAccess.Entities
 
         public virtual PipelineItemEntity pipeline_item { get; set; }
 
-        public virtual PipelineItemSettingsPrefabEntity pipeline_item_settings_prefab { get; set; }
+        public virtual PipelineItemSettingsPrefabEntity PipelineItemSettingsPrefab { get; set; }
     }
 }

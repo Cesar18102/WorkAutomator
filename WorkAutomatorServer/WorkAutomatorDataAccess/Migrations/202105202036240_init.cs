@@ -77,18 +77,16 @@
                         company_plan_unique_point2_id = c.Int(nullable: false),
                         manufactory1_id = c.Int(nullable: false),
                         manufactory2_id = c.Int(nullable: false),
-                        company_plan_unique_point1_id1 = c.Int(),
-                        manufactory1_id1 = c.Int(),
                     })
                 .PrimaryKey(t => t.id)
-                .ForeignKey("dbo.company_plan_unique_point", t => t.company_plan_unique_point1_id1)
+                .ForeignKey("dbo.company_plan_unique_point", t => t.company_plan_unique_point1_id, cascadeDelete: true)
                 .ForeignKey("dbo.manufactory", t => t.manufactory2_id)
-                .ForeignKey("dbo.manufactory", t => t.manufactory1_id1)
+                .ForeignKey("dbo.manufactory", t => t.manufactory1_id, cascadeDelete: true)
                 .ForeignKey("dbo.company_plan_unique_point", t => t.company_plan_unique_point2_id)
+                .Index(t => t.company_plan_unique_point1_id)
                 .Index(t => t.company_plan_unique_point2_id)
-                .Index(t => t.manufactory2_id)
-                .Index(t => t.company_plan_unique_point1_id1)
-                .Index(t => t.manufactory1_id1);
+                .Index(t => t.manufactory1_id)
+                .Index(t => t.manufactory2_id);
             
             CreateTable(
                 "dbo.check_point_event",
@@ -117,6 +115,40 @@
                 .PrimaryKey(t => t.id)
                 .ForeignKey("dbo.company", t => t.company_id)
                 .Index(t => t.company_id);
+            
+            CreateTable(
+                "dbo.enter_leave_point",
+                c => new
+                    {
+                        id = c.Int(nullable: false, identity: true),
+                        manufactory_id = c.Int(nullable: false),
+                        company_plan_unique_point1_id = c.Int(nullable: false),
+                        company_plan_unique_point2_id = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.id)
+                .ForeignKey("dbo.company_plan_unique_point", t => t.company_plan_unique_point1_id, cascadeDelete: true)
+                .ForeignKey("dbo.manufactory", t => t.manufactory_id)
+                .ForeignKey("dbo.company_plan_unique_point", t => t.company_plan_unique_point2_id)
+                .Index(t => t.manufactory_id)
+                .Index(t => t.company_plan_unique_point1_id)
+                .Index(t => t.company_plan_unique_point2_id);
+            
+            CreateTable(
+                "dbo.enter_leave_point_event",
+                c => new
+                    {
+                        id = c.Int(nullable: false, identity: true),
+                        enter_leave_point_id = c.Int(nullable: false),
+                        account_id = c.Int(nullable: false),
+                        timespan = c.DateTime(nullable: false),
+                        is_enter = c.Boolean(nullable: false),
+                        log = c.String(unicode: false, storeType: "text"),
+                    })
+                .PrimaryKey(t => t.id)
+                .ForeignKey("dbo.enter_leave_point", t => t.enter_leave_point_id)
+                .ForeignKey("dbo.account", t => t.account_id)
+                .Index(t => t.enter_leave_point_id)
+                .Index(t => t.account_id);
             
             CreateTable(
                 "dbo.manufactory_plan_point",
@@ -178,6 +210,22 @@
                 .ForeignKey("dbo.pipeline_item", t => t.pipeline_item_id)
                 .Index(t => t.detector_prefab_id)
                 .Index(t => t.pipeline_item_id);
+            
+            CreateTable(
+                "dbo.detector_interaction_event",
+                c => new
+                    {
+                        id = c.Int(nullable: false, identity: true),
+                        detector_id = c.Int(nullable: false),
+                        account_id = c.Int(nullable: false),
+                        timespan = c.DateTime(nullable: false),
+                        log = c.String(unicode: false, storeType: "text"),
+                    })
+                .PrimaryKey(t => t.id)
+                .ForeignKey("dbo.detector", t => t.detector_id)
+                .ForeignKey("dbo.account", t => t.account_id)
+                .Index(t => t.detector_id)
+                .Index(t => t.account_id);
             
             CreateTable(
                 "dbo.detector_data",
@@ -363,17 +411,6 @@
                 .Index(t => t.manufactory_id);
             
             CreateTable(
-                "dbo.pipeline",
-                c => new
-                    {
-                        id = c.Int(nullable: false, identity: true),
-                        company_id = c.Int(nullable: false),
-                    })
-                .PrimaryKey(t => t.id)
-                .ForeignKey("dbo.company", t => t.company_id)
-                .Index(t => t.company_id);
-            
-            CreateTable(
                 "dbo.pipeline_item_connection",
                 c => new
                     {
@@ -387,6 +424,17 @@
                 .ForeignKey("dbo.pipeline_item", t => t.pipeline_item2_id)
                 .Index(t => t.pipeline_item1_id)
                 .Index(t => t.pipeline_item2_id);
+            
+            CreateTable(
+                "dbo.pipeline",
+                c => new
+                    {
+                        id = c.Int(nullable: false, identity: true),
+                        company_id = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.id)
+                .ForeignKey("dbo.company", t => t.company_id)
+                .Index(t => t.company_id);
             
             CreateTable(
                 "dbo.pipeline_item_interaction_event",
@@ -538,54 +586,6 @@
                 .PrimaryKey(t => t.id);
             
             CreateTable(
-                "dbo.detector_interaction_event",
-                c => new
-                    {
-                        id = c.Int(nullable: false, identity: true),
-                        detector_id = c.Int(nullable: false),
-                        account_id = c.Int(nullable: false),
-                        timespan = c.DateTime(nullable: false),
-                        log = c.String(unicode: false, storeType: "text"),
-                    })
-                .PrimaryKey(t => t.id)
-                .ForeignKey("dbo.detector", t => t.detector_id)
-                .ForeignKey("dbo.account", t => t.account_id)
-                .Index(t => t.detector_id)
-                .Index(t => t.account_id);
-            
-            CreateTable(
-                "dbo.enter_leave_point",
-                c => new
-                    {
-                        id = c.Int(nullable: false, identity: true),
-                        company_plan_unique_point1_id = c.Int(nullable: false),
-                        company_plan_unique_point2_id = c.Int(nullable: false),
-                        company_plan_unique_point1_id1 = c.Int(),
-                    })
-                .PrimaryKey(t => t.id)
-                .ForeignKey("dbo.company_plan_unique_point", t => t.company_plan_unique_point1_id1)
-                .ForeignKey("dbo.company_plan_unique_point", t => t.company_plan_unique_point2_id)
-                .Index(t => t.company_plan_unique_point2_id)
-                .Index(t => t.company_plan_unique_point1_id1);
-            
-            CreateTable(
-                "dbo.enter_leave_point_event",
-                c => new
-                    {
-                        id = c.Int(nullable: false, identity: true),
-                        enter_leave_point_id = c.Int(nullable: false),
-                        account_id = c.Int(nullable: false),
-                        timespan = c.DateTime(nullable: false),
-                        is_enter = c.Boolean(nullable: false),
-                        log = c.String(unicode: false, storeType: "text"),
-                    })
-                .PrimaryKey(t => t.id)
-                .ForeignKey("dbo.enter_leave_point", t => t.enter_leave_point_id)
-                .ForeignKey("dbo.account", t => t.account_id)
-                .Index(t => t.enter_leave_point_id)
-                .Index(t => t.account_id);
-            
-            CreateTable(
                 "dbo.role_db_permission",
                 c => new
                     {
@@ -705,10 +705,8 @@
             DropForeignKey("dbo.company_plan_unique_point", "company_id", "dbo.company");
             DropForeignKey("dbo.manufactory_plan_point", "company_plan_unique_point_id", "dbo.company_plan_unique_point");
             DropForeignKey("dbo.enter_leave_point", "company_plan_unique_point2_id", "dbo.company_plan_unique_point");
-            DropForeignKey("dbo.enter_leave_point_event", "enter_leave_point_id", "dbo.enter_leave_point");
-            DropForeignKey("dbo.enter_leave_point", "company_plan_unique_point1_id1", "dbo.company_plan_unique_point");
             DropForeignKey("dbo.check_point", "company_plan_unique_point2_id", "dbo.company_plan_unique_point");
-            DropForeignKey("dbo.check_point", "manufactory1_id1", "dbo.manufactory");
+            DropForeignKey("dbo.check_point", "manufactory1_id", "dbo.manufactory");
             DropForeignKey("dbo.storage_cell", "manufactory_id", "dbo.manufactory");
             DropForeignKey("dbo.pipeline_item", "manufactory_id", "dbo.manufactory");
             DropForeignKey("dbo.role_manufactory_permission", "role_id", "dbo.role");
@@ -716,7 +714,6 @@
             DropForeignKey("dbo.role_detector_permission", "role_id", "dbo.role");
             DropForeignKey("dbo.role_detector_permission", "detector_id", "dbo.detector");
             DropForeignKey("dbo.detector_settings_value", "detector_id", "dbo.detector");
-            DropForeignKey("dbo.detector_interaction_event", "detector_id", "dbo.detector");
             DropForeignKey("dbo.detector_fault", "detector_id", "dbo.detector");
             DropForeignKey("dbo.detector_data", "detector_id", "dbo.detector");
             DropForeignKey("dbo.detector_data_prefab", "visualizer_type_id", "dbo.visualizer_type");
@@ -736,11 +733,11 @@
             DropForeignKey("dbo.role_storage_cell_permission", "storage_cell_id", "dbo.storage_cell");
             DropForeignKey("dbo.pipeline_item_settings_value", "pipeline_item_id", "dbo.pipeline_item");
             DropForeignKey("dbo.pipeline_item_interaction_event", "pipeline_item_id", "dbo.pipeline_item");
-            DropForeignKey("dbo.pipeline_item_connection", "pipeline_item2_id", "dbo.pipeline_item");
-            DropForeignKey("dbo.pipeline_item_connection", "pipeline_item1_id", "dbo.pipeline_item");
             DropForeignKey("dbo.pipeline_item", "pipeline_id", "dbo.pipeline");
             DropForeignKey("dbo.role_pipeline_item_permission", "role_id", "dbo.role");
             DropForeignKey("dbo.role_pipeline_item_permission", "pipeline_item_id", "dbo.pipeline_item");
+            DropForeignKey("dbo.pipeline_item_connection", "pipeline_item2_id", "dbo.pipeline_item");
+            DropForeignKey("dbo.pipeline_item_connection", "pipeline_item1_id", "dbo.pipeline_item");
             DropForeignKey("dbo.detector", "pipeline_item_id", "dbo.pipeline_item");
             DropForeignKey("dbo.detector_settings_prefab", "option_data_type_id", "dbo.data_type");
             DropForeignKey("dbo.detector_settings_value", "detector_settings_prefab_id", "dbo.detector_settings_prefab");
@@ -751,12 +748,16 @@
             DropForeignKey("dbo.detector_data_prefab", "detector_prefab_id", "dbo.detector_prefab");
             DropForeignKey("dbo.detector", "detector_prefab_id", "dbo.detector_prefab");
             DropForeignKey("dbo.detector_data_prefab", "field_data_type_id", "dbo.data_type");
+            DropForeignKey("dbo.detector_interaction_event", "detector_id", "dbo.detector");
             DropForeignKey("dbo.role_db_permission", "role_id", "dbo.role");
             DropForeignKey("dbo.role_db_permission", "db_permission_id", "dbo.db_permission");
             DropForeignKey("dbo.db_permission", "db_permission_type_id", "dbo.db_permission_type");
             DropForeignKey("dbo.manufactory_plan_point", "manufactory_id", "dbo.manufactory");
+            DropForeignKey("dbo.enter_leave_point", "manufactory_id", "dbo.manufactory");
+            DropForeignKey("dbo.enter_leave_point_event", "enter_leave_point_id", "dbo.enter_leave_point");
+            DropForeignKey("dbo.enter_leave_point", "company_plan_unique_point1_id", "dbo.company_plan_unique_point");
             DropForeignKey("dbo.check_point", "manufactory2_id", "dbo.manufactory");
-            DropForeignKey("dbo.check_point", "company_plan_unique_point1_id1", "dbo.company_plan_unique_point");
+            DropForeignKey("dbo.check_point", "company_plan_unique_point1_id", "dbo.company_plan_unique_point");
             DropForeignKey("dbo.check_point_event", "check_point_id", "dbo.check_point");
             DropIndex("dbo.account_role", new[] { "role_id" });
             DropIndex("dbo.account_role", new[] { "account_id" });
@@ -772,12 +773,6 @@
             DropIndex("dbo.role_pipeline_item_permission", new[] { "pipeline_item_id" });
             DropIndex("dbo.role_db_permission", new[] { "role_id" });
             DropIndex("dbo.role_db_permission", new[] { "db_permission_id" });
-            DropIndex("dbo.enter_leave_point_event", new[] { "account_id" });
-            DropIndex("dbo.enter_leave_point_event", new[] { "enter_leave_point_id" });
-            DropIndex("dbo.enter_leave_point", new[] { "company_plan_unique_point1_id1" });
-            DropIndex("dbo.enter_leave_point", new[] { "company_plan_unique_point2_id" });
-            DropIndex("dbo.detector_interaction_event", new[] { "account_id" });
-            DropIndex("dbo.detector_interaction_event", new[] { "detector_id" });
             DropIndex("dbo.storage_cell_prefab", new[] { "company_id" });
             DropIndex("dbo.storage_cell_event", new[] { "account_id" });
             DropIndex("dbo.storage_cell_event", new[] { "storage_cell_id" });
@@ -794,9 +789,9 @@
             DropIndex("dbo.pipeline_item_settings_value", new[] { "pipeline_item_id" });
             DropIndex("dbo.pipeline_item_interaction_event", new[] { "account_id" });
             DropIndex("dbo.pipeline_item_interaction_event", new[] { "pipeline_item_id" });
+            DropIndex("dbo.pipeline", new[] { "company_id" });
             DropIndex("dbo.pipeline_item_connection", new[] { "pipeline_item2_id" });
             DropIndex("dbo.pipeline_item_connection", new[] { "pipeline_item1_id" });
-            DropIndex("dbo.pipeline", new[] { "company_id" });
             DropIndex("dbo.pipeline_item", new[] { "manufactory_id" });
             DropIndex("dbo.pipeline_item", new[] { "pipeline_item_prefab_id" });
             DropIndex("dbo.pipeline_item", new[] { "pipeline_id" });
@@ -817,19 +812,26 @@
             DropIndex("dbo.detector_data_prefab", new[] { "detector_prefab_id" });
             DropIndex("dbo.detector_data", new[] { "detector_data_prefab_id" });
             DropIndex("dbo.detector_data", new[] { "detector_id" });
+            DropIndex("dbo.detector_interaction_event", new[] { "account_id" });
+            DropIndex("dbo.detector_interaction_event", new[] { "detector_id" });
             DropIndex("dbo.detector", new[] { "pipeline_item_id" });
             DropIndex("dbo.detector", new[] { "detector_prefab_id" });
             DropIndex("dbo.db_permission", new[] { "db_permission_type_id" });
             DropIndex("dbo.role", new[] { "company_id" });
             DropIndex("dbo.manufactory_plan_point", new[] { "company_plan_unique_point_id" });
             DropIndex("dbo.manufactory_plan_point", new[] { "manufactory_id" });
+            DropIndex("dbo.enter_leave_point_event", new[] { "account_id" });
+            DropIndex("dbo.enter_leave_point_event", new[] { "enter_leave_point_id" });
+            DropIndex("dbo.enter_leave_point", new[] { "company_plan_unique_point2_id" });
+            DropIndex("dbo.enter_leave_point", new[] { "company_plan_unique_point1_id" });
+            DropIndex("dbo.enter_leave_point", new[] { "manufactory_id" });
             DropIndex("dbo.manufactory", new[] { "company_id" });
             DropIndex("dbo.check_point_event", new[] { "account_id" });
             DropIndex("dbo.check_point_event", new[] { "check_point_id" });
-            DropIndex("dbo.check_point", new[] { "manufactory1_id1" });
-            DropIndex("dbo.check_point", new[] { "company_plan_unique_point1_id1" });
             DropIndex("dbo.check_point", new[] { "manufactory2_id" });
+            DropIndex("dbo.check_point", new[] { "manufactory1_id" });
             DropIndex("dbo.check_point", new[] { "company_plan_unique_point2_id" });
+            DropIndex("dbo.check_point", new[] { "company_plan_unique_point1_id" });
             DropIndex("dbo.company_plan_unique_point", new[] { "company_id" });
             DropIndex("dbo.company", new[] { "id" });
             DropIndex("dbo.task", new[] { "reviewer_account_id" });
@@ -844,9 +846,6 @@
             DropTable("dbo.role_storage_cell_permission");
             DropTable("dbo.role_pipeline_item_permission");
             DropTable("dbo.role_db_permission");
-            DropTable("dbo.enter_leave_point_event");
-            DropTable("dbo.enter_leave_point");
-            DropTable("dbo.detector_interaction_event");
             DropTable("dbo.visualizer_type");
             DropTable("dbo.storage_cell_prefab");
             DropTable("dbo.storage_cell_event");
@@ -857,8 +856,8 @@
             DropTable("dbo.pipeline_item_storage_connection");
             DropTable("dbo.pipeline_item_settings_value");
             DropTable("dbo.pipeline_item_interaction_event");
-            DropTable("dbo.pipeline_item_connection");
             DropTable("dbo.pipeline");
+            DropTable("dbo.pipeline_item_connection");
             DropTable("dbo.pipeline_item");
             DropTable("dbo.pipeline_item_prefab");
             DropTable("dbo.pipeline_item_settings_prefab");
@@ -871,11 +870,14 @@
             DropTable("dbo.data_type");
             DropTable("dbo.detector_data_prefab");
             DropTable("dbo.detector_data");
+            DropTable("dbo.detector_interaction_event");
             DropTable("dbo.detector");
             DropTable("dbo.db_permission_type");
             DropTable("dbo.db_permission");
             DropTable("dbo.role");
             DropTable("dbo.manufactory_plan_point");
+            DropTable("dbo.enter_leave_point_event");
+            DropTable("dbo.enter_leave_point");
             DropTable("dbo.manufactory");
             DropTable("dbo.check_point_event");
             DropTable("dbo.check_point");

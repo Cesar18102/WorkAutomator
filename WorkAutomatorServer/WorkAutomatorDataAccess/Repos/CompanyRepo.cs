@@ -13,18 +13,18 @@ namespace WorkAutomatorDataAccess.Repos
 
         protected override IQueryable<CompanyEntity> SetInclude(IQueryable<CompanyEntity> entities)
         {
-            return entities.Include(company => company.Owner.Roles)
-                           .Include(company => company.Members.SelectMany(member => member.Roles))
+            return entities.Include(company => company.Owner)
+                           .Include(company => company.Members)
                            .Include(company => company.CompanyPlanUniquePoints)
-                           .Include(company => company.CompanyPlanUniquePoints.SelectMany(p => p.EnterLeavePoints))
-                           .Include(company => company.Manufactories.Select(m => m.ManufactoryPlanPoints.Select(p => p.CompanyPlanUniquePoint)))
-                           .Include(company => company.Manufactories.Select(m => m.CheckPoints))
+                           .Include(company => company.Manufactories)
                            .Include(company => company.Pipelines)
                            .Include(company => company.PipelineItemPrefabs)
                            .Include(company => company.StorageCellPrefabs)
                            .Include(company => company.DetectorPrefabs)
-                           .Include(company => company.Resources.Select(resource => resource.Unit))
-                           .Include(company => company.Units);
+                           .Include(company => company.Resources)
+                           .Include(company => company.Units)
+                           .Include(company => company.Roles)
+                           .Include(company => company.Tasks);
         }
     }
 }

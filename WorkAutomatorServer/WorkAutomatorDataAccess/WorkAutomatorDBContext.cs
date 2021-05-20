@@ -292,6 +292,34 @@ namespace WorkAutomatorDataAccess
             modelBuilder.Entity<VisualizerTypeEntity>()
                 .ToTable("visualizer_type");
 
+            //PropertyInfo[] sets = this.GetType().GetProperties().Where(
+            //    p => p.PropertyType.IsGenericType &&
+            //         typeof(DbSet<>).IsAssignableFrom(p.PropertyType.GetGenericTypeDefinition())
+            //).ToArray();
+
+            //MethodInfo entityGenericMethod = modelBuilder.GetType().GetMethods().First(
+            //    method => method.Name == "Entity" && method.IsGenericMethod
+            //);
+
+            //foreach (PropertyInfo set in sets)
+            //{
+            //    Type entityType = set.PropertyType.GetGenericArguments()[0];
+
+            //    MethodInfo entityMethod = entityGenericMethod.MakeGenericMethod(entityType);
+            //    object typeConfig = entityMethod.Invoke(modelBuilder, new object[] { });
+
+            //    MethodInfo keyGenericMethod = typeConfig.GetType().GetMethods().First(
+            //        method => method.Name == "HasKey" && method.GetParameters().Length == 1
+            //    );
+
+            //    ParameterExpression entity = Expression.Parameter(entityType);
+            //    Expression body = Expression.Property(entity, entityType.GetProperty("id"));
+            //    Expression keyFunc = Expression.Lambda(body, entity);
+
+            //    MethodInfo keyMethod = keyGenericMethod.MakeGenericMethod(typeof(int));
+            //    keyMethod.Invoke(typeConfig, new object[] { keyFunc });
+            //}
+
             modelBuilder.Entity<AccountEntity>()
                 .Property(e => e.login)
                 .IsUnicode(false);
@@ -450,31 +478,55 @@ namespace WorkAutomatorDataAccess
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<CompanyPlanUniquePointEntity>()
-                .HasMany(e => e.check_point)
-                .WithRequired(e => e.company_plan_unique_point1)
-                .HasForeignKey(e => e.company_plan_unique_point1_id)
+                .HasMany(e => e.CheckPoints)
+                .WithRequired(e => e.CompanyPlanUniquePoint1)
+                .HasForeignKey(e => e.CompanyPlanUniquePoint1Id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<CompanyPlanUniquePointEntity>()
-                .HasMany(e => e.check_point)
-                .WithRequired(e => e.company_plan_unique_point2)
-                .HasForeignKey(e => e.company_plan_unique_point2_id)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<CompanyPlanUniquePointEntity>()
-                .HasMany(e => e.EnterLeavePoints)
-                .WithRequired(e => e.company_plan_unique_point1)
-                .HasForeignKey(e => e.company_plan_unique_point1_id)
+                .HasMany(e => e.CheckPoints)
+                .WithRequired(e => e.CompanyPlanUniquePoint2)
+                .HasForeignKey(e => e.CompanyPlanUniquePoint2Id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<CompanyPlanUniquePointEntity>()
                 .HasMany(e => e.EnterLeavePoints)
-                .WithRequired(e => e.company_plan_unique_point2)
-                .HasForeignKey(e => e.company_plan_unique_point2_id)
+                .WithRequired(e => e.CompanyPlanUniquePoint1)
+                .HasForeignKey(e => e.CompanyPlanUniquePoint1Id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<CompanyPlanUniquePointEntity>()
-                .HasMany(e => e.manufactory_plan_point)
+                .HasMany(e => e.EnterLeavePoints)
+                .WithRequired(e => e.CompanyPlanUniquePoint2)
+                .HasForeignKey(e => e.CompanyPlanUniquePoint2Id)
+                .WillCascadeOnDelete(false);
+
+            /*modelBuilder.Entity<CheckPointEntity>()
+                .HasRequired(checkPoint => checkPoint.CompanyPlanUniquePointA)
+                .WithMany(planPoint => planPoint.CheckPoints)
+                .HasForeignKey(checkPoint => checkPoint.company_plan_unique_point1_id)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<CheckPointEntity>()
+                .HasRequired(checkPoint => checkPoint.CompanyPlanUniquePointB)
+                .WithMany(planPoint => planPoint.CheckPoints)
+                .HasForeignKey(checkPoint => checkPoint.company_plan_unique_point2_id)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<EnterLeavePointEntity>()
+                .HasRequired(enterLeavePoint => enterLeavePoint.CompanyPlanUniquePointA)
+                .WithMany(planPoint => planPoint.EnterLeavePoints)
+                .HasForeignKey(enterLeavePoint => enterLeavePoint.company_plan_unique_point1_id)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<EnterLeavePointEntity>()
+                .HasRequired(enterLeavePoint => enterLeavePoint.CompanyPlanUniquePointB)
+                .WithMany(planPoint => planPoint.EnterLeavePoints)
+                .HasForeignKey(enterLeavePoint => enterLeavePoint.company_plan_unique_point2_id)
+                .WillCascadeOnDelete(false);*/
+
+            modelBuilder.Entity<CompanyPlanUniquePointEntity>()
+                .HasMany(e => e.ManufactoryPlanPoints)
                 .WithRequired(e => e.CompanyPlanUniquePoint)
                 .HasForeignKey(e => e.company_plan_unique_point_id)
                 .WillCascadeOnDelete(false);
@@ -674,15 +726,21 @@ namespace WorkAutomatorDataAccess
 
             modelBuilder.Entity<ManufactoryEntity>()
                 .HasMany(e => e.CheckPoints)
-                .WithRequired(e => e.ManufactoryFrom)
-                .HasForeignKey(e => e.manufactory1_id)
+                .WithRequired(e => e.Manufactory1)
+                .HasForeignKey(e => e.Manufactory1Id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<ManufactoryEntity>()
                 .HasMany(e => e.CheckPoints)
-                .WithRequired(e => e.ManufactoryTo)
-                .HasForeignKey(e => e.manufactory2_id)
+                .WithRequired(e => e.Manufactory2)
+                .HasForeignKey(e => e.Manufactory2Id)
                 .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<ManufactoryEntity>()
+               .HasMany(e => e.EnterLeavePoints)
+               .WithRequired(e => e.Manufactory)
+               .HasForeignKey(e => e.manufactory_id)
+               .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<ManufactoryEntity>()
                 .HasMany(e => e.ManufactoryPlanPoints)
@@ -720,7 +778,7 @@ namespace WorkAutomatorDataAccess
 
             modelBuilder.Entity<PipelineItemEntity>()
                 .HasMany(e => e.Detectors)
-                .WithRequired(e => e.pipeline_item)
+                .WithRequired(e => e.PipelineItem)
                 .HasForeignKey(e => e.pipeline_item_id)
                 .WillCascadeOnDelete(false);
 
@@ -802,7 +860,7 @@ namespace WorkAutomatorDataAccess
 
             modelBuilder.Entity<PipelineItemSettingsPrefabEntity>()
                 .HasMany(e => e.pipeline_item_settings_value)
-                .WithRequired(e => e.pipeline_item_settings_prefab)
+                .WithRequired(e => e.PipelineItemSettingsPrefab)
                 .HasForeignKey(e => e.pipeline_item_settings_prefab_id)
                 .WillCascadeOnDelete(false);
 

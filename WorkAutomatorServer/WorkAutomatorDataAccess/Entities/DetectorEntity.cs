@@ -38,7 +38,7 @@ namespace WorkAutomatorDataAccess.Entities
 
         public virtual DetectorPrefabEntity DetectorPrefab { get; set; }
 
-        public virtual PipelineItemEntity pipeline_item { get; set; }
+        public virtual PipelineItemEntity PipelineItem { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RoleEntity> PermissionsGranted { get; set; }

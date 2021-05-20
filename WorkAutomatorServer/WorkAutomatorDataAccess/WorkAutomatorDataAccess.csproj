@@ -124,9 +124,9 @@
     <Compile Include="Exceptions\DatabaseActionValidationException.cs" />
     <Compile Include="Exceptions\EntityNotFoundException.cs" />
     <Compile Include="Exceptions\InvalidDataException.cs" />
-    <Compile Include="Migrations\202105200143248_init.cs" />
-    <Compile Include="Migrations\202105200143248_init.designer.cs">
-      <DependentUpon>202105200143248_init.cs</DependentUpon>
+    <Compile Include="Migrations\202105202036240_init.cs" />
+    <Compile Include="Migrations\202105202036240_init.designer.cs">
+      <DependentUpon>202105202036240_init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="RepoDependencyHolder.cs" />
@@ -137,6 +137,8 @@
     <Compile Include="Repos\ManufactoryRepo.cs" />
     <Compile Include="Repos\PipelineItemRepo.cs" />
     <Compile Include="Repos\PipelineRepo.cs" />
+    <Compile Include="Repos\PrefabRepos\DetectorPrefabRepo.cs" />
+    <Compile Include="Repos\PrefabRepos\PipelineItemPrefabRepo.cs" />
     <Compile Include="Repos\RepoBase.cs" />
     <Compile Include="Repos\ResourceRepo.cs" />
     <Compile Include="Repos\RoleRepo.cs" />
@@ -150,8 +152,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202105200143248_init.resx">
-      <DependentUpon>202105200143248_init.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202105202036240_init.resx">
+      <DependentUpon>202105202036240_init.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
