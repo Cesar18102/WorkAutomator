@@ -16,7 +16,7 @@ namespace WorkAutomatorDataAccess.Entities
             CompanyPlanUniquePoints = new HashSet<CompanyPlanUniquePointEntity>();
             DetectorPrefabs = new HashSet<DetectorPrefabEntity>();
             Manufactories = new HashSet<ManufactoryEntity>();
-            PipelineItemPrefab = new HashSet<PipelineItemPrefabEntity>();
+            PipelineItemPrefabs = new HashSet<PipelineItemPrefabEntity>();
             Pipelines = new HashSet<PipelineEntity>();
             Resources = new HashSet<ResourceEntity>();
             Roles = new HashSet<RoleEntity>();
@@ -51,7 +51,7 @@ namespace WorkAutomatorDataAccess.Entities
         public virtual ICollection<ManufactoryEntity> Manufactories { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PipelineItemPrefabEntity> PipelineItemPrefab { get; set; }
+        public virtual ICollection<PipelineItemPrefabEntity> PipelineItemPrefabs { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PipelineEntity> Pipelines { get; set; }

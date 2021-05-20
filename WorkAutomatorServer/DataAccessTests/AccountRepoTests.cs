@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using System.Collections.Generic;
 
 using NUnit.Framework;
@@ -34,6 +35,34 @@ namespace DataAccessTests
             );
 
             return data;
+        }
+
+        [Test]
+        [Order(5)]
+        public async Task AddRemoveBossSubsRelationTest()
+        {
+            await Repo.Clear();
+
+            AccountEntity sub = new AccountEntity()
+            {
+                login = "testSub",
+                password = "testPassword",
+                first_name = "testFirstName",
+                last_name = "testLastName"
+            };
+
+            AccountEntity boss = new AccountEntity()
+            {
+                login = "testBoss",
+                password = "testPassword",
+                first_name = "testFirstName",
+                last_name = "testLastName",
+            };
+
+            boss.Subs.Add(sub);
+
+            AccountEntity addedBoss = await Repo.Create(boss);
+            Assert.IsNotEmpty(addedBoss.Subs);
         }
     }
 }

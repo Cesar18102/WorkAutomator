@@ -408,7 +408,7 @@ namespace WorkAutomatorDataAccess
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<CompanyEntity>()
-                .HasMany(e => e.PipelineItemPrefab)
+                .HasMany(e => e.PipelineItemPrefabs)
                 .WithRequired(e => e.company)
                 .HasForeignKey(e => e.company_id)
                 .WillCascadeOnDelete(false);
@@ -456,19 +456,19 @@ namespace WorkAutomatorDataAccess
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<CompanyPlanUniquePointEntity>()
-                .HasMany(e => e.check_point1)
+                .HasMany(e => e.check_point)
                 .WithRequired(e => e.company_plan_unique_point2)
                 .HasForeignKey(e => e.company_plan_unique_point2_id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<CompanyPlanUniquePointEntity>()
-                .HasMany(e => e.enter_leave_point)
+                .HasMany(e => e.EnterLeavePoints)
                 .WithRequired(e => e.company_plan_unique_point1)
                 .HasForeignKey(e => e.company_plan_unique_point1_id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<CompanyPlanUniquePointEntity>()
-                .HasMany(e => e.enter_leave_point1)
+                .HasMany(e => e.EnterLeavePoints)
                 .WithRequired(e => e.company_plan_unique_point2)
                 .HasForeignKey(e => e.company_plan_unique_point2_id)
                 .WillCascadeOnDelete(false);
@@ -673,19 +673,19 @@ namespace WorkAutomatorDataAccess
                 .IsUnicode(false);
 
             modelBuilder.Entity<ManufactoryEntity>()
-                .HasMany(e => e.check_point)
+                .HasMany(e => e.CheckPoints)
                 .WithRequired(e => e.manufactory1)
                 .HasForeignKey(e => e.manufactory1_id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<ManufactoryEntity>()
-                .HasMany(e => e.check_point1)
+                .HasMany(e => e.CheckPoints)
                 .WithRequired(e => e.manufactory2)
                 .HasForeignKey(e => e.manufactory2_id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<ManufactoryEntity>()
-                .HasMany(e => e.manufactory_plan_point)
+                .HasMany(e => e.ManufactoryPlanPoints)
                 .WithRequired(e => e.manufactory)
                 .HasForeignKey(e => e.manufactory_id)
                 .WillCascadeOnDelete(false);
@@ -892,7 +892,7 @@ namespace WorkAutomatorDataAccess
 
             modelBuilder.Entity<UnitEntity>()
                 .HasMany(e => e.resource)
-                .WithRequired(e => e.unit)
+                .WithRequired(e => e.Unit)
                 .HasForeignKey(e => e.unit_id)
                 .WillCascadeOnDelete(false);
 

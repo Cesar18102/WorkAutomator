@@ -12,9 +12,8 @@ namespace WorkAutomatorDataAccess.Entities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ManufactoryEntity()
         {
-            check_point = new HashSet<CheckPointEntity>();
-            check_point1 = new HashSet<CheckPointEntity>();
-            manufactory_plan_point = new HashSet<ManufactoryPlanPointEntity>();
+            CheckPoints = new HashSet<CheckPointEntity>();
+            ManufactoryPlanPoints = new HashSet<ManufactoryPlanPointEntity>();
             pipeline_item = new HashSet<PipelineItemEntity>();
             PermissionsGranted = new HashSet<RoleEntity>();
             storage_cell = new HashSet<StorageCellEntity>();
@@ -24,15 +23,12 @@ namespace WorkAutomatorDataAccess.Entities
         public int company_id { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CheckPointEntity> check_point { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CheckPointEntity> check_point1 { get; set; }
+        public virtual ICollection<CheckPointEntity> CheckPoints { get; set; }
 
         public virtual CompanyEntity company { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ManufactoryPlanPointEntity> manufactory_plan_point { get; set; }
+        public virtual ICollection<ManufactoryPlanPointEntity> ManufactoryPlanPoints { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PipelineItemEntity> pipeline_item { get; set; }

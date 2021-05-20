@@ -12,9 +12,7 @@ namespace WorkAutomatorDataAccess.Entities
         public CompanyPlanUniquePointEntity()
         {
             check_point = new HashSet<CheckPointEntity>();
-            check_point1 = new HashSet<CheckPointEntity>();
-            enter_leave_point = new HashSet<EnterLeavePointEntity>();
-            enter_leave_point1 = new HashSet<EnterLeavePointEntity>();
+            EnterLeavePoints = new HashSet<EnterLeavePointEntity>();
             manufactory_plan_point = new HashSet<ManufactoryPlanPointEntity>();
         }
 
@@ -28,16 +26,10 @@ namespace WorkAutomatorDataAccess.Entities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CheckPointEntity> check_point { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CheckPointEntity> check_point1 { get; set; }
-
         public virtual CompanyEntity company { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<EnterLeavePointEntity> enter_leave_point { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<EnterLeavePointEntity> enter_leave_point1 { get; set; }
+        public virtual ICollection<EnterLeavePointEntity> EnterLeavePoints { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ManufactoryPlanPointEntity> manufactory_plan_point { get; set; }

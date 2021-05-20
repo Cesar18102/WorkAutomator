@@ -1,15 +1,18 @@
-﻿using System.Data.Entity.Migrations;
-
-namespace WorkAutomatorDataAccess.Migrations
+﻿namespace WorkAutomatorDataAccess.Migrations
 {
-    internal sealed class Configuration : DbMigrationsConfiguration<WorkAutomatorDBContext>
+    using System;
+    using System.Data.Entity;
+    using System.Data.Entity.Migrations;
+    using System.Linq;
+
+    internal sealed class Configuration : DbMigrationsConfiguration<WorkAutomatorDataAccess.WorkAutomatorDBContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(WorkAutomatorDBContext context)
+        protected override void Seed(WorkAutomatorDataAccess.WorkAutomatorDBContext context)
         {
             //  This method will be called after migrating to the latest version.
 

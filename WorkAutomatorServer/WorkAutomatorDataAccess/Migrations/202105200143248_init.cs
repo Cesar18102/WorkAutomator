@@ -12,7 +12,7 @@
                 c => new
                     {
                         id = c.Int(nullable: false, identity: true),
-                        company_id = c.Int(nullable: false),
+                        company_id = c.Int(),
                         login = c.String(nullable: false, maxLength: 256, unicode: false),
                         password = c.String(nullable: false, maxLength: 256, unicode: false),
                         first_name = c.String(nullable: false, maxLength: 256),
@@ -20,7 +20,8 @@
                     })
                 .PrimaryKey(t => t.id)
                 .ForeignKey("dbo.company", t => t.company_id)
-                .Index(t => t.company_id);
+                .Index(t => t.company_id)
+                .Index(t => t.login, unique: true);
             
             CreateTable(
                 "dbo.task",
@@ -76,16 +77,18 @@
                         company_plan_unique_point2_id = c.Int(nullable: false),
                         manufactory1_id = c.Int(nullable: false),
                         manufactory2_id = c.Int(nullable: false),
+                        company_plan_unique_point1_id1 = c.Int(),
+                        manufactory1_id1 = c.Int(),
                     })
                 .PrimaryKey(t => t.id)
-                .ForeignKey("dbo.manufactory", t => t.manufactory1_id)
+                .ForeignKey("dbo.company_plan_unique_point", t => t.company_plan_unique_point1_id1)
                 .ForeignKey("dbo.manufactory", t => t.manufactory2_id)
-                .ForeignKey("dbo.company_plan_unique_point", t => t.company_plan_unique_point1_id)
+                .ForeignKey("dbo.manufactory", t => t.manufactory1_id1)
                 .ForeignKey("dbo.company_plan_unique_point", t => t.company_plan_unique_point2_id)
-                .Index(t => t.company_plan_unique_point1_id)
                 .Index(t => t.company_plan_unique_point2_id)
-                .Index(t => t.manufactory1_id)
-                .Index(t => t.manufactory2_id);
+                .Index(t => t.manufactory2_id)
+                .Index(t => t.company_plan_unique_point1_id1)
+                .Index(t => t.manufactory1_id1);
             
             CreateTable(
                 "dbo.check_point_event",
@@ -171,7 +174,7 @@
                         pipeline_item_id = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.id)
-                .ForeignKey("dbo.DetectorPrefabEntities", t => t.detector_prefab_id)
+                .ForeignKey("dbo.detector_prefab", t => t.detector_prefab_id)
                 .ForeignKey("dbo.pipeline_item", t => t.pipeline_item_id)
                 .Index(t => t.detector_prefab_id)
                 .Index(t => t.pipeline_item_id);
@@ -206,7 +209,7 @@
                     })
                 .PrimaryKey(t => t.id)
                 .ForeignKey("dbo.data_type", t => t.field_data_type_id)
-                .ForeignKey("dbo.DetectorPrefabEntities", t => t.detector_prefab_id)
+                .ForeignKey("dbo.detector_prefab", t => t.detector_prefab_id)
                 .ForeignKey("dbo.visualizer_type", t => t.visualizer_type_id)
                 .Index(t => t.detector_prefab_id)
                 .Index(t => t.visualizer_type_id)
@@ -232,13 +235,13 @@
                         option_description = c.String(unicode: false, storeType: "text"),
                     })
                 .PrimaryKey(t => t.id)
-                .ForeignKey("dbo.DetectorPrefabEntities", t => t.detector_prefab_id)
+                .ForeignKey("dbo.detector_prefab", t => t.detector_prefab_id)
                 .ForeignKey("dbo.data_type", t => t.option_data_type_id)
                 .Index(t => t.detector_prefab_id)
                 .Index(t => t.option_data_type_id);
             
             CreateTable(
-                "dbo.DetectorPrefabEntities",
+                "dbo.detector_prefab",
                 c => new
                     {
                         id = c.Int(nullable: false, identity: true),
@@ -260,7 +263,7 @@
                         fault_condition = c.String(unicode: false, storeType: "text"),
                     })
                 .PrimaryKey(t => t.id)
-                .ForeignKey("dbo.DetectorPrefabEntities", t => t.detector_prefab_id)
+                .ForeignKey("dbo.detector_prefab", t => t.detector_prefab_id)
                 .Index(t => t.detector_prefab_id);
             
             CreateTable(
@@ -535,7 +538,7 @@
                 .PrimaryKey(t => t.id);
             
             CreateTable(
-                "dbo.DetectorInteractionEventEntities",
+                "dbo.detector_interaction_event",
                 c => new
                     {
                         id = c.Int(nullable: false, identity: true),
@@ -557,12 +560,13 @@
                         id = c.Int(nullable: false, identity: true),
                         company_plan_unique_point1_id = c.Int(nullable: false),
                         company_plan_unique_point2_id = c.Int(nullable: false),
+                        company_plan_unique_point1_id1 = c.Int(),
                     })
                 .PrimaryKey(t => t.id)
-                .ForeignKey("dbo.company_plan_unique_point", t => t.company_plan_unique_point1_id)
+                .ForeignKey("dbo.company_plan_unique_point", t => t.company_plan_unique_point1_id1)
                 .ForeignKey("dbo.company_plan_unique_point", t => t.company_plan_unique_point2_id)
-                .Index(t => t.company_plan_unique_point1_id)
-                .Index(t => t.company_plan_unique_point2_id);
+                .Index(t => t.company_plan_unique_point2_id)
+                .Index(t => t.company_plan_unique_point1_id1);
             
             CreateTable(
                 "dbo.enter_leave_point_event",
@@ -683,7 +687,7 @@
             DropForeignKey("dbo.pipeline_item_interaction_event", "account_id", "dbo.account");
             DropForeignKey("dbo.company", "id", "dbo.account");
             DropForeignKey("dbo.enter_leave_point_event", "account_id", "dbo.account");
-            DropForeignKey("dbo.DetectorInteractionEventEntities", "account_id", "dbo.account");
+            DropForeignKey("dbo.detector_interaction_event", "account_id", "dbo.account");
             DropForeignKey("dbo.check_point_event", "account_id", "dbo.account");
             DropForeignKey("dbo.account_bosses_subs", "boss_account_id", "dbo.account");
             DropForeignKey("dbo.account_bosses_subs", "sub_account_id", "dbo.account");
@@ -693,17 +697,18 @@
             DropForeignKey("dbo.storage_cell_prefab", "company_id", "dbo.company");
             DropForeignKey("dbo.role", "company_id", "dbo.company");
             DropForeignKey("dbo.resource", "company_id", "dbo.company");
-            DropForeignKey("dbo.pipeline_item_prefab", "company_id", "dbo.company");
             DropForeignKey("dbo.pipeline", "company_id", "dbo.company");
+            DropForeignKey("dbo.pipeline_item_prefab", "company_id", "dbo.company");
+            DropForeignKey("dbo.account", "company_id", "dbo.company");
             DropForeignKey("dbo.manufactory", "company_id", "dbo.company");
-            DropForeignKey("dbo.DetectorPrefabEntities", "company_id", "dbo.company");
+            DropForeignKey("dbo.detector_prefab", "company_id", "dbo.company");
             DropForeignKey("dbo.company_plan_unique_point", "company_id", "dbo.company");
             DropForeignKey("dbo.manufactory_plan_point", "company_plan_unique_point_id", "dbo.company_plan_unique_point");
             DropForeignKey("dbo.enter_leave_point", "company_plan_unique_point2_id", "dbo.company_plan_unique_point");
-            DropForeignKey("dbo.enter_leave_point", "company_plan_unique_point1_id", "dbo.company_plan_unique_point");
             DropForeignKey("dbo.enter_leave_point_event", "enter_leave_point_id", "dbo.enter_leave_point");
+            DropForeignKey("dbo.enter_leave_point", "company_plan_unique_point1_id1", "dbo.company_plan_unique_point");
             DropForeignKey("dbo.check_point", "company_plan_unique_point2_id", "dbo.company_plan_unique_point");
-            DropForeignKey("dbo.check_point", "company_plan_unique_point1_id", "dbo.company_plan_unique_point");
+            DropForeignKey("dbo.check_point", "manufactory1_id1", "dbo.manufactory");
             DropForeignKey("dbo.storage_cell", "manufactory_id", "dbo.manufactory");
             DropForeignKey("dbo.pipeline_item", "manufactory_id", "dbo.manufactory");
             DropForeignKey("dbo.role_manufactory_permission", "role_id", "dbo.role");
@@ -711,7 +716,7 @@
             DropForeignKey("dbo.role_detector_permission", "role_id", "dbo.role");
             DropForeignKey("dbo.role_detector_permission", "detector_id", "dbo.detector");
             DropForeignKey("dbo.detector_settings_value", "detector_id", "dbo.detector");
-            DropForeignKey("dbo.DetectorInteractionEventEntities", "detector_id", "dbo.detector");
+            DropForeignKey("dbo.detector_interaction_event", "detector_id", "dbo.detector");
             DropForeignKey("dbo.detector_fault", "detector_id", "dbo.detector");
             DropForeignKey("dbo.detector_data", "detector_id", "dbo.detector");
             DropForeignKey("dbo.detector_data_prefab", "visualizer_type_id", "dbo.visualizer_type");
@@ -739,21 +744,20 @@
             DropForeignKey("dbo.detector", "pipeline_item_id", "dbo.pipeline_item");
             DropForeignKey("dbo.detector_settings_prefab", "option_data_type_id", "dbo.data_type");
             DropForeignKey("dbo.detector_settings_value", "detector_settings_prefab_id", "dbo.detector_settings_prefab");
-            DropForeignKey("dbo.detector_settings_prefab", "detector_prefab_id", "dbo.DetectorPrefabEntities");
-            DropForeignKey("dbo.detector_fault_prefab", "detector_prefab_id", "dbo.DetectorPrefabEntities");
+            DropForeignKey("dbo.detector_settings_prefab", "detector_prefab_id", "dbo.detector_prefab");
+            DropForeignKey("dbo.detector_fault_prefab", "detector_prefab_id", "dbo.detector_prefab");
             DropForeignKey("dbo.detector_fault", "detector_fault_prefab_id", "dbo.detector_fault_prefab");
             DropForeignKey("dbo.detector_fault_event", "detector_fault_id", "dbo.detector_fault");
-            DropForeignKey("dbo.detector_data_prefab", "detector_prefab_id", "dbo.DetectorPrefabEntities");
-            DropForeignKey("dbo.detector", "detector_prefab_id", "dbo.DetectorPrefabEntities");
+            DropForeignKey("dbo.detector_data_prefab", "detector_prefab_id", "dbo.detector_prefab");
+            DropForeignKey("dbo.detector", "detector_prefab_id", "dbo.detector_prefab");
             DropForeignKey("dbo.detector_data_prefab", "field_data_type_id", "dbo.data_type");
             DropForeignKey("dbo.role_db_permission", "role_id", "dbo.role");
             DropForeignKey("dbo.role_db_permission", "db_permission_id", "dbo.db_permission");
             DropForeignKey("dbo.db_permission", "db_permission_type_id", "dbo.db_permission_type");
             DropForeignKey("dbo.manufactory_plan_point", "manufactory_id", "dbo.manufactory");
             DropForeignKey("dbo.check_point", "manufactory2_id", "dbo.manufactory");
-            DropForeignKey("dbo.check_point", "manufactory1_id", "dbo.manufactory");
+            DropForeignKey("dbo.check_point", "company_plan_unique_point1_id1", "dbo.company_plan_unique_point");
             DropForeignKey("dbo.check_point_event", "check_point_id", "dbo.check_point");
-            DropForeignKey("dbo.account", "company_id", "dbo.company");
             DropIndex("dbo.account_role", new[] { "role_id" });
             DropIndex("dbo.account_role", new[] { "account_id" });
             DropIndex("dbo.account_bosses_subs", new[] { "boss_account_id" });
@@ -770,10 +774,10 @@
             DropIndex("dbo.role_db_permission", new[] { "db_permission_id" });
             DropIndex("dbo.enter_leave_point_event", new[] { "account_id" });
             DropIndex("dbo.enter_leave_point_event", new[] { "enter_leave_point_id" });
+            DropIndex("dbo.enter_leave_point", new[] { "company_plan_unique_point1_id1" });
             DropIndex("dbo.enter_leave_point", new[] { "company_plan_unique_point2_id" });
-            DropIndex("dbo.enter_leave_point", new[] { "company_plan_unique_point1_id" });
-            DropIndex("dbo.DetectorInteractionEventEntities", new[] { "account_id" });
-            DropIndex("dbo.DetectorInteractionEventEntities", new[] { "detector_id" });
+            DropIndex("dbo.detector_interaction_event", new[] { "account_id" });
+            DropIndex("dbo.detector_interaction_event", new[] { "detector_id" });
             DropIndex("dbo.storage_cell_prefab", new[] { "company_id" });
             DropIndex("dbo.storage_cell_event", new[] { "account_id" });
             DropIndex("dbo.storage_cell_event", new[] { "storage_cell_id" });
@@ -805,7 +809,7 @@
             DropIndex("dbo.detector_fault", new[] { "detector_fault_prefab_id" });
             DropIndex("dbo.detector_fault", new[] { "detector_id" });
             DropIndex("dbo.detector_fault_prefab", new[] { "detector_prefab_id" });
-            DropIndex("dbo.DetectorPrefabEntities", new[] { "company_id" });
+            DropIndex("dbo.detector_prefab", new[] { "company_id" });
             DropIndex("dbo.detector_settings_prefab", new[] { "option_data_type_id" });
             DropIndex("dbo.detector_settings_prefab", new[] { "detector_prefab_id" });
             DropIndex("dbo.detector_data_prefab", new[] { "field_data_type_id" });
@@ -822,15 +826,16 @@
             DropIndex("dbo.manufactory", new[] { "company_id" });
             DropIndex("dbo.check_point_event", new[] { "account_id" });
             DropIndex("dbo.check_point_event", new[] { "check_point_id" });
+            DropIndex("dbo.check_point", new[] { "manufactory1_id1" });
+            DropIndex("dbo.check_point", new[] { "company_plan_unique_point1_id1" });
             DropIndex("dbo.check_point", new[] { "manufactory2_id" });
-            DropIndex("dbo.check_point", new[] { "manufactory1_id" });
             DropIndex("dbo.check_point", new[] { "company_plan_unique_point2_id" });
-            DropIndex("dbo.check_point", new[] { "company_plan_unique_point1_id" });
             DropIndex("dbo.company_plan_unique_point", new[] { "company_id" });
             DropIndex("dbo.company", new[] { "id" });
             DropIndex("dbo.task", new[] { "reviewer_account_id" });
             DropIndex("dbo.task", new[] { "assignee_account_id" });
             DropIndex("dbo.task", new[] { "company_id" });
+            DropIndex("dbo.account", new[] { "login" });
             DropIndex("dbo.account", new[] { "company_id" });
             DropTable("dbo.account_role");
             DropTable("dbo.account_bosses_subs");
@@ -841,7 +846,7 @@
             DropTable("dbo.role_db_permission");
             DropTable("dbo.enter_leave_point_event");
             DropTable("dbo.enter_leave_point");
-            DropTable("dbo.DetectorInteractionEventEntities");
+            DropTable("dbo.detector_interaction_event");
             DropTable("dbo.visualizer_type");
             DropTable("dbo.storage_cell_prefab");
             DropTable("dbo.storage_cell_event");
@@ -861,7 +866,7 @@
             DropTable("dbo.detector_fault_event");
             DropTable("dbo.detector_fault");
             DropTable("dbo.detector_fault_prefab");
-            DropTable("dbo.DetectorPrefabEntities");
+            DropTable("dbo.detector_prefab");
             DropTable("dbo.detector_settings_prefab");
             DropTable("dbo.data_type");
             DropTable("dbo.detector_data_prefab");

@@ -1,5 +1,5 @@
 ﻿using Autofac;
-
+using System;
 using WorkAutomatorDataAccess.Entities;
 using WorkAutomatorDataAccess.RepoInterfaces;
 using WorkAutomatorDataAccess.Repos;
@@ -30,21 +30,49 @@ namespace WorkAutomatorDataAccess
         {
             ContainerBuilder builder = new ContainerBuilder();
 
-            RegisterBaseRepoForEntityType<AccountEntity>(builder);
+            RegisterRepo<AccountRepo, AccountEntity>(builder);
+            RegisterRepo<CompanyRepo, CompanyEntity>(builder);
 
             return builder.Build();
         }
 
         private static void RegisterBaseRepoForEntityType<TEntity>(ContainerBuilder builder) where TEntity : EntityBase
         {
-            builder.RegisterType<RepoBase<WorkAutomatorDBContext, TEntity>>()
+            builder.RegisterType<RepoBase<TEntity>>()
                    .As<IRepo<TEntity>>()
                    .Keyed<IRepo<TEntity>>(ContextType.REAL)
+                   .UsingConstructor(new Type[] { typeof(Type) })
+                   .WithParameter(new TypedParameter(typeof(Type), typeof(WorkAutomatorDBContext)))
                    .SingleInstance();
 
-            builder.RegisterType<RepoBase<WorkAutomatorDBContextTest, TEntity>>()
+            builder.RegisterType<RepoBase<TEntity>>()
                    .As<IRepo<TEntity>>()
                    .Keyed<IRepo<TEntity>>(ContextType.TEST)
+                   .UsingConstructor(new Type[] { typeof(Type) })
+                   .WithParameter(new TypedParameter(typeof(Type), typeof(WorkAutomatorDBContextTest)))
+                   .SingleInstance();
+        }
+
+        private static void RegisterRepo<TRepo, TEntity>(ContainerBuilder builder)
+            where TEntity : EntityBase
+            where TRepo : IRepo<TEntity>
+        {
+            builder.RegisterType<TRepo>()
+                   .As<RepoBase<TEntity>>()
+                   .As<IRepo<TEntity>>()
+                   .AsSelf()
+                   .Keyed<IRepo<TEntity>>(ContextType.REAL)
+                   .UsingConstructor(new Type[] { typeof(Type) })
+                   .WithParameter(new TypedParameter(typeof(Type), typeof(WorkAutomatorDBContext)))
+                   .SingleInstance();
+
+            builder.RegisterType<TRepo>()
+                   .As<RepoBase<TEntity>>()
+                   .As<IRepo<TEntity>>()
+                   .AsSelf()
+                   .Keyed<IRepo<TEntity>>(ContextType.TEST)
+                   .UsingConstructor(new Type[] { typeof(Type) })
+                   .WithParameter(new TypedParameter(typeof(Type), typeof(WorkAutomatorDBContextTest)))
                    .SingleInstance();
         }
     }

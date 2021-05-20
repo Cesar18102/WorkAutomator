@@ -12,3 +12,6 @@
 
 /WorkAutomatorServer/DataAccessTests/bin
 /WorkAutomatorServer/DataAccessTests/obj
+
+/WorkAutomatorServer/BusinessLogicTests/bin
+/WorkAutomatorServer/BusinessLogicTests/obj

@@ -11,24 +11,19 @@ namespace WorkAutomatorDataAccess.Aspects
 {
     public sealed class ProtectedExecuteAspect : OnMethodBoundaryAspect
     {
-        public override void OnEntry(MethodExecutionArgs arg)
-        {
-            
-        }
-
-        public override void OnExit(MethodExecutionArgs arg)
-        {
-            
-        }
-
         public override void OnException(MethodExecutionArgs args)
         {
-            if (!typeof(RepoBase<,>).IsAssignableFrom(args.Instance.GetType().GetGenericTypeDefinition()))
+            Type instanceType = args.Instance.GetType();
+
+            while (!instanceType.IsGenericType)
+                instanceType = instanceType.BaseType;
+
+            if (!typeof(RepoBase<>).IsAssignableFrom(instanceType.GetGenericTypeDefinition()))
                 return;
 
             if (args.Exception is DatabaseActionValidationException ex)
             {
-                Type entityType = args.Instance.GetType().GetGenericArguments()[1];
+                Type entityType = instanceType.GetGenericArguments()[0];
                 InvalidDataException invalidDataException = new InvalidDataException();
 
                 foreach (ValidationResult validationResult in ex.Errors)

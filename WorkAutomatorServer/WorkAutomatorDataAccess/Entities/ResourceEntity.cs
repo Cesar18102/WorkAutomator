@@ -35,6 +35,6 @@ namespace WorkAutomatorDataAccess.Entities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ResourceStorageCellEntity> resource_storage_cell { get; set; }
 
-        public virtual UnitEntity unit { get; set; }
+        public virtual UnitEntity Unit { get; set; }
     }
 }
