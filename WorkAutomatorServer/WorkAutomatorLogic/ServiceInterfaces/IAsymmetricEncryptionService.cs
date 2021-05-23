@@ -1,12 +1,10 @@
-﻿using WorkAutomatorLogic.Models;
+﻿using System.Security.Cryptography;
 
 namespace WorkAutomatorLogic.ServiceInterfaces
 {
     public interface IAsymmetricEncryptionService
     {
-        PublicKeyModel GetNewPublicKey();
-        string Decrypt(string encryptedText, PublicKeyModel publicKey);
-        string Encrypt(string text, PublicKeyModel publicKey);
-        void DestroyKeyPair(PublicKeyModel publicKey);
+        string Decrypt(string encryptedText, AsymmetricAlgorithm algorithm);
+        string Encrypt(string text, AsymmetricAlgorithm algorithm);
     }
 }

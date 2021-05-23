@@ -32,6 +32,11 @@ namespace WorkAutomatorDataAccess
             }
         }
 
+        public static IRepo<TEntity> ResolveRealRepo<TEntity>() where TEntity : EntityBase
+        {
+            return Dependencies.ResolveKeyed<IRepo<TEntity>>(ContextType.REAL);
+        }
+
         private static List<Type> RegisteredEntityTypes = new List<Type>();
 
         private static IContainer BuildDependencies()

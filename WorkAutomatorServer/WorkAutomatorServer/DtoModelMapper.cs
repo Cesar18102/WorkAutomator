@@ -33,6 +33,7 @@ namespace WorkAutomatorServer
             config.CreateMap<PublicKeyDto, PublicKeyModel>().ReverseMap();
             config.CreateMap<SignUpDto, SignUpFormModel>();
             config.CreateMap<LogInDto, LogInFormModel>();
+            config.CreateMap<SessionDto, SessionCredentialsModel>();
         }
     }
 }

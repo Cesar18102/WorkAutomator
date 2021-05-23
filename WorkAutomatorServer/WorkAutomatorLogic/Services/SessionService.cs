@@ -44,9 +44,13 @@ namespace WorkAutomatorLogic.Services
 
         public void CheckSession(SessionCredentialsModel sessionCredentials)
         {
+            if(sessionCredentials == null)
+                throw new NotFoundException("Session");
+
             int userId = sessionCredentials.UserId;
+
             if (!Sessions.ContainsKey(userId))
-                throw new SessionNotFoundException();
+                throw new NotFoundException("Session");
 
             SessionModel session = Sessions[userId];
 

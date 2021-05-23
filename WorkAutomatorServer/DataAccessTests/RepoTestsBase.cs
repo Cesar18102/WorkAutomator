@@ -9,6 +9,7 @@ using WorkAutomatorDataAccess;
 using WorkAutomatorDataAccess.Entities;
 using WorkAutomatorDataAccess.RepoInterfaces;
 using WorkAutomatorDataAccess.Exceptions;
+using WorkAutomatorDataAccess.Aspects;
 
 namespace DataAccessTests
 {

@@ -80,7 +80,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Aspects\ProtectedExecuteAspect.cs" />
+    <Compile Include="Aspects\AddRepoInfoToDatabaseActionValidationExceptionAspect.cs" />
     <Compile Include="Entities\AccountEntity.cs" />
     <Compile Include="Entities\CheckPointEntity.cs" />
     <Compile Include="Entities\CheckPointEventEntity.cs" />
@@ -123,10 +123,9 @@
     <Compile Include="Entities\VisualizerTypeEntity.cs" />
     <Compile Include="Exceptions\DatabaseActionValidationException.cs" />
     <Compile Include="Exceptions\EntityNotFoundException.cs" />
-    <Compile Include="Exceptions\InvalidDataException.cs" />
-    <Compile Include="Migrations\202105202036240_init.cs" />
-    <Compile Include="Migrations\202105202036240_init.designer.cs">
-      <DependentUpon>202105202036240_init.cs</DependentUpon>
+    <Compile Include="Migrations\202105231734330_init.cs" />
+    <Compile Include="Migrations\202105231734330_init.designer.cs">
+      <DependentUpon>202105231734330_init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="RepoDependencyHolder.cs" />
@@ -152,8 +151,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202105202036240_init.resx">
-      <DependentUpon>202105202036240_init.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202105231734330_init.resx">
+      <DependentUpon>202105231734330_init.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -163,9 +162,9 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
     <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
-    <Error Condition="!Exists('..\packages\Fody.6.0.5\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.6.0.5\build\Fody.targets'))" />
     <Error Condition="!Exists('..\packages\MethodBoundaryAspect.Fody.2.0.139\build\MethodBoundaryAspect.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MethodBoundaryAspect.Fody.2.0.139\build\MethodBoundaryAspect.Fody.props'))" />
+    <Error Condition="!Exists('..\packages\Fody.6.5.1\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.6.5.1\build\Fody.targets'))" />
   </Target>
   <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
-  <Import Project="..\packages\Fody.6.0.5\build\Fody.targets" Condition="Exists('..\packages\Fody.6.0.5\build\Fody.targets')" />
+  <Import Project="..\packages\Fody.6.5.1\build\Fody.targets" Condition="Exists('..\packages\Fody.6.5.1\build\Fody.targets')" />
 </Project>

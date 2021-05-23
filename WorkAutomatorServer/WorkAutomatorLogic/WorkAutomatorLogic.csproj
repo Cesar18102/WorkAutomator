@@ -1,5 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
+  <Import Project="..\packages\MethodBoundaryAspect.Fody.2.0.139\build\MethodBoundaryAspect.Fody.props" Condition="Exists('..\packages\MethodBoundaryAspect.Fody.2.0.139\build\MethodBoundaryAspect.Fody.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -12,6 +14,8 @@
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -37,6 +41,15 @@
     <Reference Include="AutoMapper, Version=10.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.10.1.1\lib\net461\AutoMapper.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="MethodBoundaryAspect, Version=2.0.139.0, Culture=neutral, PublicKeyToken=296379d5065c9d61, processorArchitecture=MSIL">
+      <HintPath>..\packages\MethodBoundaryAspect.Fody.2.0.139\lib\net452\MethodBoundaryAspect.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
@@ -47,6 +60,7 @@
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
     </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.7.1\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
@@ -72,40 +86,59 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Exceptions\AccountNotFoundException.cs" />
+    <Compile Include="Exceptions\DataValidationException.cs" />
     <Compile Include="Exceptions\InvalidKeyException.cs" />
     <Compile Include="Exceptions\InvalidPasswordException.cs" />
     <Compile Include="Exceptions\LogicExceptionBase.cs" />
     <Compile Include="Exceptions\LoginDuplicationException.cs" />
+    <Compile Include="Exceptions\NotFoundException.cs" />
     <Compile Include="Exceptions\PostValidationException.cs" />
     <Compile Include="Exceptions\SessionExpiredException.cs" />
-    <Compile Include="Exceptions\SessionNotFoundException.cs" />
     <Compile Include="Exceptions\WrongEncryptionException.cs" />
     <Compile Include="Exceptions\WrongPasswordException.cs" />
     <Compile Include="Exceptions\WrongSessionTokenException.cs" />
     <Compile Include="LogicDependencyHolder.cs" />
     <Compile Include="ModelEntityMapper.cs" />
     <Compile Include="Models\AccountModel.cs" />
+    <Compile Include="Models\CompanyModel.cs" />
+    <Compile Include="Models\Permission\InteractionDbType.cs" />
+    <Compile Include="Models\Permission\Interaction.cs" />
+    <Compile Include="Models\Permission\PermissionDbModel.cs" />
     <Compile Include="Models\DtoModels\LogInFormModel.cs" />
+    <Compile Include="Models\ManufactoryModel.cs" />
     <Compile Include="Models\ModelBase.cs" />
+    <Compile Include="Models\Permission\InteractionType.cs" />
+    <Compile Include="Models\Permission\PermissionModel.cs" />
+    <Compile Include="Models\Permission\PermissionModelBase.cs" />
+    <Compile Include="Models\PlanPointModel.cs" />
     <Compile Include="Models\PublicKeyModel.cs" />
     <Compile Include="Models\DtoModels\SessionCredentialsModel.cs" />
+    <Compile Include="Models\RoleModel.cs" />
     <Compile Include="Models\SessionModel.cs" />
     <Compile Include="Models\DtoModels\SignUpFormModel.cs" />
+    <Compile Include="Models\WorkerModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceInterfaces\IAsymmetricEncryptionService.cs" />
     <Compile Include="ServiceInterfaces\IAuthService.cs" />
+    <Compile Include="ServiceInterfaces\ICompanyService.cs" />
     <Compile Include="ServiceInterfaces\IHashingService.cs" />
-    <Compile Include="ServiceInterfaces\IRoleCheckService.cs" />
+    <Compile Include="ServiceInterfaces\IKeyService.cs" />
+    <Compile Include="ServiceInterfaces\IProfileService.cs" />
+    <Compile Include="ServiceInterfaces\IPermissionService.cs" />
     <Compile Include="ServiceInterfaces\ISessionService.cs" />
     <Compile Include="Services\AuthService.cs" />
-    <Compile Include="Services\RoleCheckService.cs" />
+    <Compile Include="Services\KeyService.cs" />
+    <Compile Include="Services\PermissionService.cs" />
     <Compile Include="Services\RSAService.cs" />
+    <Compile Include="Services\ServiceBase.cs" />
     <Compile Include="Services\SessionService.cs" />
     <Compile Include="Services\SHA256HashingService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="FodyWeavers.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -115,7 +148,21 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\BusinessModels\" />
+    <Folder Include="Aspects\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="FodyWeavers.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\Fody.6.0.5\build\Fody.targets" Condition="Exists('..\packages\Fody.6.0.5\build\Fody.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Fody.6.0.5\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.6.0.5\build\Fody.targets'))" />
+    <Error Condition="!Exists('..\packages\MethodBoundaryAspect.Fody.2.0.139\build\MethodBoundaryAspect.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MethodBoundaryAspect.Fody.2.0.139\build\MethodBoundaryAspect.Fody.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
 </Project>

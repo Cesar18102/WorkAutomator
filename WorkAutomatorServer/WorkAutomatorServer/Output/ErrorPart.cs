@@ -10,13 +10,13 @@ namespace WorkAutomatorServer.Output
         [JsonProperty("code")]
         public int Code { get; set; }
 
-        [JsonProperty("message")]
-        public string Message { get; set; }
+        [JsonProperty("exception")]
+        public Exception Exception { get; set; }
 
         public ErrorPart(int code, Exception exception)
         {
             Code = code;
-            Message = exception.Message;
+            Exception = exception;
         }
     }
 }

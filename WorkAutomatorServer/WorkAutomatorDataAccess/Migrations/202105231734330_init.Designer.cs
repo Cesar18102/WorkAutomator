@@ -13,7 +13,7 @@ namespace WorkAutomatorDataAccess.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "202105202036240_init"; }
+            get { return "202105231734330_init"; }
         }
         
         string IMigrationMetadata.Source

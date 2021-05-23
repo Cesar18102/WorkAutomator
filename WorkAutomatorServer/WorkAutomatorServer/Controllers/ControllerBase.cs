@@ -28,9 +28,11 @@ namespace WorkAutomatorServer.Controllers
 {
     public abstract class ControllerBase : ApiController
     {
-        private static Dictionary<Type, HttpStatusCode> ErrorStatusCodes = new Dictionary<Type, HttpStatusCode>()
+        internal static Dictionary<Type, HttpStatusCode> ErrorStatusCodes = new Dictionary<Type, HttpStatusCode>()
         {
             { typeof(ValidationException), HttpStatusCode.BadRequest },
+
+            { typeof(NotFoundException), HttpStatusCode.NotFound },
 
             { typeof(LoginDuplicationException), HttpStatusCode.Conflict },
             { typeof(InvalidKeyException), HttpStatusCode.Unauthorized },
@@ -38,10 +40,7 @@ namespace WorkAutomatorServer.Controllers
             { typeof(WrongEncryptionException), HttpStatusCode.BadRequest },
             { typeof(InvalidPasswordException), HttpStatusCode.BadRequest },
 
-            { typeof(AccountNotFoundException), HttpStatusCode.NotFound },
             { typeof(WrongPasswordException), HttpStatusCode.Unauthorized },
-
-            { typeof(SessionNotFoundException), HttpStatusCode.Unauthorized },
             { typeof(WrongSessionTokenException), HttpStatusCode.Unauthorized },
             { typeof(SessionExpiredException), HttpStatusCode.Unauthorized },
 
@@ -56,7 +55,7 @@ namespace WorkAutomatorServer.Controllers
             //{ typeof(ForbiddenActionException), HttpStatusCode.Forbidden },
         };
 
-        public async Task<HttpResponseMessage> Execute<Tin>(Action<Tin> executor, Tin parameter)
+        public async Task<HttpResponseMessage> Execute<Tin>(Action<Tin> executor, Tin parameter, bool createResponseOnSuccess = true)
         {
             Func<object> func = new Func<object>(() =>
             {
@@ -68,10 +67,10 @@ namespace WorkAutomatorServer.Controllers
                 () => Task.Run(func)
             );
 
-            return await ProtectedExecute(task, parameter, true);
+            return await ProtectedExecute(task, parameter, true, createResponseOnSuccess);
         }
 
-        public async Task<HttpResponseMessage> Execute<Tin>(Func<Tin, Task> executor, Tin parameter)
+        public async Task<HttpResponseMessage> Execute<Tin>(Func<Tin, Task> executor, Tin parameter, bool createResponseOnSuccess = true)
         {
             Func<Task<object>> task = new Func<Task<object>>(
                 async () =>
@@ -81,15 +80,15 @@ namespace WorkAutomatorServer.Controllers
                 }
             );
 
-            return await ProtectedExecute(task, parameter, true);
+            return await ProtectedExecute(task, parameter, true, createResponseOnSuccess);
         }
 
-        public async Task<HttpResponseMessage> Execute<Tout>(Func<Tout> executor)
+        public async Task<HttpResponseMessage> Execute<Tout>(Func<Tout> executor, bool createResponseOnSuccess = true)
         {
-            return await ProtectedExecute(() => Task.Run(executor), null, false);
+            return await ProtectedExecute(() => Task.Run(executor), null, false, createResponseOnSuccess);
         }
 
-        public async Task<HttpResponseMessage> Execute(Func<Task> executor)
+        public async Task<HttpResponseMessage> Execute(Func<Task> executor, bool createResponseOnSuccess = true)
         {
             Func<Task<object>> task = new Func<Task<object>>(
                 async () =>
@@ -99,15 +98,15 @@ namespace WorkAutomatorServer.Controllers
                 }
             );
 
-            return await ProtectedExecute(task, null, false);
+            return await ProtectedExecute(task, null, false, createResponseOnSuccess);
         }
 
-        public async Task<HttpResponseMessage> Execute<Tout>(Func<Task<Tout>> executor)
+        public async Task<HttpResponseMessage> Execute<Tout>(Func<Task<Tout>> executor, bool createResponseOnSuccess = true)
         {
-            return await ProtectedExecute(executor, null, false);
+            return await ProtectedExecute(executor, null, false, createResponseOnSuccess);
         }
 
-        public async Task<HttpResponseMessage> Execute<Tin, Tout>(Func<Tin, Tout> executor, Tin parameter)
+        public async Task<HttpResponseMessage> Execute<Tin, Tout>(Func<Tin, Tout> executor, Tin parameter, bool createResponseOnSuccess = true)
         {
             Func<Task<Tout>> task = new Func<Task<Tout>>(
                 () => Task.Run(
@@ -115,30 +114,12 @@ namespace WorkAutomatorServer.Controllers
                 )
             );
 
-            return await ProtectedExecute(task, parameter, true);
+            return await ProtectedExecute(task, parameter, true, createResponseOnSuccess);
         }
 
-        public async Task<HttpResponseMessage> Execute<Tin, Tout>(Func<Tin, Task<Tout>> executor, Tin parameter)
+        public async Task<HttpResponseMessage> Execute<Tin, Tout>(Func<Tin, Task<Tout>> executor, Tin parameter, bool createResponseOnSuccess = true)
         {
-            return await ProtectedExecute(() => executor(parameter), parameter, true);
-        }
-
-        protected string GetHeaderOrCookie(string name, bool throwIfNotPresented)
-        {
-            string header = null;
-            if (!Request.Headers.TryGetValues(name, out IEnumerable<string> tokens))
-            {
-                Collection<CookieHeaderValue> cookies = Request.Headers.GetCookies();
-                if (cookies != null && cookies.Count > 0 && cookies[0][name] != null)
-                    header = cookies[0][name].Value;
-            }
-            else
-                header = tokens.FirstOrDefault();
-
-            if (header == null && throwIfNotPresented)
-                throw new ValidationException($"{name} was not presented");
-
-            return header;
+            return await ProtectedExecute(() => executor(parameter), parameter, true, createResponseOnSuccess);
         }
 
         protected virtual void ValidateModel(object parameter, bool mustHaveParameter = true)
@@ -239,60 +220,19 @@ namespace WorkAutomatorServer.Controllers
             //log it
             throw ex;
         }
-
-        private void WireHeaders(object obj)
-        {
-            if (obj == null || obj.GetType().IsPrimitive)
-                return;
-
-            PropertyInfo[] properties = obj.GetType().GetProperties()
-                .Where(property => property.GetCustomAttribute<HeaderAutoWiredAttribute>() != null)
-                .ToArray();
-
-            foreach (PropertyInfo property in properties)
-            {
-                HeaderAutoWiredAttribute attr = property.GetCustomAttribute<HeaderAutoWiredAttribute>();
-
-                if (property.PropertyType.IsPrimitive || property.PropertyType.Equals(typeof(string)))
-                {
-                    string header = GetHeaderOrCookie(attr.HeaderName, attr.ThrowIfNotPresented);
-                    try
-                    {
-                        object value = Convert.ChangeType(header, property.PropertyType);
-                        property.SetValue(obj, value);
-                    }
-                    catch { throw new ValidationException($"Header {attr.HeaderName} is invalid"); }
-                }
-                else
-                {
-                    object value = property.GetValue(obj);
-
-                    if (value == null)
-                    {
-                        value = property.PropertyType.GetConstructor(new Type[] { })
-                            .Invoke(new object[] { });
-
-                        property.SetValue(obj, value);
-                    }
-
-                    WireHeaders(value);
-                }
-            }
-        }
-
         private HttpResponseMessage CreateResponse(object data)
         {
             Response response = new Response() { Data = data };
             return Request.CreateResponse(HttpStatusCode.OK, response);
         }
 
-        private async Task<HttpResponseMessage> ProtectedExecute<Tout>(Func<Task<Tout>> task, object parameter, bool mustHaveParameter)
+        private async Task<HttpResponseMessage> ProtectedExecute<TOut>(Func<Task<TOut>> task, object parameter, bool mustHaveParameter, bool createResponseOnSuccess)
         {
             try
             {
                 ValidateModel(parameter, mustHaveParameter);
-                WireHeaders(parameter);
-                return CreateResponse(await task());
+                TOut result = await task();
+                return createResponseOnSuccess ? CreateResponse(result) : null;
             }
             catch (ServerExceptionBase ex) { return CreateErrorResponse(ex); }
             catch (LogicExceptionBase ex) { return CreateErrorResponse(ex); }

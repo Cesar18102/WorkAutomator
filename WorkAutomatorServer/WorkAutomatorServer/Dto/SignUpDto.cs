@@ -24,11 +24,6 @@ namespace WorkAutomatorServer.Dto
         [JsonProperty("password_encrypted")]
         public string PasswordEncrypted { get; set; }
 
-        [Required(AllowEmptyStrings = false, ErrorMessage = "email is required")]
-        [EmailAddress(ErrorMessage = "email is invalid")]
-        [JsonProperty("email")]
-        public string Email { get; set; }
-
         [Required(AllowEmptyStrings = false, ErrorMessage = "public_key is required")]
         [JsonProperty("public_key")]
         public PublicKeyDto PublicKey { get; set; }

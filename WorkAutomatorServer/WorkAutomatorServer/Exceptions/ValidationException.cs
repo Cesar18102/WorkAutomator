@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Runtime.Remoting;
 
 using Newtonsoft.Json;
 
@@ -18,7 +17,6 @@ namespace WorkAutomatorServer.Exceptions
         }
 
         public ValidationException(params string[] messages) :
-            this(messages as IEnumerable<string>)
-        { }
+            this(messages as IEnumerable<string>) { }
     }
 }

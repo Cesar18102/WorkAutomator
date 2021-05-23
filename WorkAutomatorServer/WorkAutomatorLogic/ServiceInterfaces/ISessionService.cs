@@ -2,7 +2,7 @@
 
 namespace WorkAutomatorLogic.ServiceInterfaces
 {
-    internal interface ISessionService
+    public interface ISessionService
     {
         SessionModel CreateSessionFor(int accountId);
         void CheckSession(SessionCredentialsModel sessionCredentials);

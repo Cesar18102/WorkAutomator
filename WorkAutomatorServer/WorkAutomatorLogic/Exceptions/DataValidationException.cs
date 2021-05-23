@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
-using WorkAutomatorDataAccess.Entities;
-
-namespace WorkAutomatorDataAccess.Exceptions
+namespace WorkAutomatorLogic.Exceptions
 {
-    public class InvalidDataException : Exception
+    public class DataValidationException : Exception
     {
         public List<InvalidFieldInfo> InvalidFieldInfos { get; private set; } = 
             new List<InvalidFieldInfo>();
+
+        public override string Message => "There were some validation errors: " +
+            string.Join("\n", InvalidFieldInfos.Select(info => $"{info.Field}: {info.Reason}"));
     }
 
     public class InvalidFieldInfo

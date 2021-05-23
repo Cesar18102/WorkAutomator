@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System.Linq;
+using System.Web.Http;
 
 namespace WorkAutomatorServer
 {
@@ -10,9 +11,14 @@ namespace WorkAutomatorServer
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
+                routeTemplate: "api/{controller}/{action}"
             );
+
+            var appXmlType = config.Formatters.XmlFormatter.SupportedMediaTypes.FirstOrDefault(
+                t => t.MediaType == "application/xml"
+            );
+
+            config.Formatters.XmlFormatter.SupportedMediaTypes.Remove(appXmlType);
         }
     }
 }

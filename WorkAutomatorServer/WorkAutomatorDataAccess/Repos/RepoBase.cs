@@ -63,7 +63,7 @@ namespace WorkAutomatorDataAccess.Repos
             }
         }
 
-        [ProtectedExecuteAspect]
+        [AddRepoInfoToDatabaseActionValidationExceptionAspect]
         public virtual async Task<TEntity> Create(TEntity entity)
         {
             using(DbContext db = CreateContext())
@@ -74,7 +74,7 @@ namespace WorkAutomatorDataAccess.Repos
             }
         }
 
-        [ProtectedExecuteAspect]
+        [AddRepoInfoToDatabaseActionValidationExceptionAspect]
         public virtual async Task<TEntity> Update(TEntity entity)
         {
             using(DbContext db = CreateContext())
@@ -91,6 +91,7 @@ namespace WorkAutomatorDataAccess.Repos
             }
         }
 
+        [AddRepoInfoToDatabaseActionValidationExceptionAspect]
         public virtual async Task Delete(int id)
         {
             using (DbContext db = CreateContext())
@@ -105,6 +106,7 @@ namespace WorkAutomatorDataAccess.Repos
             }
         }
 
+        [AddRepoInfoToDatabaseActionValidationExceptionAspect]
         public virtual async Task Clear()
         {
             using (DbContext db = CreateContext())

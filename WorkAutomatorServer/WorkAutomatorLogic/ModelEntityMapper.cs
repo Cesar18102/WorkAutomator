@@ -30,9 +30,15 @@ namespace WorkAutomatorLogic
 
         private static void Configure(IMapperConfigurationExpression config)
         {
-            //config.CreateMap<PublicKeyDto, PublicKeyModel>().ReverseMap();
-            //config.CreateMap<SignUpDto, SignUpFormModel>();
-            //config.CreateMap<LogInDto, LogInFormModel>();
+            config.CreateMap<SignUpFormModel, AccountEntity>()
+                  .ForMember(entity => entity.password, cnf => cnf.MapFrom(model => model.PasswordEncrypted));
+
+            config.CreateMap<AccountModel, AccountEntity>()
+                  .ForMember(entity => entity.first_name, cnf => cnf.MapFrom(model => model.FirstName))
+                  .ForMember(entity => entity.last_name, cnf => cnf.MapFrom(model => model.LastName))
+                  .ReverseMap()
+                  .ForMember(model => model.FirstName, cnf => cnf.MapFrom(entity => entity.first_name))
+                  .ForMember(model => model.LastName, cnf => cnf.MapFrom(entity => entity.last_name));
         }
     }
 }

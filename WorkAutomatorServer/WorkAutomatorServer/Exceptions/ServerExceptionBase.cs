@@ -4,5 +4,10 @@ using System;
 
 namespace WorkAutomatorServer.Exceptions
 {
-    public class ServerExceptionBase : Exception { }
+    [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
+    public class ServerExceptionBase : Exception
+    {
+        [JsonProperty("message")]
+        public override string Message => base.Message;
+    }
 }

@@ -27,7 +27,7 @@ namespace WorkAutomatorServer.Controllers
         }
 
         [HttpPost]
-        public async Task<HttpResponseMessage> LogIn(LogInDto logInDto)
+        public async Task<HttpResponseMessage> LogIn([FromBody] LogInDto logInDto)
         {
             return await Execute(
                 dto => AuthService.LogIn(dto.ToModel<LogInFormModel>()),
