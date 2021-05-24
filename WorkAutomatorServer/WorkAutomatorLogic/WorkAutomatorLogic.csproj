@@ -86,21 +86,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Aspects\DbPermissionAspect.cs" />
+    <Compile Include="Aspects\InitiatorAccountIdAttribute.cs" />
+    <Compile Include="Aspects\IsHiredAspect.cs" />
+    <Compile Include="Aspects\PermissionAspect.cs" />
+    <Compile Include="Aspects\TableNameParameterAttribute.cs" />
     <Compile Include="Exceptions\DataValidationException.cs" />
     <Compile Include="Exceptions\InvalidKeyException.cs" />
     <Compile Include="Exceptions\InvalidPasswordException.cs" />
     <Compile Include="Exceptions\LogicExceptionBase.cs" />
     <Compile Include="Exceptions\LoginDuplicationException.cs" />
     <Compile Include="Exceptions\NotFoundException.cs" />
+    <Compile Include="Exceptions\NotPermittedException.cs" />
     <Compile Include="Exceptions\PostValidationException.cs" />
     <Compile Include="Exceptions\SessionExpiredException.cs" />
     <Compile Include="Exceptions\WrongEncryptionException.cs" />
     <Compile Include="Exceptions\WrongPasswordException.cs" />
     <Compile Include="Exceptions\WrongSessionTokenException.cs" />
+    <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="LogicDependencyHolder.cs" />
     <Compile Include="ModelEntityMapper.cs" />
     <Compile Include="Models\AccountModel.cs" />
     <Compile Include="Models\CompanyModel.cs" />
+    <Compile Include="Models\Permission\Converters.cs" />
+    <Compile Include="Models\Permission\DbTable.cs" />
     <Compile Include="Models\Permission\InteractionDbType.cs" />
     <Compile Include="Models\Permission\Interaction.cs" />
     <Compile Include="Models\Permission\PermissionDbModel.cs" />
@@ -125,6 +134,7 @@
     <Compile Include="ServiceInterfaces\IKeyService.cs" />
     <Compile Include="ServiceInterfaces\IProfileService.cs" />
     <Compile Include="ServiceInterfaces\IPermissionService.cs" />
+    <Compile Include="ServiceInterfaces\IRoleService.cs" />
     <Compile Include="ServiceInterfaces\ISessionService.cs" />
     <Compile Include="Services\AuthService.cs" />
     <Compile Include="Services\KeyService.cs" />
@@ -147,9 +157,7 @@
       <Name>WorkAutomatorDataAccess</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Aspects\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="FodyWeavers.xml" />
   </ItemGroup>

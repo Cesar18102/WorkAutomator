@@ -36,13 +36,13 @@ namespace WorkAutomatorServer.Aspects
 
             SessionCredentialsModel sessionModel = session?.ToModel<SessionCredentialsModel>();
 
-            Task<HttpResponseMessage> response = (args.Instance as ControllerBase).Execute(
+            HttpResponseMessage response = Task.Run(() => (args.Instance as ControllerBase).Execute(
                 (model) => SessionService.CheckSession(model), sessionModel, false
-            );
+            )).GetAwaiter().GetResult();
             
             if(response != null)
             {
-                args.ReturnValue = response;
+                args.ReturnValue = Task.Run(() => response);
                 args.FlowBehavior = FlowBehavior.Return;
             }
             else

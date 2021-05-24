@@ -44,6 +44,8 @@ namespace WorkAutomatorServer.Controllers
             { typeof(WrongSessionTokenException), HttpStatusCode.Unauthorized },
             { typeof(SessionExpiredException), HttpStatusCode.Unauthorized },
 
+            { typeof(NotPermittedException), HttpStatusCode.Forbidden }
+
 
             //{ typeof(NotFoundException), HttpStatusCode.NotFound },
             //{ typeof(NotAppropriateRoleException), HttpStatusCode.Forbidden },

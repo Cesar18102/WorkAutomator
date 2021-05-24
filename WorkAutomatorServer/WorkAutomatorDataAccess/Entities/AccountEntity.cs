@@ -42,6 +42,9 @@ namespace WorkAutomatorDataAccess.Entities
         [StringLength(256)]
         public string last_name { get; set; }
 
+        [Required]
+        public bool is_superadmin { get; set; }
+
         public virtual CompanyEntity Company { get; set; }
         public virtual CompanyEntity OwnedCompany { get; set; }
 

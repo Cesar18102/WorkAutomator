@@ -1,12 +1,18 @@
 ﻿using System.Threading.Tasks;
-using WorkAutomatorLogic.Models;
+
+using WorkAutomatorLogic.Aspects;
 using WorkAutomatorLogic.Models.Permission;
 
 namespace WorkAutomatorLogic.ServiceInterfaces
 {
-    internal interface IPermissionService
+    public interface IPermissionService
     {
-        Task CheckPermission(Interaction interaction);
-        Task GrantPermission(DbTable table, DbPermissionType type, int userId);
+        Task CreateDbPermission(PermissionDbModel dbPermission, [InitiatorAccountId] int creatorAccountId);
+
+        Task GrantPermission([TableNameParameter] PermissionModelBase permission, [InitiatorAccountId] int grantingByAccountId, int grantingToRoleId);
+        Task UnGrantPermission([TableNameParameter] PermissionModelBase permission, [InitiatorAccountId] int grantingByAccountId, int grantingToRoleId);
+
+        Task<bool> IsLegal(Interaction interaction);
+        Task CheckLegal(Interaction interaction);
     }
 }

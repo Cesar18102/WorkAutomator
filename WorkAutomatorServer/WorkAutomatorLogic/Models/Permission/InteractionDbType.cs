@@ -1,10 +1,13 @@
-﻿namespace WorkAutomatorLogic.Models.Permission
+﻿using System;
+
+namespace WorkAutomatorLogic.Models.Permission
 {
-    public enum InteractionDbType
+    [Flags]
+    public enum InteractionDbType : byte
     {
-        READ,
-        CREATE,
-        UPDATE,
-        DELETE
+        READ = 1,
+        CREATE = 2,
+        UPDATE = 4,
+        DELETE = 8
     }
 }

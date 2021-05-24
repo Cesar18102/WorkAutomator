@@ -127,6 +127,10 @@
     <Compile Include="Migrations\202105231734330_init.designer.cs">
       <DependentUpon>202105231734330_init.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202105232149436_superadmin.cs" />
+    <Compile Include="Migrations\202105232149436_superadmin.designer.cs">
+      <DependentUpon>202105232149436_superadmin.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="RepoDependencyHolder.cs" />
     <Compile Include="RepoInterfaces\IRepo.cs" />
@@ -153,6 +157,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202105231734330_init.resx">
       <DependentUpon>202105231734330_init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202105232149436_superadmin.resx">
+      <DependentUpon>202105232149436_superadmin.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
