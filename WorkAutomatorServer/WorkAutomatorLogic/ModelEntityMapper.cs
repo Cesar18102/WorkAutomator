@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using WorkAutomatorDataAccess.Entities;
 using WorkAutomatorLogic.Models;
 using WorkAutomatorLogic.Models.Permission;
+using WorkAutomatorLogic.Models.Roles;
 
 namespace WorkAutomatorLogic
 {
@@ -42,6 +43,8 @@ namespace WorkAutomatorLogic
                   .ReverseMap()
                   .ForMember(model => model.FirstName, cnf => cnf.MapFrom(entity => entity.first_name))
                   .ForMember(model => model.LastName, cnf => cnf.MapFrom(entity => entity.last_name));
+
+            config.CreateMap<CompanyModel, CompanyEntity>().ReverseMap();
         }
 
         public static IReadOnlyDictionary<DbTable, string> TABLE_NAME_DICTIONARY = new Dictionary<DbTable, string>()
@@ -102,6 +105,27 @@ namespace WorkAutomatorLogic
             { InteractionDbType.DELETE, "DELETE" }
         };
 
+        public static IReadOnlyDictionary<DefaultRoles, string> DEFAULT_ROLES_NAMES = new Dictionary<DefaultRoles, string>()
+        {
+            { DefaultRoles.AUTHORIZED, "AUTHORIZED" },
+            { DefaultRoles.OWNER, "OWNER" }
+        };
+
         //public static IReadOnlyDictionary<Type, string> DATA_TYPES = new Dictionary<>
+
+        public static string ToName(this DbTable table)
+        {
+            return TABLE_NAME_DICTIONARY[table];
+        }
+
+        public static string ToName(this InteractionDbType interactionDbType)
+        {
+            return INTERACTION_DB_TYPES[interactionDbType];
+        }
+
+        public static string ToName(this DefaultRoles role)
+        {
+            return DEFAULT_ROLES_NAMES[role];
+        }
     }
 }

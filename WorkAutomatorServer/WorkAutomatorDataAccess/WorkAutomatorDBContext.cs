@@ -427,7 +427,7 @@ namespace WorkAutomatorDataAccess
 
             modelBuilder.Entity<CompanyEntity>()
                 .HasMany(e => e.Roles)
-                .WithRequired(e => e.Company)
+                .WithOptional(e => e.Company)
                 .HasForeignKey(e => e.company_id)
                 .WillCascadeOnDelete(false);
 

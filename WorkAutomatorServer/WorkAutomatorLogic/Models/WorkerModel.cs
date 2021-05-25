@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 
+using WorkAutomatorLogic.Models.Roles;
+
 namespace WorkAutomatorLogic.Models
 {
     public class WorkerModel : AccountModel

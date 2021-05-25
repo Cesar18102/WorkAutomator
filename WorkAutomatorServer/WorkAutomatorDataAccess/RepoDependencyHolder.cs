@@ -54,6 +54,7 @@ namespace WorkAutomatorDataAccess
             RegisterRepo<DetectorRepo, DetectorEntity>(builder);
             RegisterRepo<DetectorPrefabRepo, DetectorPrefabEntity>(builder);
             RegisterRepo<PipelineItemPrefabRepo, PipelineItemPrefabEntity>(builder);
+            RegisterRepo<DbPermissionRepo, DbPermissionEntity>(builder);
 
             Type[] entityTypes = Assembly.GetAssembly(typeof(EntityBase)).GetTypes().Where(
                 type => typeof(EntityBase).IsAssignableFrom(type) && !type.IsAbstract && !RegisteredEntityTypes.Contains(type)

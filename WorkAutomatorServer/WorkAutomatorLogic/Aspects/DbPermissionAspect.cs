@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -6,7 +7,8 @@ using System.Threading.Tasks;
 using Autofac;
 
 using MethodBoundaryAspect.Fody.Attributes;
-
+using WorkAutomatorLogic.Exceptions;
+using WorkAutomatorLogic.Extensions;
 using WorkAutomatorLogic.Models.Permission;
 using WorkAutomatorLogic.ServiceInterfaces;
 
@@ -24,19 +26,11 @@ namespace WorkAutomatorLogic.Aspects
         {
             ParameterInfo[] methodParameters = arg.Method.GetParameters();
 
-            ParameterInfo initiatorParameter = methodParameters.First(
-                param => param.GetCustomAttribute<InitiatorAccountIdAttribute>() != null
-            );
-
-            int initiatorAccountId = (int)arg.Arguments[initiatorParameter.Position];
+            int initiatorAccountId = (int)arg.Arguments.GetMarkedValueFromArgumentList<InitiatorAccountIdAttribute>(methodParameters);
 
             if(Table == DbTable.None)
             {
-                ParameterInfo tableNameParameter = methodParameters.First(
-                    param => param.GetCustomAttribute<TableNameParameterAttribute>() != null
-                );
-
-                object tableNameParameterValue = arg.Arguments[tableNameParameter.Position];
+                object tableNameParameterValue = arg.Arguments.GetMarkedValueFromArgumentList<TableNameParameterAttribute>(methodParameters);
 
                 if (DbTableConverterType != null)
                 {

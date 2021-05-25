@@ -26,7 +26,7 @@ namespace WorkAutomatorServer.Aspects
             if (session == null)
             {
                 object authorizedDto = args.Arguments.FirstOrDefault(
-                   arg => arg != null && typeof(AuthorizedDto<>).IsAssignableFrom(arg.GetType())
+                   arg => arg != null && typeof(AuthorizedDto<>).IsAssignableFrom(arg.GetType().GetGenericTypeDefinition())
                 );
 
                 session = authorizedDto?.GetType().GetProperty(

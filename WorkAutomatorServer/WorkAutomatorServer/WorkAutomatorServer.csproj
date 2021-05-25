@@ -167,6 +167,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Aspects\AuthorizedAspect.cs" />
     <Compile Include="Aspects\WireHeadersAspect.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\CompanyController.cs" />
     <Compile Include="Controllers\ControllerBase.cs" />
@@ -175,6 +176,7 @@
     <Compile Include="Dto\Attributes\HeaderAutoWiredAttribute.cs" />
     <Compile Include="Dto\Attributes\IdentifiedAttribute.cs" />
     <Compile Include="Dto\AuthorizedDto.cs" />
+    <Compile Include="Dto\CompanyDto.cs" />
     <Compile Include="Dto\DtoBase.cs" />
     <Compile Include="Dto\IdDto.cs" />
     <Compile Include="Dto\LogInDto.cs" />

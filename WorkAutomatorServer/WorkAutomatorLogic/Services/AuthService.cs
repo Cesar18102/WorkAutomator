@@ -13,12 +13,14 @@ using WorkAutomatorLogic.Models;
 using WorkAutomatorDataAccess;
 using WorkAutomatorDataAccess.RepoInterfaces;
 using WorkAutomatorDataAccess.Entities;
+using WorkAutomatorLogic.Models.Roles;
 
 namespace WorkAutomatorLogic.Services
 {
     internal class AuthService : ServiceBase, IAuthService
     {
         private static IRepo<AccountEntity> AccountRepo = RepoDependencyHolder.ResolveRealRepo<AccountEntity>();
+        private static IRepo<RoleEntity> RoleRepo = RepoDependencyHolder.ResolveRealRepo<RoleEntity>();
 
         private static IAsymmetricEncryptionService EncryptionService = LogicDependencyHolder.Dependencies.Resolve<IAsymmetricEncryptionService>();
         private static IKeyService KeyService = LogicDependencyHolder.Dependencies.Resolve<IKeyService>();
@@ -55,9 +57,14 @@ namespace WorkAutomatorLogic.Services
                 KeyService.DestroyKeyPair(signUpForm.PublicKey);
 
                 AccountEntity accountEntity = signUpForm.ToEntity<AccountEntity>();
+
                 accountEntity.password = HashingService.GetHashHex(password);
 
+                string authorizedRoleName = DefaultRoles.AUTHORIZED.ToName();
+                accountEntity.Roles.Add(await RoleRepo.FirstOrDefault(role => role.is_default && role.name == authorizedRoleName));
+
                 AccountEntity inserted = await AccountRepo.Create(accountEntity);
+
                 return inserted.ToModel<AccountModel>();
             });
         }

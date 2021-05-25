@@ -2,7 +2,7 @@
 
 namespace WorkAutomatorLogic.Aspects
 {
-    public class IsHiredAspect : OnMethodBoundaryAspect
+    public class IsCompanyMemberAspect : OnMethodBoundaryAspect
     {
     }
 }

@@ -131,11 +131,20 @@
     <Compile Include="Migrations\202105232149436_superadmin.designer.cs">
       <DependentUpon>202105232149436_superadmin.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202105242222392_default_roles.cs" />
+    <Compile Include="Migrations\202105242222392_default_roles.designer.cs">
+      <DependentUpon>202105242222392_default_roles.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202105242353580_default_roles2.cs" />
+    <Compile Include="Migrations\202105242353580_default_roles2.designer.cs">
+      <DependentUpon>202105242353580_default_roles2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="RepoDependencyHolder.cs" />
     <Compile Include="RepoInterfaces\IRepo.cs" />
     <Compile Include="Repos\AccountRepo.cs" />
     <Compile Include="Repos\CompanyRepo.cs" />
+    <Compile Include="Repos\DbPermissionRepo.cs" />
     <Compile Include="Repos\DetectorRepo.cs" />
     <Compile Include="Repos\ManufactoryRepo.cs" />
     <Compile Include="Repos\PipelineItemRepo.cs" />
@@ -160,6 +169,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202105232149436_superadmin.resx">
       <DependentUpon>202105232149436_superadmin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202105242222392_default_roles.resx">
+      <DependentUpon>202105242222392_default_roles.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202105242353580_default_roles2.resx">
+      <DependentUpon>202105242353580_default_roles2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

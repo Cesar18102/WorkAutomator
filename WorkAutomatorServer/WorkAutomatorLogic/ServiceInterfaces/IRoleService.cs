@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-using WorkAutomatorLogic.Models;
+using WorkAutomatorLogic.Models.Roles;
 
 namespace WorkAutomatorLogic.ServiceInterfaces
 {

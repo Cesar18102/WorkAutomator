@@ -24,7 +24,7 @@ namespace WorkAutomatorDataAccess.Repos
                            .Include(account => account.TasksToReview)
                            .Include(account => account.TasksToReview.Select(t => t.Assignee))
                            .Include(account => account.TasksToReview.Select(t => t.Reviewer))
-                           .Include(account => account.Roles)
+                           .Include(account => account.Roles.Select(role => role.DbPermissions.Select(p => p.DbPermissionType)))
                            .Include(account => account.CheckPointEvents)
                            .Include(account => account.EnterLeavePointEvents)
                            .Include(account => account.DetectorInteractionEvents)

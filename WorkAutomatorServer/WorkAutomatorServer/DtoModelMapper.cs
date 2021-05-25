@@ -23,6 +23,18 @@ namespace WorkAutomatorServer
             return Mapper.Map<TModel>(dto);
         }
 
+        public static UserActionModel<TModel> ToModel<TDto, TModel>(this AuthorizedDto<TDto> dto)
+            where TDto : IdDto
+            where TModel : ModelBase
+        {
+            UserActionModel<TModel> model = new UserActionModel<TModel>();
+
+            model.UserAccountId = dto.Session.UserId;
+            model.Data = Mapper.Map<TModel>(dto.Data);
+
+            return model;
+        }
+
         public static TDto ToDto<TDto>(this ModelBase model) where TDto : DtoBase
         {
             return Mapper.Map<TDto>(model);
@@ -34,6 +46,8 @@ namespace WorkAutomatorServer
             config.CreateMap<SignUpDto, SignUpFormModel>();
             config.CreateMap<LogInDto, LogInFormModel>();
             config.CreateMap<SessionDto, SessionCredentialsModel>();
+
+            config.CreateMap<CompanyDto, CompanyModel>();
         }
     }
 }

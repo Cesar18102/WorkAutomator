@@ -19,9 +19,9 @@ namespace WorkAutomatorDataAccess.Entities
             PipelineItemPermissions = new HashSet<PipelineItemEntity>();
             StorageCellPermissions = new HashSet<StorageCellEntity>();
         }
-
         
-        public int company_id { get; set; }
+        public int? company_id { get; set; }
+        public bool is_default { get; set; }
 
         [Required]
         [StringLength(256)]

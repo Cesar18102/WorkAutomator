@@ -1,7 +1,5 @@
-﻿using System.Security.Cryptography;
-
-using Autofac;
-
+﻿using Autofac;
+using System.Threading.Tasks;
 using WorkAutomatorLogic.ServiceInterfaces;
 using WorkAutomatorLogic.Services;
 
@@ -17,6 +15,7 @@ namespace WorkAutomatorLogic
             {
                 if (denendencies == null)
                     denendencies = BuildDependencies();
+
                 return denendencies;
             }
         }
@@ -25,6 +24,8 @@ namespace WorkAutomatorLogic
         {
             ContainerBuilder builder = new ContainerBuilder();
 
+            builder.RegisterType<InitService>().As<IInitService>().SingleInstance();
+
             builder.RegisterType<KeyService>().As<IKeyService>().SingleInstance();
             builder.RegisterType<RSAService>().As<IAsymmetricEncryptionService>().SingleInstance();
             builder.RegisterType<SHA256HashingService>().As<IHashingService>().SingleInstance();
@@ -32,6 +33,7 @@ namespace WorkAutomatorLogic
             builder.RegisterType<AuthService>().As<IAuthService>().SingleInstance();
             builder.RegisterType<SessionService>().As<ISessionService>().SingleInstance();
             builder.RegisterType<PermissionService>().As<IPermissionService>().SingleInstance();
+            builder.RegisterType<CompanyService>().As<ICompanyService>().SingleInstance();
 
             return builder.Build();
         }

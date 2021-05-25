@@ -2,7 +2,7 @@
 
 using WorkAutomatorLogic.Models.Permission;
 
-namespace WorkAutomatorLogic.Models
+namespace WorkAutomatorLogic.Models.Roles
 {
     public class RoleModel : ModelBase
     {
