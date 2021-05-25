@@ -1,4 +1,4 @@
-﻿namespace WorkAutomatorServer.Dto
+﻿namespace Dto
 {
     public abstract class DtoBase
     {

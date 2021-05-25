@@ -1,9 +1,10 @@
-﻿using WorkAutomatorServer.Dto.Attributes;
+﻿using Attributes;
 
-namespace WorkAutomatorServer.Dto
+namespace Dto
 {
     public class SessionDto : DtoBase
     {
+        [InitiatorAccountId]
         [HeaderAutoWired("UID")]
         public int UserId { get; set; }
 

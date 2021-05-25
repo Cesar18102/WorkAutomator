@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 
-using WorkAutomatorLogic.Aspects;
+using Attributes;
+
 using WorkAutomatorLogic.Models.Permission;
 
 namespace WorkAutomatorLogic.ServiceInterfaces

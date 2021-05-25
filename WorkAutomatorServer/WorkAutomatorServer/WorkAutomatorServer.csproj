@@ -172,17 +172,6 @@
     <Compile Include="Controllers\CompanyController.cs" />
     <Compile Include="Controllers\ControllerBase.cs" />
     <Compile Include="Controllers\KeyController.cs" />
-    <Compile Include="DtoModelMapper.cs" />
-    <Compile Include="Dto\Attributes\HeaderAutoWiredAttribute.cs" />
-    <Compile Include="Dto\Attributes\IdentifiedAttribute.cs" />
-    <Compile Include="Dto\AuthorizedDto.cs" />
-    <Compile Include="Dto\CompanyDto.cs" />
-    <Compile Include="Dto\DtoBase.cs" />
-    <Compile Include="Dto\IdDto.cs" />
-    <Compile Include="Dto\LogInDto.cs" />
-    <Compile Include="Dto\PublicKeyDto.cs" />
-    <Compile Include="Dto\SessionDto.cs" />
-    <Compile Include="Dto\SignUpDto.cs" />
     <Compile Include="Exceptions\ServerExceptionBase.cs" />
     <Compile Include="Exceptions\ValidationException.cs" />
     <Compile Include="Global.asax.cs">
@@ -214,6 +203,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Attributes\Attributes.csproj">
+      <Project>{89371046-9916-460a-9e03-5eb4f85842fd}</Project>
+      <Name>Attributes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Dto\Dto.csproj">
+      <Project>{2489724d-32ee-4295-a5a4-111575bfb67a}</Project>
+      <Name>Dto</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WorkAutomatorLogic\WorkAutomatorLogic.csproj">
       <Project>{c68ddcb0-b488-4a57-819a-2f402677dc54}</Project>
       <Name>WorkAutomatorLogic</Name>

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 using Autofac;
 
+using Dto;
+
 using WorkAutomatorLogic.Exceptions;
 
 using WorkAutomatorLogic.Models;
@@ -42,7 +44,7 @@ namespace WorkAutomatorLogic.Services
             return session;
         }
 
-        public void CheckSession(SessionCredentialsModel sessionCredentials)
+        public void CheckSession(SessionDto sessionCredentials)
         {
             if(sessionCredentials == null)
                 throw new NotFoundException("Session");
@@ -70,7 +72,7 @@ namespace WorkAutomatorLogic.Services
                 session.ExpiredAt = session.ExpiredAt.AddSeconds(SESSION_DURATION - secondsLeft);
         }
 
-        public void TerminateSession(SessionCredentialsModel sessionCredentials)
+        public void TerminateSession(SessionDto sessionCredentials)
         {
             CheckSession(sessionCredentials);
             Sessions.Remove(sessionCredentials.UserId);

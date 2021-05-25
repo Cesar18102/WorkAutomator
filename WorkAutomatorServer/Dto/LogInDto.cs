@@ -2,7 +2,7 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace WorkAutomatorServer.Dto
+namespace Dto
 {
     public class LogInDto : DtoBase
     {

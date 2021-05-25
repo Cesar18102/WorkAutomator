@@ -15,3 +15,9 @@
 
 /WorkAutomatorServer/BusinessLogicTests/bin
 /WorkAutomatorServer/BusinessLogicTests/obj
+
+/WorkAutomatorServer/Dto/bin
+/WorkAutomatorServer/Dto/obj
+
+/WorkAutomatorServer/Attributes/bin
+/WorkAutomatorServer/Attributes/obj

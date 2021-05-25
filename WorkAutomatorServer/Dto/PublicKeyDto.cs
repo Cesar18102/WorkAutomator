@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace WorkAutomatorServer.Dto
+namespace Dto
 {
     public class PublicKeyDto : DtoBase
     {

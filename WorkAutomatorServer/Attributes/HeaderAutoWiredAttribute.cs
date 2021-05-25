@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WorkAutomatorServer.Dto.Attributes
+namespace Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
     public class HeaderAutoWiredAttribute : Attribute

@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace WorkAutomatorLogic.Models
 {
-    public class PublicKeyModel : IEquatable<PublicKeyModel>
+    public class PublicKeyModel : ModelBase, IEquatable<PublicKeyModel>
     {
         private Regex ModulusPattern = new Regex("<Modulus>(.+?)</Modulus>");
         private Regex ExponentPattern = new Regex("<Exponent>(.+?)</Exponent>");

@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Autofac;
 
 using MethodBoundaryAspect.Fody.Attributes;
-using WorkAutomatorLogic.Attributes;
+
+using Attributes;
+
 using WorkAutomatorLogic.Extensions;
 using WorkAutomatorLogic.Models.Permission;
 using WorkAutomatorLogic.ServiceInterfaces;

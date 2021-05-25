@@ -6,12 +6,12 @@ using Autofac;
 
 using MethodBoundaryAspect.Fody.Attributes;
 
+using Dto;
+
 using WorkAutomatorLogic;
-using WorkAutomatorLogic.Models;
 using WorkAutomatorLogic.ServiceInterfaces;
 
 using WorkAutomatorServer.Controllers;
-using WorkAutomatorServer.Dto;
 
 namespace WorkAutomatorServer.Aspects
 {
@@ -34,10 +34,8 @@ namespace WorkAutomatorServer.Aspects
                 ).GetValue(authorizedDto) as SessionDto;
             }
 
-            SessionCredentialsModel sessionModel = session?.ToModel<SessionCredentialsModel>();
-
             HttpResponseMessage response = Task.Run(() => (args.Instance as ControllerBase).Execute(
-                (model) => SessionService.CheckSession(model), sessionModel, false
+                (model) => SessionService.CheckSession(model), session, false
             )).GetAwaiter().GetResult();
             
             if(response != null)

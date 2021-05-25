@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.ComponentModel.DataAnnotations.Schema;
 
+using Attributes;
+
 using WorkAutomatorDataAccess;
 using WorkAutomatorDataAccess.Entities;
 
@@ -101,6 +103,9 @@ namespace WorkAutomatorLogic.Services
                             .MakeGenericType(entityType)
                             .GetMethod(nameof(TaskAwaiter<object>.GetResult))
                             .Invoke(awaiter, new object[] { });
+
+                        if (entity == null)
+                            throw new NotFoundException(entityType.Name.Replace("Entity", ""));
 
                         if (entity is CompanyEntity)
                             isLegal &= initiator.Company?.owner_id == (entity as CompanyEntity).owner_id;

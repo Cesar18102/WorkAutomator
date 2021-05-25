@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 
-using WorkAutomatorLogic.Models;
-using WorkAutomatorServer.Dto;
+using Dto;
 
-namespace WorkAutomatorServer
+using WorkAutomatorLogic.Models;
+
+namespace WorkAutomatorLogic
 {
-    public static class DtoModelMapper
+    public static class ModelDtoMapper
     {
         private static Mapper mapper;
         public static Mapper Mapper
@@ -23,18 +24,6 @@ namespace WorkAutomatorServer
             return Mapper.Map<TModel>(dto);
         }
 
-        public static UserActionModel<TModel> ToModel<TDto, TModel>(this AuthorizedDto<TDto> dto)
-            where TDto : IdDto
-            where TModel : ModelBase
-        {
-            UserActionModel<TModel> model = new UserActionModel<TModel>();
-
-            model.UserAccountId = dto.Session.UserId;
-            model.Data = Mapper.Map<TModel>(dto.Data);
-
-            return model;
-        }
-
         public static TDto ToDto<TDto>(this ModelBase model) where TDto : DtoBase
         {
             return Mapper.Map<TDto>(model);
@@ -43,10 +32,6 @@ namespace WorkAutomatorServer
         private static void Configure(IMapperConfigurationExpression config)
         {
             config.CreateMap<PublicKeyDto, PublicKeyModel>().ReverseMap();
-            config.CreateMap<SignUpDto, SignUpFormModel>();
-            config.CreateMap<LogInDto, LogInFormModel>();
-            config.CreateMap<SessionDto, SessionCredentialsModel>();
-
             config.CreateMap<CompanyDto, CompanyModel>();
         }
     }

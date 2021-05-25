@@ -1,11 +1,12 @@
-﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+
+using AutoMapper;
 
 using WorkAutomatorDataAccess.Entities;
+
 using WorkAutomatorLogic.Models;
-using WorkAutomatorLogic.Models.Permission;
 using WorkAutomatorLogic.Models.Roles;
+using WorkAutomatorLogic.Models.Permission;
 
 namespace WorkAutomatorLogic
 {
@@ -34,9 +35,6 @@ namespace WorkAutomatorLogic
 
         private static void Configure(IMapperConfigurationExpression config)
         {
-            config.CreateMap<SignUpFormModel, AccountEntity>()
-                  .ForMember(entity => entity.password, cnf => cnf.MapFrom(model => model.PasswordEncrypted));
-
             config.CreateMap<AccountModel, AccountEntity>()
                   .ForMember(entity => entity.first_name, cnf => cnf.MapFrom(model => model.FirstName))
                   .ForMember(entity => entity.last_name, cnf => cnf.MapFrom(model => model.LastName))
@@ -45,9 +43,11 @@ namespace WorkAutomatorLogic
                   .ForMember(model => model.LastName, cnf => cnf.MapFrom(entity => entity.last_name));
 
             config.CreateMap<CompanyModel, CompanyEntity>()
+                  .ForMember(entity => entity.owner_id, cnf => cnf.MapFrom(model => model.Id))
                   .ForMember(entity => entity.plan_image_url, cnf => cnf.MapFrom(model => model.PlanImageUrl))
                   .ReverseMap()
-                  .ForMember(model => model.PlanImageUrl, cnf => cnf.MapFrom(entity => entity.plan_image_url));
+                  .ForMember(model => model.PlanImageUrl, cnf => cnf.MapFrom(entity => entity.plan_image_url))
+                  .ForMember(model => model.Id, cnf => cnf.MapFrom(entity => entity.owner_id));
         }
 
         public static IReadOnlyDictionary<DbTable, string> TABLE_NAME_DICTIONARY = new Dictionary<DbTable, string>()

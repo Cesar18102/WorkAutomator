@@ -8,7 +8,6 @@ using System.Collections.ObjectModel;
 
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 
 using System.Web.Http;
 using System.Web.Http.Controllers;
@@ -16,10 +15,10 @@ using System.Web.Http.ModelBinding;
 
 using Newtonsoft.Json.Linq;
 
-using WorkAutomatorLogic.Exceptions;
+using Attributes;
+using Dto;
 
-using WorkAutomatorServer.Dto;
-using WorkAutomatorServer.Dto.Attributes;
+using WorkAutomatorLogic.Exceptions;
 
 using WorkAutomatorServer.Output;
 using WorkAutomatorServer.Exceptions;
@@ -44,7 +43,9 @@ namespace WorkAutomatorServer.Controllers
             { typeof(WrongSessionTokenException), HttpStatusCode.Unauthorized },
             { typeof(SessionExpiredException), HttpStatusCode.Unauthorized },
 
-            { typeof(NotPermittedException), HttpStatusCode.Forbidden }
+            { typeof(NotPermittedException), HttpStatusCode.Forbidden },
+            { typeof(AlreadyHiredException), HttpStatusCode.Conflict },
+            { typeof(NotHiredException), HttpStatusCode.NotFound },
 
 
             //{ typeof(NotFoundException), HttpStatusCode.NotFound },

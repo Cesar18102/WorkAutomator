@@ -2,7 +2,7 @@
 
 namespace WorkAutomatorLogic.Models
 {
-    public class AccountModel : ModelBase
+    public class AccountModel : IdModel
     {
         [JsonProperty("login")]
         public string Login { get; set; }

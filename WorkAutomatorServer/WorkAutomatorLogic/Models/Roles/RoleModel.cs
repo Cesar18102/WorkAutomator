@@ -4,7 +4,7 @@ using WorkAutomatorLogic.Models.Permission;
 
 namespace WorkAutomatorLogic.Models.Roles
 {
-    public class RoleModel : ModelBase
+    public class RoleModel : IdModel
     {
         public string Name { get; set; }
         public int CompanyId { get; set; }

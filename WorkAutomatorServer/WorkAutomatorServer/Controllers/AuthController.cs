@@ -4,11 +4,10 @@ using System.Threading.Tasks;
 
 using Autofac;
 
-using WorkAutomatorLogic;
-using WorkAutomatorLogic.Models;
-using WorkAutomatorLogic.ServiceInterfaces;
+using Dto;
 
-using WorkAutomatorServer.Dto;
+using WorkAutomatorLogic;
+using WorkAutomatorLogic.ServiceInterfaces;
 
 namespace WorkAutomatorServer.Controllers
 {
@@ -18,21 +17,15 @@ namespace WorkAutomatorServer.Controllers
         private static IAuthService AuthService = LogicDependencyHolder.Dependencies.Resolve<IAuthService>();
 
         [HttpPost]
-        public async Task<HttpResponseMessage> SignUp([FromBody] SignUpDto signUpDto)
+        public async Task<HttpResponseMessage> SignUp([FromBody] SignUpDto dto)
         {
-            return await Execute(
-                dto => AuthService.SignUp(dto.ToModel<SignUpFormModel>()),
-                signUpDto
-            );
+            return await Execute(signUpDto => AuthService.SignUp(signUpDto), dto);
         }
 
         [HttpPost]
-        public async Task<HttpResponseMessage> LogIn([FromBody] LogInDto logInDto)
+        public async Task<HttpResponseMessage> LogIn([FromBody] LogInDto dto)
         {
-            return await Execute(
-                dto => AuthService.LogIn(dto.ToModel<LogInFormModel>()),
-                logInDto
-            );
+            return await Execute(logInDto => AuthService.LogIn(logInDto), dto);
         }
     }
 }

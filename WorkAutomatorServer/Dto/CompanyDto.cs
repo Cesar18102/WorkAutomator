@@ -1,11 +1,17 @@
-﻿using Newtonsoft.Json;
+﻿using System.ComponentModel.DataAnnotations;
 
-using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 
-namespace WorkAutomatorServer.Dto
+using Attributes;
+
+namespace Dto
 {
     public class CompanyDto : IdDto
     {
+        [SubjectId]
+        [JsonIgnore]
+        public int? CompanyId => Id;
+
         [Required(AllowEmptyStrings = false)]
         [JsonProperty("name")]
         public string Name { get; set; }

@@ -6,8 +6,8 @@ using Autofac;
 
 using WorkAutomatorServer.Aspects;
 
-using WorkAutomatorServer.Dto;
-using WorkAutomatorServer.Dto.Attributes;
+using Dto;
+using Attributes;
 
 using WorkAutomatorLogic;
 using WorkAutomatorLogic.Models;
@@ -24,11 +24,7 @@ namespace WorkAutomatorServer.Controllers
         [AuthorizedAspect]
         public async Task<HttpResponseMessage> Create([FromBody] AuthorizedDto<CompanyDto> dto)
         {
-            return await Execute(
-                company => CompanyService.CreateCompany(
-                    company.ToModel<CompanyDto, CompanyModel>()
-                ), dto
-            );
+            return await Execute(company => CompanyService.CreateCompany(company), dto);
         }
 
         [HttpPost]
@@ -36,11 +32,23 @@ namespace WorkAutomatorServer.Controllers
         [AuthorizedAspect]
         public async Task<HttpResponseMessage> Update([FromBody, Identified] AuthorizedDto<CompanyDto> dto)
         {
-            return await Execute(
-                company => CompanyService.UpdateCompany(
-                    company.ToModel<CompanyDto, CompanyModel>()
-                ), dto
-            );
+            return await Execute(company => CompanyService.UpdateCompany(company), dto);
+        }
+
+        [HttpPost]
+        [WireHeadersAspect]
+        [AuthorizedAspect]
+        public async Task<HttpResponseMessage> HireMember([FromBody] AuthorizedDto<FireHireDto> dto)
+        {
+            return await Execute(hireFireDto => CompanyService.HireMember(hireFireDto), dto);
+        }
+
+        [HttpPost]
+        [WireHeadersAspect]
+        [AuthorizedAspect]
+        public async Task<HttpResponseMessage> FireMember([FromBody, Identified] AuthorizedDto<FireHireDto> dto)
+        {
+            return await Execute(hireFireDto => CompanyService.FireMember(hireFireDto), dto);
         }
     }
 }

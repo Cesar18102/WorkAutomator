@@ -2,7 +2,7 @@
 
 namespace WorkAutomatorLogic.Models
 {
-    public class ManufactoryModel : ModelBase
+    public class ManufactoryModel : IdModel
     {
         public int CompanyId { get; set; }
         public virtual ICollection<int> ManufactoryPlanPoints { get; set; }

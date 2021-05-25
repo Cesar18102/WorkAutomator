@@ -2,14 +2,12 @@
 
 using Newtonsoft.Json;
 
-using WorkAutomatorLogic.Attributes;
 using WorkAutomatorLogic.Models.Roles;
 
 namespace WorkAutomatorLogic.Models
 {
-    public class CompanyModel : ModelBase
+    public class CompanyModel : IdModel
     {
-        [SubjectId]
         [JsonIgnore]
         public int CompanyId => Id;
 

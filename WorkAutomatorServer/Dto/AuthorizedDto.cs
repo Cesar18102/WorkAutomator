@@ -2,9 +2,9 @@
 
 using Newtonsoft.Json;
 
-using WorkAutomatorServer.Dto.Attributes;
+using Attributes;
 
-namespace WorkAutomatorServer.Dto
+namespace Dto
 {
     public class AuthorizedDto<TDto> : DtoBase where TDto : DtoBase
     {

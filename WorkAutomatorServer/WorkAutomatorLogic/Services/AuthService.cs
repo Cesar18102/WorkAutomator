@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 
 using Autofac;
+
+using Dto;
 
 using WorkAutomatorLogic.ServiceInterfaces;
 using WorkAutomatorLogic.Exceptions;
@@ -27,7 +29,7 @@ namespace WorkAutomatorLogic.Services
 
         private static Regex PasswordPattern = new Regex("^[A-Za-z0-9]{8,32}$");
 
-        public async Task<AccountModel> SignUp(SignUpFormModel signUpForm)
+        public async Task<AccountModel> SignUp(SignUpDto signUpForm)
         {
             return await base.Execute<AccountModel>(async () =>
             {
@@ -38,6 +40,7 @@ namespace WorkAutomatorLogic.Services
                     if (await accountRepo.FirstOrDefault(acc => acc.login == signUpForm.Login) != null)
                         throw new LoginDuplicationException();
 
+                    PublicKeyModel publicKeyModel = signUpForm.PublicKey.ToModel<PublicKeyModel>();
                     string password = null;
 
                     try
@@ -45,7 +48,7 @@ namespace WorkAutomatorLogic.Services
                         if (signUpForm.PublicKey == null)
                             throw new InvalidKeyException();
 
-                        AsymmetricAlgorithm algorithm = KeyService.GetKeyPair(signUpForm.PublicKey);
+                        AsymmetricAlgorithm algorithm = KeyService.GetKeyPair(publicKeyModel);
                         password = EncryptionService.Decrypt(signUpForm.PasswordEncrypted, algorithm);
                     }
                     catch (KeyNotFoundException) { throw new InvalidKeyException(); }
@@ -55,11 +58,15 @@ namespace WorkAutomatorLogic.Services
                     if (!PasswordPattern.IsMatch(password))
                         throw new InvalidPasswordException();
 
-                    KeyService.DestroyKeyPair(signUpForm.PublicKey);
+                    KeyService.DestroyKeyPair(publicKeyModel);
 
-                    AccountEntity accountEntity = signUpForm.ToEntity<AccountEntity>();
-
-                    accountEntity.password = HashingService.GetHashHex(password);
+                    AccountEntity accountEntity = new AccountEntity()
+                    {
+                        login = signUpForm.Login,
+                        password = HashingService.GetHashHex(password),
+                        first_name = signUpForm.FirstName,
+                        last_name = signUpForm.LastName
+                    };
 
                     string authorizedRoleName = DefaultRoles.AUTHORIZED.ToName();
                     accountEntity.Roles.Add(
@@ -76,7 +83,7 @@ namespace WorkAutomatorLogic.Services
             });
         }
 
-        public async Task<SessionModel> LogIn(LogInFormModel logInForm)
+        public async Task<SessionModel> LogIn(LogInDto logInForm)
         {
             return await base.Execute<SessionModel>(async () =>
             {

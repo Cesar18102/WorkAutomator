@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WorkAutomatorLogic.Aspects
+namespace Attributes
 {
     public class TableNameParameterAttribute : Attribute
     {

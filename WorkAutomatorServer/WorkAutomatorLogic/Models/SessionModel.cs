@@ -4,7 +4,7 @@ using System;
 
 namespace WorkAutomatorLogic.Models
 {
-    public class SessionModel
+    public class SessionModel : ModelBase
     {
         [JsonProperty("user_id")]
         public int UserId { get; set; }

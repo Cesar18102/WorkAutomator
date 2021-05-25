@@ -11,8 +11,9 @@ using System.Collections.ObjectModel;
 
 using MethodBoundaryAspect.Fody.Attributes;
 
+using Attributes;
+
 using WorkAutomatorServer.Controllers;
-using WorkAutomatorServer.Dto.Attributes;
 using WorkAutomatorServer.Exceptions;
 using WorkAutomatorServer.Output;
 

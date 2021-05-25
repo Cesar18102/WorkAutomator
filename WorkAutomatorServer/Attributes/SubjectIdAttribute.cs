@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WorkAutomatorLogic.Attributes
+namespace Attributes
 {
     public class SubjectIdAttribute : Attribute
     {
