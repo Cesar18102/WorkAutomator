@@ -2,7 +2,7 @@
 
 namespace WorkAutomatorLogic.Attributes
 {
-    public class CompanyIdAttribute : Attribute
+    public class SubjectIdAttribute : Attribute
     {
     }
 }

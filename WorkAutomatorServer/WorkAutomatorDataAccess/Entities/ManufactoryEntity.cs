@@ -7,7 +7,7 @@ namespace WorkAutomatorDataAccess.Entities
     using System.Data.Entity.Spatial;
 
     [Table("manufactory")]
-    public partial class ManufactoryEntity : EntityBase
+    public partial class ManufactoryEntity : IdEntity
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ManufactoryEntity()

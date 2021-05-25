@@ -6,7 +6,7 @@ namespace WorkAutomatorDataAccess.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class StorageCellEventEntity : EntityBase
+    public partial class StorageCellEventEntity : IdEntity
     {
         
         public int storage_cell_id { get; set; }

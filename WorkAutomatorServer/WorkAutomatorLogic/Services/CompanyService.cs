@@ -1,41 +1,75 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 
-using WorkAutomatorLogic.Models;
+using Autofac;
+
 using WorkAutomatorLogic.Aspects;
 using WorkAutomatorLogic.ServiceInterfaces;
+
+using WorkAutomatorLogic.Models;
+using WorkAutomatorLogic.Models.Roles;
 using WorkAutomatorLogic.Models.Permission;
 
 using WorkAutomatorDataAccess;
-using WorkAutomatorDataAccess.RepoInterfaces;
 using WorkAutomatorDataAccess.Entities;
 
 namespace WorkAutomatorLogic.Services
 {
-    internal class CompanyService : ICompanyService
+    internal class CompanyService : ServiceBase, ICompanyService
     {
-        private static IRepo<CompanyEntity> CompanyRepo = RepoDependencyHolder.ResolveRealRepo<CompanyEntity>();
-        private static IRepo<RoleEntity> RoleRepo = RepoDependencyHolder.ResolveRealRepo<RoleEntity>();
-
         [DbPermissionAspect(Action = InteractionDbType.CREATE, Table = DbTable.Company)]
         public async Task<CompanyModel> CreateCompany(UserActionModel<CompanyModel> model)
         {
-            //TODO
-            CompanyEntity company = model.Data.ToEntity<CompanyEntity>();
-            company.owner_id = model.UserAccountId;
+            return await Execute(async () => {
+                using (UnitOfWork db = new UnitOfWork())
+                {
+                    CompanyEntity company = model.Data.ToEntity<CompanyEntity>();
 
-            CompanyEntity created = await CompanyRepo.Create(company);
-            //created.Owner.Roles.
+                    company.Owner = await db.GetRepo<AccountEntity>().Get(model.UserAccountId);
 
-            return company.ToModel<CompanyModel>();
+                    company.Owner.Roles.Remove(
+                        company.Owner.Roles.First(
+                            role => role.name == DefaultRoles.AUTHORIZED.ToName()
+                        )
+                    );
+
+                    string ownerRoleName = DefaultRoles.OWNER.ToName();
+                    company.Owner.Roles.Add(
+                        await db.GetRepo<RoleEntity>().FirstOrDefault(
+                            role => role.is_default && role.name == ownerRoleName
+                        )
+                    );
+
+                    CompanyEntity created = await db.GetRepo<CompanyEntity>().Create(company);
+                    company.Owner.Company = created;
+
+                    await db.Save();
+
+                    return created.ToModel<CompanyModel>();
+                }
+            });
+        }
+
+        [DbPermissionAspect(Action = InteractionDbType.UPDATE, Table = DbTable.Company, CheckSameCompany = true)]
+        public async Task<CompanyModel> UpdateCompany(UserActionModel<CompanyModel> model)
+        {
+            return await Execute(async () => {
+                using (UnitOfWork db = new UnitOfWork())
+                {
+                    CompanyEntity modified = await db.GetRepo<CompanyEntity>().Get(model.Data.Id);
+
+                    modified.name = model.Data.Name;
+                    modified.plan_image_url = model.Data.PlanImageUrl;
+
+                    await db.Save();
+
+                    return modified.ToModel<CompanyModel>();
+                }
+            });
         }
 
         [DbPermissionAspect(Action = InteractionDbType.CREATE | InteractionDbType.DELETE, Table = DbTable.CompanyPlanUniquePoint)]
         public async Task<CompanyModel> SetupCompanyPlanPoints(UserActionModel<CompanyModel> model)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public async Task<CompanyModel> UpdateCompany(UserActionModel<CompanyModel> model)
         {
             throw new System.NotImplementedException();
         }

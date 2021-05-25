@@ -4,8 +4,10 @@ using System.Threading.Tasks;
 
 using Autofac;
 
-using WorkAutomatorServer.Dto;
 using WorkAutomatorServer.Aspects;
+
+using WorkAutomatorServer.Dto;
+using WorkAutomatorServer.Dto.Attributes;
 
 using WorkAutomatorLogic;
 using WorkAutomatorLogic.Models;
@@ -24,6 +26,18 @@ namespace WorkAutomatorServer.Controllers
         {
             return await Execute(
                 company => CompanyService.CreateCompany(
+                    company.ToModel<CompanyDto, CompanyModel>()
+                ), dto
+            );
+        }
+
+        [HttpPost]
+        [WireHeadersAspect]
+        [AuthorizedAspect]
+        public async Task<HttpResponseMessage> Update([FromBody, Identified] AuthorizedDto<CompanyDto> dto)
+        {
+            return await Execute(
+                company => CompanyService.UpdateCompany(
                     company.ToModel<CompanyDto, CompanyModel>()
                 ), dto
             );

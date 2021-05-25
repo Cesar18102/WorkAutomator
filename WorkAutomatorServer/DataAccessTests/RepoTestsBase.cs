@@ -7,13 +7,11 @@ using NUnit.Framework;
 
 using WorkAutomatorDataAccess;
 using WorkAutomatorDataAccess.Entities;
-using WorkAutomatorDataAccess.RepoInterfaces;
 using WorkAutomatorDataAccess.Exceptions;
-using WorkAutomatorDataAccess.Aspects;
 
 namespace DataAccessTests
 {
-    public abstract class RepoTestsBase<TEntity> where TEntity : EntityBase
+    public abstract class RepoTestsBase<TEntity> where TEntity : IdEntity
     {
         protected static IRepo<TEntity> Repo = RepoDependencyHolder.Dependencies.ResolveKeyed<IRepo<TEntity>>(
             RepoDependencyHolder.ContextType.TEST

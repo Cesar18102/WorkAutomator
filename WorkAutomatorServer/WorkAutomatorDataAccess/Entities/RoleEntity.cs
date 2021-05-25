@@ -7,7 +7,7 @@ namespace WorkAutomatorDataAccess.Entities
     using System.Data.Entity.Spatial;
 
     [Table("role")]
-    public partial class RoleEntity : EntityBase
+    public partial class RoleEntity : IdEntity
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public RoleEntity()

@@ -30,6 +30,7 @@ namespace WorkAutomatorDataAccess.Entities
         [StringLength(1024)]
         public string name { get; set; }
 
+        [Key]
         public int owner_id { get; set; }
 
         [Required]

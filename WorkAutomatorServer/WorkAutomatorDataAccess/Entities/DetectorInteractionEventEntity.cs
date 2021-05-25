@@ -6,7 +6,7 @@ namespace WorkAutomatorDataAccess.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class DetectorInteractionEventEntity : EntityBase
+    public partial class DetectorInteractionEventEntity : IdEntity
     {
         
         public int detector_id { get; set; }

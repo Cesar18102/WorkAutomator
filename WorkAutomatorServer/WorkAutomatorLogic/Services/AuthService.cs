@@ -8,20 +8,17 @@ using Autofac;
 
 using WorkAutomatorLogic.ServiceInterfaces;
 using WorkAutomatorLogic.Exceptions;
+
 using WorkAutomatorLogic.Models;
+using WorkAutomatorLogic.Models.Roles;
 
 using WorkAutomatorDataAccess;
-using WorkAutomatorDataAccess.RepoInterfaces;
 using WorkAutomatorDataAccess.Entities;
-using WorkAutomatorLogic.Models.Roles;
 
 namespace WorkAutomatorLogic.Services
 {
     internal class AuthService : ServiceBase, IAuthService
     {
-        private static IRepo<AccountEntity> AccountRepo = RepoDependencyHolder.ResolveRealRepo<AccountEntity>();
-        private static IRepo<RoleEntity> RoleRepo = RepoDependencyHolder.ResolveRealRepo<RoleEntity>();
-
         private static IAsymmetricEncryptionService EncryptionService = LogicDependencyHolder.Dependencies.Resolve<IAsymmetricEncryptionService>();
         private static IKeyService KeyService = LogicDependencyHolder.Dependencies.Resolve<IKeyService>();
 
@@ -34,38 +31,48 @@ namespace WorkAutomatorLogic.Services
         {
             return await base.Execute<AccountModel>(async () =>
             {
-                if (await AccountRepo.FirstOrDefault(acc => acc.login == signUpForm.Login) != null)
-                    throw new LoginDuplicationException();
-
-                string password = null;
-
-                try
+                using (UnitOfWork db = new UnitOfWork())
                 {
-                    if (signUpForm.PublicKey == null)
-                        throw new InvalidKeyException();
+                    IRepo<AccountEntity> accountRepo = db.GetRepo<AccountEntity>();
 
-                    AsymmetricAlgorithm algorithm = KeyService.GetKeyPair(signUpForm.PublicKey);
-                    password = EncryptionService.Decrypt(signUpForm.PasswordEncrypted, algorithm);
+                    if (await accountRepo.FirstOrDefault(acc => acc.login == signUpForm.Login) != null)
+                        throw new LoginDuplicationException();
+
+                    string password = null;
+
+                    try
+                    {
+                        if (signUpForm.PublicKey == null)
+                            throw new InvalidKeyException();
+
+                        AsymmetricAlgorithm algorithm = KeyService.GetKeyPair(signUpForm.PublicKey);
+                        password = EncryptionService.Decrypt(signUpForm.PasswordEncrypted, algorithm);
+                    }
+                    catch (KeyNotFoundException) { throw new InvalidKeyException(); }
+                    catch (FormatException) { throw new PostValidationException("Password format was not match Base64"); }
+                    catch (CryptographicException) { throw new WrongEncryptionException("Password"); }
+
+                    if (!PasswordPattern.IsMatch(password))
+                        throw new InvalidPasswordException();
+
+                    KeyService.DestroyKeyPair(signUpForm.PublicKey);
+
+                    AccountEntity accountEntity = signUpForm.ToEntity<AccountEntity>();
+
+                    accountEntity.password = HashingService.GetHashHex(password);
+
+                    string authorizedRoleName = DefaultRoles.AUTHORIZED.ToName();
+                    accountEntity.Roles.Add(
+                        await db.GetRepo<RoleEntity>().FirstOrDefault(
+                            role => role.is_default && role.name == authorizedRoleName
+                        )
+                    );
+
+                    AccountEntity inserted = await accountRepo.Create(accountEntity);
+                    await db.Save();
+
+                    return inserted.ToModel<AccountModel>();
                 }
-                catch (KeyNotFoundException) { throw new InvalidKeyException(); }
-                catch (FormatException) { throw new PostValidationException("Password format was not match Base64"); }
-                catch (CryptographicException) { throw new WrongEncryptionException("Password"); }
-
-                if (!PasswordPattern.IsMatch(password))
-                    throw new InvalidPasswordException();
-
-                KeyService.DestroyKeyPair(signUpForm.PublicKey);
-
-                AccountEntity accountEntity = signUpForm.ToEntity<AccountEntity>();
-
-                accountEntity.password = HashingService.GetHashHex(password);
-
-                string authorizedRoleName = DefaultRoles.AUTHORIZED.ToName();
-                accountEntity.Roles.Add(await RoleRepo.FirstOrDefault(role => role.is_default && role.name == authorizedRoleName));
-
-                AccountEntity inserted = await AccountRepo.Create(accountEntity);
-
-                return inserted.ToModel<AccountModel>();
             });
         }
 
@@ -73,18 +80,23 @@ namespace WorkAutomatorLogic.Services
         {
             return await base.Execute<SessionModel>(async () =>
             {
-                AccountEntity account = await AccountRepo.FirstOrDefault(acc => acc.login == logInForm.Login);
+                using (UnitOfWork db = new UnitOfWork())
+                {
+                    AccountEntity account = await db.GetRepo<AccountEntity>().FirstOrDefault(
+                        acc => acc.login == logInForm.Login
+                    );
 
-                if (account == null)
-                    throw new NotFoundException("Account");
+                    if (account == null)
+                        throw new NotFoundException("Account");
 
-                string saltedPassword = account.password + logInForm.Salt;
-                string saltedPasswordHash = HashingService.GetHashHex(saltedPassword);
+                    string saltedPassword = account.password + logInForm.Salt;
+                    string saltedPasswordHash = HashingService.GetHashHex(saltedPassword);
 
-                if (logInForm.PasswordSalted.ToUpper() != saltedPasswordHash.ToUpper())
-                    throw new WrongPasswordException();
+                    if (logInForm.PasswordSalted.ToUpper() != saltedPasswordHash.ToUpper())
+                        throw new WrongPasswordException();
 
-                return SessionService.CreateSessionFor(account.id);
+                    return SessionService.CreateSessionFor(account.id);
+                }
             });
         }
     }

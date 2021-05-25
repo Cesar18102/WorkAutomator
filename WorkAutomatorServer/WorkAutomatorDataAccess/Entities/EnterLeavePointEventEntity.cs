@@ -6,7 +6,7 @@ namespace WorkAutomatorDataAccess.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class EnterLeavePointEventEntity : EntityBase
+    public partial class EnterLeavePointEventEntity : IdEntity
     {
         
         public int enter_leave_point_id { get; set; }

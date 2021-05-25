@@ -7,7 +7,7 @@ namespace WorkAutomatorDataAccess.Entities
     using System.Data.Entity.Spatial;
 
     [Table("pipeline")]
-    public partial class PipelineEntity : EntityBase
+    public partial class PipelineEntity : IdEntity
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public PipelineEntity()

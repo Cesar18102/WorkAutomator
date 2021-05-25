@@ -17,6 +17,7 @@
                         password = c.String(nullable: false, maxLength: 256, unicode: false),
                         first_name = c.String(nullable: false, maxLength: 256),
                         last_name = c.String(nullable: false, maxLength: 256),
+                        is_superadmin = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.id)
                 .ForeignKey("dbo.company", t => t.company_id)
@@ -46,14 +47,13 @@
                 "dbo.company",
                 c => new
                     {
-                        id = c.Int(nullable: false, identity: true),
-                        name = c.String(nullable: false, maxLength: 1024, unicode: false),
                         owner_id = c.Int(nullable: false),
+                        name = c.String(nullable: false, maxLength: 1024, unicode: false),
                         plan_image_url = c.String(nullable: false, maxLength: 1024, unicode: false),
                     })
-                .PrimaryKey(t => t.id)
-                .ForeignKey("dbo.account", t => t.id)
-                .Index(t => t.id);
+                .PrimaryKey(t => t.owner_id)
+                .ForeignKey("dbo.account", t => t.owner_id)
+                .Index(t => t.owner_id);
             
             CreateTable(
                 "dbo.company_plan_unique_point",
@@ -169,7 +169,8 @@
                 c => new
                     {
                         id = c.Int(nullable: false, identity: true),
-                        company_id = c.Int(nullable: false),
+                        company_id = c.Int(),
+                        is_default = c.Boolean(nullable: false),
                         name = c.String(nullable: false, maxLength: 256, unicode: false),
                     })
                 .PrimaryKey(t => t.id)
@@ -685,7 +686,7 @@
             DropForeignKey("dbo.account_role", "role_id", "dbo.role");
             DropForeignKey("dbo.account_role", "account_id", "dbo.account");
             DropForeignKey("dbo.pipeline_item_interaction_event", "account_id", "dbo.account");
-            DropForeignKey("dbo.company", "id", "dbo.account");
+            DropForeignKey("dbo.company", "owner_id", "dbo.account");
             DropForeignKey("dbo.enter_leave_point_event", "account_id", "dbo.account");
             DropForeignKey("dbo.detector_interaction_event", "account_id", "dbo.account");
             DropForeignKey("dbo.check_point_event", "account_id", "dbo.account");
@@ -833,7 +834,7 @@
             DropIndex("dbo.check_point", new[] { "company_plan_unique_point2_id" });
             DropIndex("dbo.check_point", new[] { "company_plan_unique_point1_id" });
             DropIndex("dbo.company_plan_unique_point", new[] { "company_id" });
-            DropIndex("dbo.company", new[] { "id" });
+            DropIndex("dbo.company", new[] { "owner_id" });
             DropIndex("dbo.task", new[] { "reviewer_account_id" });
             DropIndex("dbo.task", new[] { "assignee_account_id" });
             DropIndex("dbo.task", new[] { "company_id" });

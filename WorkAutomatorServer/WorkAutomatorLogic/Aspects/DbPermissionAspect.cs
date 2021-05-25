@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
 using Autofac;
 
 using MethodBoundaryAspect.Fody.Attributes;
-using WorkAutomatorLogic.Exceptions;
+using WorkAutomatorLogic.Attributes;
 using WorkAutomatorLogic.Extensions;
 using WorkAutomatorLogic.Models.Permission;
 using WorkAutomatorLogic.ServiceInterfaces;
@@ -21,6 +19,7 @@ namespace WorkAutomatorLogic.Aspects
         public DbTable Table { get; set; } = DbTable.None;
         public InteractionDbType Action { get; set; }
         public Type DbTableConverterType { get; set; }
+        public bool CheckSameCompany { get; set; }
 
         public override void OnEntry(MethodExecutionArgs arg)
         {
@@ -41,7 +40,9 @@ namespace WorkAutomatorLogic.Aspects
                     Table = (DbTable)tableNameParameterValue;
             }
 
-            Interaction interaction = new Interaction(Action, Table, initiatorAccountId);
+            int? companyId = CheckSameCompany ? (int?)arg.Arguments.GetMarkedValueFromArgumentList<SubjectIdAttribute>(methodParameters) : null;
+
+            Interaction interaction = new Interaction(Action, Table, initiatorAccountId) { SubjectId = companyId };
             Task.Run(() => PermissionService.CheckLegal(interaction)).GetAwaiter().GetResult();
         }
     }

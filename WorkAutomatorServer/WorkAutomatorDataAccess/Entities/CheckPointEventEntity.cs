@@ -6,7 +6,7 @@ namespace WorkAutomatorDataAccess.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class CheckPointEventEntity : EntityBase
+    public partial class CheckPointEventEntity : IdEntity
     {
         
         public int check_point_id { get; set; }

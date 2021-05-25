@@ -17,7 +17,6 @@ using Autofac;
 
 using WorkAutomatorDataAccess.Entities;
 using WorkAutomatorDataAccess.Exceptions;
-using WorkAutomatorDataAccess.RepoInterfaces;
 
 namespace WorkAutomatorDataAccess
 {
@@ -92,7 +91,7 @@ namespace WorkAutomatorDataAccess
                     errors, true
                 );
 
-                Type entityType = entry.Entity.GetType();
+                /*Type entityType = entry.Entity.GetType();
 
                 PropertyInfo[] indexes = entityType.GetProperties().Where(
                     p =>
@@ -151,7 +150,7 @@ namespace WorkAutomatorDataAccess
                 if (result == null)
                     continue;
 
-                errors.Add(new ValidationResult("Unique attribute value duplication"));
+                errors.Add(new ValidationResult("Unique attribute value duplication"));*/
             }
 
             if (errors.Count != 0)
@@ -324,6 +323,11 @@ namespace WorkAutomatorDataAccess
                 .WithRequired(e => e.account)
                 .HasForeignKey(e => e.account_id)
                 .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<CompanyEntity>()
+                .HasKey(e => e.owner_id)
+                .HasRequired(e => e.Owner)
+                .WithOptional(e => e.OwnedCompany);
 
             modelBuilder.Entity<AccountEntity>()
                 .HasOptional(e => e.OwnedCompany)

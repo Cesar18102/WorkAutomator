@@ -6,7 +6,7 @@ namespace WorkAutomatorDataAccess.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class PipelineItemStorageConnectionEntity : EntityBase
+    public partial class PipelineItemStorageConnectionEntity : IdEntity
     {
         
         public int pipeline_item_id { get; set; }

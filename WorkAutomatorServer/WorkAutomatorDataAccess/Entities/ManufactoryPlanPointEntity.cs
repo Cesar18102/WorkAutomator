@@ -6,7 +6,7 @@ namespace WorkAutomatorDataAccess.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class ManufactoryPlanPointEntity : EntityBase
+    public partial class ManufactoryPlanPointEntity : IdEntity
     {
         
         public int manufactory_id { get; set; }

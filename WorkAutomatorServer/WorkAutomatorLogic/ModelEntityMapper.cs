@@ -44,7 +44,10 @@ namespace WorkAutomatorLogic
                   .ForMember(model => model.FirstName, cnf => cnf.MapFrom(entity => entity.first_name))
                   .ForMember(model => model.LastName, cnf => cnf.MapFrom(entity => entity.last_name));
 
-            config.CreateMap<CompanyModel, CompanyEntity>().ReverseMap();
+            config.CreateMap<CompanyModel, CompanyEntity>()
+                  .ForMember(entity => entity.plan_image_url, cnf => cnf.MapFrom(model => model.PlanImageUrl))
+                  .ReverseMap()
+                  .ForMember(model => model.PlanImageUrl, cnf => cnf.MapFrom(entity => entity.plan_image_url));
         }
 
         public static IReadOnlyDictionary<DbTable, string> TABLE_NAME_DICTIONARY = new Dictionary<DbTable, string>()

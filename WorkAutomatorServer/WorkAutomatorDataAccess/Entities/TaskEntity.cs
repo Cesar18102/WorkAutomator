@@ -7,7 +7,7 @@ namespace WorkAutomatorDataAccess.Entities
     using System.Data.Entity.Spatial;
 
     [Table("task")]
-    public partial class TaskEntity : EntityBase
+    public partial class TaskEntity : IdEntity
     {
         
         [Required]

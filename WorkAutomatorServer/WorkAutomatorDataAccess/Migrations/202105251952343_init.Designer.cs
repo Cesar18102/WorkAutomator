@@ -7,13 +7,13 @@ namespace WorkAutomatorDataAccess.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class default_roles2 : IMigrationMetadata
+    public sealed partial class init : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(default_roles2));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(init));
         
         string IMigrationMetadata.Id
         {
-            get { return "202105242353580_default_roles2"; }
+            get { return "202105251952343_init"; }
         }
         
         string IMigrationMetadata.Source

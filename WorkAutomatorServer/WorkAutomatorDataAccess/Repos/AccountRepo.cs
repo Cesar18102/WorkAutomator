@@ -4,11 +4,10 @@ using System.Data.Entity;
 using System.Threading.Tasks;
 
 using WorkAutomatorDataAccess.Entities;
-using WorkAutomatorDataAccess.RepoInterfaces;
 
 namespace WorkAutomatorDataAccess.Repos
 {
-    internal class AccountRepo : RepoBase<AccountEntity>, IRepo<AccountEntity>
+   /* internal class AccountRepo : RepoBase<AccountEntity>, IRepo<AccountEntity>
     {
         public AccountRepo(Type contextType) : base(contextType) { }
 
@@ -60,5 +59,5 @@ namespace WorkAutomatorDataAccess.Repos
                 await db.SaveChangesAsync();
             }
         }
-    }
+    }*/
 }

@@ -102,6 +102,7 @@
     <Compile Include="Entities\EnterLeavePointEntity.cs" />
     <Compile Include="Entities\EnterLeavePointEventEntity.cs" />
     <Compile Include="Entities\EntityBase.cs" />
+    <Compile Include="Entities\IdEntity.cs" />
     <Compile Include="Entities\ManufactoryEntity.cs" />
     <Compile Include="Entities\ManufactoryPlanPointEntity.cs" />
     <Compile Include="Entities\PipelineEntity.cs" />
@@ -123,38 +124,15 @@
     <Compile Include="Entities\VisualizerTypeEntity.cs" />
     <Compile Include="Exceptions\DatabaseActionValidationException.cs" />
     <Compile Include="Exceptions\EntityNotFoundException.cs" />
-    <Compile Include="Migrations\202105231734330_init.cs" />
-    <Compile Include="Migrations\202105231734330_init.designer.cs">
-      <DependentUpon>202105231734330_init.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202105232149436_superadmin.cs" />
-    <Compile Include="Migrations\202105232149436_superadmin.designer.cs">
-      <DependentUpon>202105232149436_superadmin.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202105242222392_default_roles.cs" />
-    <Compile Include="Migrations\202105242222392_default_roles.designer.cs">
-      <DependentUpon>202105242222392_default_roles.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202105242353580_default_roles2.cs" />
-    <Compile Include="Migrations\202105242353580_default_roles2.designer.cs">
-      <DependentUpon>202105242353580_default_roles2.cs</DependentUpon>
+    <Compile Include="IRepo.cs" />
+    <Compile Include="Migrations\202105251952343_init.cs" />
+    <Compile Include="Migrations\202105251952343_init.designer.cs">
+      <DependentUpon>202105251952343_init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="RepoDependencyHolder.cs" />
-    <Compile Include="RepoInterfaces\IRepo.cs" />
     <Compile Include="Repos\AccountRepo.cs" />
-    <Compile Include="Repos\CompanyRepo.cs" />
-    <Compile Include="Repos\DbPermissionRepo.cs" />
-    <Compile Include="Repos\DetectorRepo.cs" />
-    <Compile Include="Repos\ManufactoryRepo.cs" />
-    <Compile Include="Repos\PipelineItemRepo.cs" />
-    <Compile Include="Repos\PipelineRepo.cs" />
-    <Compile Include="Repos\PrefabRepos\DetectorPrefabRepo.cs" />
-    <Compile Include="Repos\PrefabRepos\PipelineItemPrefabRepo.cs" />
-    <Compile Include="Repos\RepoBase.cs" />
-    <Compile Include="Repos\ResourceRepo.cs" />
-    <Compile Include="Repos\RoleRepo.cs" />
-    <Compile Include="Repos\StorageRepo.cs" />
+    <Compile Include="RepoBase.cs" />
+    <Compile Include="UnitOfWork.cs" />
     <Compile Include="WorkAutomatorDBContext.cs" />
     <Compile Include="WorkAutomatorDBInitializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -164,17 +142,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202105231734330_init.resx">
-      <DependentUpon>202105231734330_init.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202105232149436_superadmin.resx">
-      <DependentUpon>202105232149436_superadmin.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202105242222392_default_roles.resx">
-      <DependentUpon>202105242222392_default_roles.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202105242353580_default_roles2.resx">
-      <DependentUpon>202105242353580_default_roles2.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202105251952343_init.resx">
+      <DependentUpon>202105251952343_init.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

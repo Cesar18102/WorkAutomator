@@ -7,7 +7,7 @@ namespace WorkAutomatorDataAccess.Entities
     using System.Data.Entity.Spatial;
 
     [Table("detector")]
-    public partial class DetectorEntity : EntityBase
+    public partial class DetectorEntity : IdEntity
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public DetectorEntity()

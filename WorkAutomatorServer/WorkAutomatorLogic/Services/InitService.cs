@@ -4,115 +4,138 @@ using System.Collections.Generic;
 
 using Autofac;
 
-using WorkAutomatorDataAccess;
-using WorkAutomatorDataAccess.Entities;
-using WorkAutomatorDataAccess.RepoInterfaces;
-
 using WorkAutomatorLogic.Extensions;
 using WorkAutomatorLogic.ServiceInterfaces;
+
 using WorkAutomatorLogic.Models.Roles;
 using WorkAutomatorLogic.Models.Permission;
 
+using WorkAutomatorDataAccess;
+using WorkAutomatorDataAccess.Entities;
+
 namespace WorkAutomatorLogic.Services
 {
-    internal class InitService : IInitService
+    internal class InitService : ServiceBase, IInitService
     {
-        private static IRepo<DbPermissionTypeEntity> DbPermissionTypeRepo = RepoDependencyHolder.ResolveRealRepo<DbPermissionTypeEntity>();
-        private static IRepo<DbPermissionEntity> DbPermissionRepo = RepoDependencyHolder.ResolveRealRepo<DbPermissionEntity>();
-        private static IRepo<RoleEntity> RoleRepo = RepoDependencyHolder.ResolveRealRepo<RoleEntity>();
-
         public async Task InitDbPermissions()
         {
-            IList<DbPermissionTypeEntity> existingDbPermissionTypes = await DbPermissionTypeRepo.Get();
-            IList<DbPermissionEntity> existingDbPermissions = await DbPermissionRepo.Get();
-
-            foreach (string interactionDbTypeName in ModelEntityMapper.INTERACTION_DB_TYPES.Values)
+            await Execute(async () =>
             {
-                if (existingDbPermissionTypes.FirstOrDefault(pt => pt.name == interactionDbTypeName) != null)
-                    continue;
-
-                await DbPermissionTypeRepo.Create(new DbPermissionTypeEntity() { name = interactionDbTypeName });
-            }
-
-            existingDbPermissionTypes = await DbPermissionTypeRepo.Get();
-            existingDbPermissions = await DbPermissionRepo.Get();
-
-            foreach (string table in ModelEntityMapper.TABLE_NAME_DICTIONARY.Values)
-            {
-                DbPermissionEntity[] permissionsForTable = existingDbPermissions.Where(p => p.table_name == table).ToArray();
-
-                foreach (string interactionDbTypeName in ModelEntityMapper.INTERACTION_DB_TYPES.Values)
+                using (UnitOfWork db = new UnitOfWork())
                 {
-                    DbPermissionTypeEntity dbPermissionType = existingDbPermissionTypes.First(pt => pt.name == interactionDbTypeName);
+                    IRepo<DbPermissionTypeEntity> dbPermissionTypeRepo = db.GetRepo<DbPermissionTypeEntity>();
 
-                    if (permissionsForTable.FirstOrDefault(p => p.db_permission_type_id == dbPermissionType.id) != null)
-                        continue;
+                    IList<DbPermissionTypeEntity> existingDbPermissionTypes = await dbPermissionTypeRepo.Get();
+                    IList<DbPermissionEntity> existingDbPermissions = await db.GetRepo<DbPermissionEntity>().Get();
 
-                    await DbPermissionRepo.Create(
-                        new DbPermissionEntity() { 
-                            table_name = table, 
-                            db_permission_type_id = dbPermissionType.id 
-                        }
-                    );
+                    foreach (string interactionDbTypeName in ModelEntityMapper.INTERACTION_DB_TYPES.Values)
+                    {
+                        if (existingDbPermissionTypes.FirstOrDefault(pt => pt.name == interactionDbTypeName) != null)
+                            continue;
+
+                        await dbPermissionTypeRepo.Create(new DbPermissionTypeEntity() { name = interactionDbTypeName });
+                    }
+
+                    await db.Save();
                 }
-            }
+
+                using (UnitOfWork db = new UnitOfWork())
+                {
+                    IRepo<DbPermissionEntity> dbPermissionRepo = db.GetRepo<DbPermissionEntity>();
+
+                    IList<DbPermissionTypeEntity> existingDbPermissionTypes = await db.GetRepo<DbPermissionTypeEntity>().Get();
+                    IList<DbPermissionEntity> existingDbPermissions = await dbPermissionRepo.Get();
+
+                    foreach (string table in ModelEntityMapper.TABLE_NAME_DICTIONARY.Values)
+                    {
+                        DbPermissionEntity[] permissionsForTable = existingDbPermissions.Where(p => p.table_name == table).ToArray();
+
+                        foreach (string interactionDbTypeName in ModelEntityMapper.INTERACTION_DB_TYPES.Values)
+                        {
+                            DbPermissionTypeEntity dbPermissionType = existingDbPermissionTypes.First(pt => pt.name == interactionDbTypeName);
+
+                            if (permissionsForTable.FirstOrDefault(p => p.db_permission_type_id == dbPermissionType.id) != null)
+                                continue;
+
+                            await dbPermissionRepo.Create(
+                                new DbPermissionEntity()
+                                {
+                                    table_name = table,
+                                    db_permission_type_id = dbPermissionType.id
+                                }
+                            );
+                        }
+                    }
+
+                    await db.Save();
+                }
+            });
         }
 
         public async Task InitDefaultRoles()
         {
-            IList<RoleEntity> defaultRoles = await RoleRepo.Get(role => role.is_default);
-            IList<DbPermissionEntity> permissions = await DbPermissionRepo.Get();
-
-            if (defaultRoles.FirstOrDefault(role => role.name == DefaultRoles.AUTHORIZED.ToName()) == null)
+            await Execute(async () =>
             {
-                RoleEntity authorizedRole = new RoleEntity()
+                using (UnitOfWork db = new UnitOfWork())
                 {
-                    is_default = true,
-                    name = DefaultRoles.AUTHORIZED.ToName()
-                };
+                    IRepo<RoleEntity> roleRepo = db.GetRepo<RoleEntity>();
 
-                authorizedRole.DbPermissions.AddRange(
-                    permissions.Where(p => 
-                        p.table_name == DbTable.Account.ToName() && (
-                            p.DbPermissionType.name == InteractionDbType.READ.ToName() || 
-                            p.DbPermissionType.name == InteractionDbType.UPDATE.ToName()
-                        )
-                    ).ToArray()
-                );
+                    IList<RoleEntity> defaultRoles = await roleRepo.Get(role => role.is_default);
+                    IList<DbPermissionEntity> permissions = await db.GetRepo<DbPermissionEntity>().Get();
 
-                authorizedRole.DbPermissions.AddRange(
-                    permissions.Where(p => 
-                        p.table_name == DbTable.Company.ToName() &&
-                        p.DbPermissionType.name == InteractionDbType.CREATE.ToName()
-                    ).ToArray()
-                );
+                    if (defaultRoles.FirstOrDefault(role => role.name == DefaultRoles.AUTHORIZED.ToName()) == null)
+                    {
+                        RoleEntity authorizedRole = new RoleEntity()
+                        {
+                            is_default = true,
+                            name = DefaultRoles.AUTHORIZED.ToName()
+                        };
 
-                await RoleRepo.Create(authorizedRole);
-            }
+                        authorizedRole.DbPermissions.AddRange(
+                            permissions.Where(p =>
+                                p.table_name == DbTable.Account.ToName() && (
+                                    p.DbPermissionType.name == InteractionDbType.READ.ToName() ||
+                                    p.DbPermissionType.name == InteractionDbType.UPDATE.ToName()
+                                )
+                            ).ToArray()
+                        );
 
-            if (defaultRoles.FirstOrDefault(role => role.name == DefaultRoles.OWNER.ToName()) == null)
-            {
-                RoleEntity ownerRole = new RoleEntity()
-                {
-                    is_default = true,
-                    name = DefaultRoles.OWNER.ToName()
-                };
+                        authorizedRole.DbPermissions.AddRange(
+                            permissions.Where(p =>
+                                p.table_name == DbTable.Company.ToName() &&
+                                p.DbPermissionType.name == InteractionDbType.CREATE.ToName()
+                            ).ToArray()
+                        );
 
-                ownerRole.DbPermissions.AddRange(
-                    permissions.Where(p => 
-                        p.table_name != DbTable.Account.ToName() && 
-                        p.table_name != DbTable.DbPermissionType.ToName() && 
-                        p.table_name != DbTable.DbPermission.ToName() &&
-                        p.table_name != DbTable.DataType.ToName() &&
-                        p.table_name != DbTable.VisualizerType.ToName() && (
-                            p.table_name != DbTable.Company.ToName() || 
-                            p.DbPermissionType.name != InteractionDbType.CREATE.ToName()
-                        )
-                    ).ToArray()
-                );
+                        await roleRepo.Create(authorizedRole);
+                    }
 
-                await RoleRepo.Create(ownerRole);
-            }
+                    if (defaultRoles.FirstOrDefault(role => role.name == DefaultRoles.OWNER.ToName()) == null)
+                    {
+                        RoleEntity ownerRole = new RoleEntity()
+                        {
+                            is_default = true,
+                            name = DefaultRoles.OWNER.ToName()
+                        };
+
+                        ownerRole.DbPermissions.AddRange(
+                            permissions.Where(p =>
+                                p.table_name != DbTable.DbPermissionType.ToName() &&
+                                p.table_name != DbTable.DbPermission.ToName() &&
+                                p.table_name != DbTable.DataType.ToName() &&
+                                p.table_name != DbTable.VisualizerType.ToName() && (
+                                    p.table_name != DbTable.Company.ToName() ||
+                                    p.DbPermissionType.name != InteractionDbType.CREATE.ToName()
+                                )
+                            ).ToArray()
+                        );
+
+                        await roleRepo.Create(ownerRole);
+                    }
+
+                    await db.Save();
+                }
+            });
         }
 
         public async Task InitDataTypes()

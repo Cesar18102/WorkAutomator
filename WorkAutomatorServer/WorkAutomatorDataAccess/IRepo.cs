@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 using WorkAutomatorDataAccess.Entities;
 
-namespace WorkAutomatorDataAccess.RepoInterfaces
+namespace WorkAutomatorDataAccess
 {
     public interface IRepo<TEntity> where TEntity : EntityBase
     {
@@ -16,9 +16,8 @@ namespace WorkAutomatorDataAccess.RepoInterfaces
         Task<IList<TEntity>> Get(Expression<Func<TEntity, bool>> predicate);
 
         Task<TEntity> Create(TEntity item);
-        Task<TEntity> Update(TEntity item);
 
         Task Delete(int id);
-        Task Clear();
+        void Clear();
     }
 }

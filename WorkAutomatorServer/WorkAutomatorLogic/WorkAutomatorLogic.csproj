@@ -87,8 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aspects\DbPermissionAspect.cs" />
-    <Compile Include="Aspects\IsCompanyMemberAspect.cs" />
-    <Compile Include="Attributes\CompanyIdAttribute.cs" />
+    <Compile Include="Attributes\SubjectIdAttribute.cs" />
     <Compile Include="Attributes\InitiatorAccountIdAttribute.cs" />
     <Compile Include="Attributes\InteractionTargetIdAttribute.cs" />
     <Compile Include="Aspects\PermissionAspect.cs" />
@@ -148,6 +147,7 @@
     <Compile Include="Services\InitService.cs" />
     <Compile Include="Services\KeyService.cs" />
     <Compile Include="Services\PermissionService.cs" />
+    <Compile Include="Services\RoleService.cs" />
     <Compile Include="Services\RSAService.cs" />
     <Compile Include="Services\ServiceBase.cs" />
     <Compile Include="Services\SessionService.cs" />

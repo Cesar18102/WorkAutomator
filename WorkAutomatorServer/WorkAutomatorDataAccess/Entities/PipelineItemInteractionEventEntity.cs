@@ -6,7 +6,7 @@ namespace WorkAutomatorDataAccess.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class PipelineItemInteractionEventEntity : EntityBase
+    public partial class PipelineItemInteractionEventEntity : IdEntity
     {
         
         public int pipeline_item_id { get; set; }
