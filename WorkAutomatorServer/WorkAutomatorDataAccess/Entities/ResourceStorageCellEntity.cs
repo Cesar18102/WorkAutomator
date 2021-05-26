@@ -6,6 +6,7 @@ namespace WorkAutomatorDataAccess.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
+    [Table("resource_storage_cell")]
     public partial class ResourceStorageCellEntity : IdEntity
     {
         

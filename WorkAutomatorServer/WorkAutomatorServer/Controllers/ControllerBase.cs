@@ -168,7 +168,7 @@ namespace WorkAutomatorServer.Controllers
             Type type = obj.GetType();
             if (obj is IEnumerable<object> collection)
             {
-                if (!CheckTypeContainsIdentified(type.GetGenericArguments()[0]))
+                if (!CheckTypeContainsIdentified(type.IsGenericType ? type.GetGenericArguments()[0] : type.GetElementType()))
                     return true;
 
                 return collection.All(item => CheckIdentified(item));

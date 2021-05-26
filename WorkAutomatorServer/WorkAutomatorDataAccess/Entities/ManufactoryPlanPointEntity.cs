@@ -6,6 +6,7 @@ namespace WorkAutomatorDataAccess.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
+    [Table("manufactory_plan_point")]
     public partial class ManufactoryPlanPointEntity : IdEntity
     {
         

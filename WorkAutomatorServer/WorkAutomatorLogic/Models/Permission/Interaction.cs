@@ -4,7 +4,8 @@
     {
         public PermissionModelBase Permission { get; set; }
         public int InitiatorAccountId { get; set; }
-        public int? SubjectId { get; set; }
+        public int? CompanyId { get; set; }
+        public int[] SubjectIds { get; set; }
 
         public Interaction(InteractionDbType type, DbTable table, int initiatorAccountId)
         {

@@ -8,7 +8,7 @@ namespace Dto
 {
     public class FireHireDto : DtoBase
     {
-        [SubjectId]
+        [ObjectId]
         [Required(AllowEmptyStrings = false)]
         [JsonProperty("company_id")]
         public int? CompanyId { get; set; }

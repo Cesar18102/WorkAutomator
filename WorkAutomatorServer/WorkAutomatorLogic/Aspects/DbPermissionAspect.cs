@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -27,11 +28,11 @@ namespace WorkAutomatorLogic.Aspects
         {
             ParameterInfo[] methodParameters = arg.Method.GetParameters();
 
-            int initiatorAccountId = (int)arg.Arguments.GetMarkedValueFromArgumentList<InitiatorAccountIdAttribute>(methodParameters);
+            int initiatorAccountId = (int)arg.Arguments.GetMarkedValueFromArgumentList<InitiatorAccountIdAttribute>(methodParameters).First();
 
             if(Table == DbTable.None)
             {
-                object tableNameParameterValue = arg.Arguments.GetMarkedValueFromArgumentList<TableNameParameterAttribute>(methodParameters);
+                object tableNameParameterValue = arg.Arguments.GetMarkedValueFromArgumentList<TableNameParameterAttribute>(methodParameters).First();
 
                 if (DbTableConverterType != null)
                 {
@@ -42,9 +43,14 @@ namespace WorkAutomatorLogic.Aspects
                     Table = (DbTable)tableNameParameterValue;
             }
 
-            int? companyId = CheckSameCompany ? (int?)arg.Arguments.GetMarkedValueFromArgumentList<SubjectIdAttribute>(methodParameters) : null;
+            Interaction interaction = new Interaction(Action, Table, initiatorAccountId);
 
-            Interaction interaction = new Interaction(Action, Table, initiatorAccountId) { SubjectId = companyId };
+            if(CheckSameCompany)
+            {
+                interaction.CompanyId = (int?)arg.Arguments.GetMarkedValueFromArgumentList<CompanyIdAttribute>(methodParameters).FirstOrDefault();
+                interaction.SubjectIds = arg.Arguments.GetMarkedValueFromArgumentList<ObjectIdAttribute>(methodParameters).Cast<int>()?.ToArray() ?? new int[0];
+            }
+
             Task.Run(() => PermissionService.CheckLegal(interaction)).GetAwaiter().GetResult();
         }
     }

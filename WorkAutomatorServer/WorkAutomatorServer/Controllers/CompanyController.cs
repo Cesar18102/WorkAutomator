@@ -10,7 +10,6 @@ using Dto;
 using Attributes;
 
 using WorkAutomatorLogic;
-using WorkAutomatorLogic.Models;
 using WorkAutomatorLogic.ServiceInterfaces;
 
 namespace WorkAutomatorServer.Controllers
@@ -49,6 +48,14 @@ namespace WorkAutomatorServer.Controllers
         public async Task<HttpResponseMessage> FireMember([FromBody, Identified] AuthorizedDto<FireHireDto> dto)
         {
             return await Execute(hireFireDto => CompanyService.FireMember(hireFireDto), dto);
+        }
+
+        [HttpPost]
+        [WireHeadersAspect]
+        [AuthorizedAspect]
+        public async Task<HttpResponseMessage> SetupPlanPoints([FromBody, Identified] AuthorizedDto<CompanyPlanPointsDto> dto)
+        {
+            return await Execute(planPointsDto => CompanyService.SetupCompanyPlanPoints(planPointsDto), dto);
         }
     }
 }

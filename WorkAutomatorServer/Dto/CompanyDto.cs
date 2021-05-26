@@ -8,7 +8,7 @@ namespace Dto
 {
     public class CompanyDto : IdDto
     {
-        [SubjectId]
+        [CompanyId]
         [JsonIgnore]
         public int? CompanyId => Id;
 

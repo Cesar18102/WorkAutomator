@@ -51,6 +51,8 @@
     <Compile Include="FireHireDto.cs" />
     <Compile Include="IdDto.cs" />
     <Compile Include="LogInDto.cs" />
+    <Compile Include="CompanyPlanPointDto.cs" />
+    <Compile Include="CompanyPlanPointsDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PublicKeyDto.cs" />
     <Compile Include="SessionDto.cs" />

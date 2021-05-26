@@ -2,7 +2,7 @@
 
 namespace Attributes
 {
-    public class SubjectIdAttribute : Attribute
+    public class ObjectIdAttribute : Attribute
     {
     }
 }

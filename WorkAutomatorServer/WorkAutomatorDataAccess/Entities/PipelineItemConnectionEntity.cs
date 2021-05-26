@@ -6,6 +6,7 @@ namespace WorkAutomatorDataAccess.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
+    [Table("pipeline_item_connection")]
     public partial class PipelineItemConnectionEntity : IdEntity
     {
         

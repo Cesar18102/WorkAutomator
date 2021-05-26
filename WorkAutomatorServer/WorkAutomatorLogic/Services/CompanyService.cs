@@ -135,10 +135,31 @@ namespace WorkAutomatorLogic.Services
             });
         }
 
-        [DbPermissionAspect(Action = InteractionDbType.CREATE | InteractionDbType.DELETE, Table = DbTable.CompanyPlanUniquePoint)]
-        public async Task<CompanyModel> SetupCompanyPlanPoints(AuthorizedDto<CompanyDto> model)
+        [DbPermissionAspect(Action = InteractionDbType.CREATE | InteractionDbType.DELETE, Table = DbTable.CompanyPlanUniquePoint, CheckSameCompany = true)]
+        public async Task<CompanyModel> SetupCompanyPlanPoints(AuthorizedDto<CompanyPlanPointsDto> model)
         {
-            throw new System.NotImplementedException();
+            return await Execute(async () => {
+                using (UnitOfWork db = new UnitOfWork())
+                {
+                    CompanyEntity company = await db.GetRepo<CompanyEntity>().Get(model.Data.CompanyId.Value);
+
+                    company.CompanyPlanUniquePoints.Clear();
+
+                    foreach (CompanyPlanPointDto point in model.Data.Points)
+                    { 
+                        company.CompanyPlanUniquePoints.Add(
+                            new CompanyPlanUniquePointEntity()
+                            {
+                                x = point.X,
+                                y = point.Y
+                            }
+                        );
+                    }
+
+                    await db.Save();
+                    return company.ToModel<CompanyModel>();
+                }
+            });
         }
     }
 }

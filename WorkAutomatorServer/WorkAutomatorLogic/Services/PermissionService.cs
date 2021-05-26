@@ -70,7 +70,7 @@ namespace WorkAutomatorLogic.Services
 
                     bool isLegal = requiredInteractionTypes.Intersect(havingInteractionTypes).Count() == requiredInteractionTypes.Length;
 
-                    if(interaction.SubjectId.HasValue)
+                    if(interaction.CompanyId.HasValue && interaction.SubjectIds.Length != 0) //TODO: introduce companyId and subjectIds[]
                     {
                         Type entityType = typeof(EntityBase).Assembly.GetTypes().FirstOrDefault(
                             type => type.GetCustomAttribute<TableAttribute>()?.Name == tableName
@@ -92,23 +92,32 @@ namespace WorkAutomatorLogic.Services
                             }
                         );
 
-                        object task = getByIdMethod.Invoke(repo, new object[] { interaction.SubjectId.Value });
+                        IEnumerable<Task> tasks = interaction.SubjectIds.Select(
+                            subjectId => getByIdMethod.Invoke(repo, new object[] { subjectId })
+                        ).Cast<Task>();
 
-                        object awaiter = typeof(Task<>)
-                            .MakeGenericType(entityType)
-                            .GetMethod(nameof(Task<object>.GetAwaiter))
-                            .Invoke(task, new object[] { });
+                        await Task.WhenAll(tasks);
 
-                        object entity = typeof(TaskAwaiter<>)
-                            .MakeGenericType(entityType)
-                            .GetMethod(nameof(TaskAwaiter<object>.GetResult))
-                            .Invoke(awaiter, new object[] { });
+                        object[] entities = tasks.Select(task =>
+                        {
+                            object awaiter = typeof(Task<>)
+                                .MakeGenericType(entityType)
+                                .GetMethod(nameof(Task<object>.GetAwaiter))
+                                .Invoke(task, new object[] { });
 
-                        if (entity == null)
-                            throw new NotFoundException(entityType.Name.Replace("Entity", ""));
+                            object entity = typeof(TaskAwaiter<>)
+                                .MakeGenericType(entityType)
+                                .GetMethod(nameof(TaskAwaiter<object>.GetResult))
+                                .Invoke(awaiter, new object[] { });
 
-                        if (entity is CompanyEntity)
-                            isLegal &= initiator.Company?.owner_id == (entity as CompanyEntity).owner_id;
+                            if (entity == null)
+                                throw new NotFoundException(entityType.Name.Replace("Entity", ""));
+
+                            return entity;
+                        }).ToArray();
+
+                        if (entities is CompanyEntity[] companies)
+                            isLegal &= companies.All(company => company.owner_id == initiator.Company?.owner_id);
                         else
                         {
                             int companyId = (int)entity.GetType().GetProperty("company_id").GetValue(entity);
@@ -118,10 +127,10 @@ namespace WorkAutomatorLogic.Services
 
                     if (!isLegal)
                     {
-                        if (interaction.SubjectId.HasValue)
+                        if (interaction.CompanyId.HasValue)
                         {
                             notEnoughPermissions = requiredInteractionTypes.Select(
-                                t => $"{t} {dbPermissionModel.DbTable} #{interaction.SubjectId.Value}"
+                                t => $"{t} {dbPermissionModel.DbTable} #{interaction.CompanyId.Value}"
                             ).ToArray();
                         }
                         else

@@ -6,6 +6,7 @@ namespace WorkAutomatorDataAccess.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
+    [Table("pipeline_item_settings_value")]
     public partial class PipelineItemSettingsValueEntity : IdEntity
     {
         

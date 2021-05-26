@@ -14,8 +14,6 @@ namespace WorkAutomatorLogic.ServiceInterfaces
         Task<CompanyModel> HireMember(AuthorizedDto<FireHireDto> model);
         Task<CompanyModel> FireMember(AuthorizedDto<FireHireDto> model);
 
-        Task<CompanyModel> SetupCompanyPlanPoints(AuthorizedDto<CompanyDto> model);
-
-        //CompanyModel SetupManufactory()
+        Task<CompanyModel> SetupCompanyPlanPoints(AuthorizedDto<CompanyPlanPointsDto> model);
     }
 }

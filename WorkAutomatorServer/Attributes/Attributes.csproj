@@ -41,10 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompanyIdAttribute.cs" />
     <Compile Include="HeaderAutoWiredAttribute.cs" />
     <Compile Include="IdentifiedAttribute.cs" />
     <Compile Include="InitiatorAccountIdAttribute.cs" />
-    <Compile Include="SubjectIdAttribute.cs" />
+    <Compile Include="ObjectIdAttribute.cs" />
     <Compile Include="TableNameParameterAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
