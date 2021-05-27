@@ -103,7 +103,6 @@
     <Compile Include="Exceptions\WrongEncryptionException.cs" />
     <Compile Include="Exceptions\WrongPasswordException.cs" />
     <Compile Include="Exceptions\WrongSessionTokenException.cs" />
-    <Compile Include="Extensions\AttributeExtensions.cs" />
     <Compile Include="Extensions\CollectionExtensions.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="LogicDependencyHolder.cs" />
@@ -118,7 +117,7 @@
     <Compile Include="Models\ModelBase.cs" />
     <Compile Include="Models\Permission\PermissionModel.cs" />
     <Compile Include="Models\Permission\PermissionModelBase.cs" />
-    <Compile Include="Models\PlanPointModel.cs" />
+    <Compile Include="Models\CompanyPlanPointModel.cs" />
     <Compile Include="Models\PublicKeyModel.cs" />
     <Compile Include="Models\Roles\RoleModel.cs" />
     <Compile Include="Models\SessionModel.cs" />
@@ -130,6 +129,7 @@
     <Compile Include="ServiceInterfaces\IHashingService.cs" />
     <Compile Include="ServiceInterfaces\IInitService.cs" />
     <Compile Include="ServiceInterfaces\IKeyService.cs" />
+    <Compile Include="ServiceInterfaces\IManufactoryService.cs" />
     <Compile Include="ServiceInterfaces\IProfileService.cs" />
     <Compile Include="ServiceInterfaces\IPermissionService.cs" />
     <Compile Include="ServiceInterfaces\IRoleService.cs" />
@@ -138,6 +138,7 @@
     <Compile Include="Services\CompanyService.cs" />
     <Compile Include="Services\InitService.cs" />
     <Compile Include="Services\KeyService.cs" />
+    <Compile Include="Services\ManufactoryService.cs" />
     <Compile Include="Services\PermissionService.cs" />
     <Compile Include="Services\RoleService.cs" />
     <Compile Include="Services\RSAService.cs" />

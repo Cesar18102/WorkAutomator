@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
 
-namespace WorkAutomatorLogic.Extensions
+namespace Attributes
 {
     public static class AttributeExtensions
     {
@@ -91,7 +91,7 @@ namespace WorkAutomatorLogic.Extensions
             return arguments.GetMarkedMapFromArgumentList<TAttribute>(parameters)?.SelectMany(kvp => kvp.Value).ToArray();
         }
 
-        private static object[] GetValuesByPath(this object source, List<PropertyInfo> path)
+        public static object[] GetValuesByPath(this object source, List<PropertyInfo> path)
         {
             if (source == null || path.Count == 0)
                 return new object[] { source };

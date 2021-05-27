@@ -2,7 +2,7 @@
 
 namespace WorkAutomatorLogic.Models
 {
-    public class PlanPointModel : IdModel
+    public class CompanyPlanPointModel : IdModel
     {
         [JsonProperty("x")]
         public double X { get; set; }

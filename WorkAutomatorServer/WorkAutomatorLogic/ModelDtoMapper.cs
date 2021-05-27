@@ -33,6 +33,7 @@ namespace WorkAutomatorLogic
         {
             config.CreateMap<PublicKeyDto, PublicKeyModel>().ReverseMap();
             config.CreateMap<CompanyDto, CompanyModel>();
+            config.CreateMap<CompanyPlanPointDto, CompanyPlanPointModel>();
         }
     }
 }

@@ -41,9 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AttributeExtensions.cs" />
     <Compile Include="CompanyIdAttribute.cs" />
     <Compile Include="HeaderAutoWiredAttribute.cs" />
-    <Compile Include="IdentifiedAttribute.cs" />
     <Compile Include="InitiatorAccountIdAttribute.cs" />
     <Compile Include="ObjectIdAttribute.cs" />
     <Compile Include="TableNameParameterAttribute.cs" />

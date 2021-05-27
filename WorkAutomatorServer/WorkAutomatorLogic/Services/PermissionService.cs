@@ -74,7 +74,7 @@ namespace WorkAutomatorLogic.Services
                     if (isLegal && interaction.CompanyId.HasValue)
                         isLegal &= interaction.CompanyId == initiator.company_id;
 
-                    if(isLegal && interaction.CompanyId.HasValue && interaction.ObjectIds.Length != 0)
+                    if(isLegal && interaction.CompanyId.HasValue && interaction.ObjectIds != null && interaction.ObjectIds.Length != 0)
                     {
                         Type entityType = typeof(EntityBase).Assembly.GetTypes().FirstOrDefault(
                             type => type.GetCustomAttribute<TableAttribute>()?.Name == tableName

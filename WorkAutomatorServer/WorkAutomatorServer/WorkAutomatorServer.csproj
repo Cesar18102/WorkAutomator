@@ -166,12 +166,14 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Aspects\AuthorizedAspect.cs" />
+    <Compile Include="Aspects\RequiredMaskAspect.cs" />
     <Compile Include="Aspects\WireHeadersAspect.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\CompanyController.cs" />
     <Compile Include="Controllers\ControllerBase.cs" />
     <Compile Include="Controllers\KeyController.cs" />
+    <Compile Include="Controllers\ManufactoryController.cs" />
     <Compile Include="Exceptions\ServerExceptionBase.cs" />
     <Compile Include="Exceptions\ValidationException.cs" />
     <Compile Include="Global.asax.cs">

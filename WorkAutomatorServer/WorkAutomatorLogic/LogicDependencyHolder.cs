@@ -34,6 +34,7 @@ namespace WorkAutomatorLogic
             builder.RegisterType<SessionService>().As<ISessionService>().SingleInstance();
             builder.RegisterType<PermissionService>().As<IPermissionService>().SingleInstance();
             builder.RegisterType<CompanyService>().As<ICompanyService>().SingleInstance();
+            builder.RegisterType<ManufactoryService>().As<IManufactoryService>().SingleInstance();
             builder.RegisterType<RoleService>().As<IRoleService>().SingleInstance();
 
             return builder.Build();

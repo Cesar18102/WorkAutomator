@@ -17,6 +17,7 @@ using WorkAutomatorLogic.ServiceInterfaces;
 
 namespace WorkAutomatorLogic.Aspects
 {
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class DbPermissionAspect : OnMethodBoundaryAspect
     {
         private static IPermissionService PermissionService = LogicDependencyHolder.Dependencies.Resolve<IPermissionService>();

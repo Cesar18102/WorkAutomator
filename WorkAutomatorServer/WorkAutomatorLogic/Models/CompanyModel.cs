@@ -8,9 +8,6 @@ namespace WorkAutomatorLogic.Models
 {
     public class CompanyModel : IdModel
     {
-        [JsonIgnore]
-        public int CompanyId => Id;
-
         [JsonProperty("name")]
         public string Name { get; set; }
 
@@ -24,7 +21,7 @@ namespace WorkAutomatorLogic.Models
         public ICollection<AccountModel> Members { get; set; }
 
         [JsonProperty("company_plan_unique_points")]
-        public ICollection<PlanPointModel> CompanyPlanUniquePoints { get; set; }
+        public ICollection<CompanyPlanPointModel> CompanyPlanUniquePoints { get; set; }
 
         [JsonProperty("manufactories")]
         public ICollection<ManufactoryModel> Manufactories { get; set; }
