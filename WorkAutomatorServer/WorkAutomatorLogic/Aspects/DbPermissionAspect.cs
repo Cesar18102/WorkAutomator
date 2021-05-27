@@ -48,7 +48,7 @@ namespace WorkAutomatorLogic.Aspects
 
             int? companyId = (int?)arg.Arguments.GetMarkedValueFromArgumentList<CompanyIdAttribute>(methodParameters).FirstOrDefault();
 
-            if (Table != DbTable.None)
+            if (Table != DbTable.None && !CheckSameCompany)
             {
                 Interaction interaction = new Interaction(Action, Table, initiatorAccountId);
                 interaction.CompanyId = companyId;

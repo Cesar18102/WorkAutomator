@@ -8,6 +8,8 @@ namespace WorkAutomatorLogic.ServiceInterfaces
 {
     public interface ICompanyService
     {
+        Task<CompanyModel> GetCompany(AuthorizedDto<CompanyIdDto> model);
+
         Task<CompanyModel> CreateCompany(AuthorizedDto<CompanyDto> model);
         Task<CompanyModel> UpdateCompany(AuthorizedDto<CompanyDto> model);
 
@@ -15,5 +17,7 @@ namespace WorkAutomatorLogic.ServiceInterfaces
         Task<CompanyModel> FireMember(AuthorizedDto<FireHireDto> model);
 
         Task<CompanyModel> SetupCompanyPlanPoints(AuthorizedDto<CompanyPlanPointsDto> model);
+        Task<CompanyModel> SetupCheckPoint(AuthorizedDto<CheckPointDto> model);
+        Task<CompanyModel> SetupEnterLeavePoint(AuthorizedDto<EnterLeavePointDto> model);
     }
 }

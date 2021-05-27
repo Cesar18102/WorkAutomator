@@ -59,5 +59,30 @@ namespace WorkAutomatorServer.Controllers
         {
             return await Execute(planPointsDto => CompanyService.SetupCompanyPlanPoints(planPointsDto), dto);
         }
+
+        [HttpPost]
+        [WireHeadersAspect]
+        [AuthorizedAspect]
+        [RequiredMaskAspect("dto.Data.Id")]
+        public async Task<HttpResponseMessage> Get([FromBody] AuthorizedDto<CompanyIdDto> dto)
+        {
+            return await Execute(companyIdDto => CompanyService.GetCompany(companyIdDto), dto);
+        }
+
+        [HttpPost]
+        [WireHeadersAspect]
+        [AuthorizedAspect]
+        public async Task<HttpResponseMessage> SetupCheckPoint([FromBody] AuthorizedDto<CheckPointDto> dto)
+        {
+            return await Execute(checkPointDto => CompanyService.SetupCheckPoint(checkPointDto), dto);
+        }
+
+        [HttpPost]
+        [WireHeadersAspect]
+        [AuthorizedAspect]
+        public async Task<HttpResponseMessage> SetupEnterLeavePoint([FromBody] AuthorizedDto<EnterLeavePointDto> dto)
+        {
+            return await Execute(enterLeavePointDto => CompanyService.SetupEnterLeavePoint(enterLeavePointDto), dto);
+        }
     }
 }

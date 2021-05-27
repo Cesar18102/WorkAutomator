@@ -108,7 +108,9 @@
     <Compile Include="LogicDependencyHolder.cs" />
     <Compile Include="ModelEntityMapper.cs" />
     <Compile Include="Models\AccountModel.cs" />
+    <Compile Include="Models\CheckPointModel.cs" />
     <Compile Include="Models\CompanyModel.cs" />
+    <Compile Include="Models\EnterLeavePointModel.cs" />
     <Compile Include="Models\IdModel.cs" />
     <Compile Include="Models\ManufactoryPlanPointModel.cs" />
     <Compile Include="Models\Permission\Converters.cs" />

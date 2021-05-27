@@ -162,5 +162,31 @@ namespace WorkAutomatorLogic.Services
                 }
             });
         }
+
+        [DbPermissionAspect(Action = InteractionDbType.READ, Table = DbTable.Company, CheckSameCompany = true)]
+        public async Task<CompanyModel> GetCompany(AuthorizedDto<CompanyIdDto> model)
+        {
+            return await Execute(async () => {
+                using (UnitOfWork db = new UnitOfWork())
+                {
+                    CompanyEntity company = await db.GetRepo<CompanyEntity>().Get(model.Data.CompanyId.Value);
+                    return company.ToModel<CompanyModel>();
+                }
+            });
+        }
+
+        [DbPermissionAspect(Action = InteractionDbType.CREATE, Table = DbTable.CheckPoint)]
+        [DbPermissionAspect(Action = InteractionDbType.READ, Table = DbTable.CompanyPlanUniquePoint, CheckSameCompany = true)]
+        public async Task<CompanyModel> SetupCheckPoint(AuthorizedDto<CheckPointDto> model)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        [DbPermissionAspect(Action = InteractionDbType.CREATE, Table = DbTable.EnterLeavePoint)]
+        [DbPermissionAspect(Action = InteractionDbType.READ, Table = DbTable.CompanyPlanUniquePoint, CheckSameCompany = true)]
+        public async Task<CompanyModel> SetupEnterLeavePoint(AuthorizedDto<EnterLeavePointDto> model)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

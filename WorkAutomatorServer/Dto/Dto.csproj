@@ -46,8 +46,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthorizedDto.cs" />
+    <Compile Include="CheckPointDto.cs" />
     <Compile Include="CompanyDto.cs" />
+    <Compile Include="CompanyIdDto.cs" />
     <Compile Include="DtoBase.cs" />
+    <Compile Include="EnterLeavePointDto.cs" />
     <Compile Include="FireHireDto.cs" />
     <Compile Include="IdDto.cs" />
     <Compile Include="LogInDto.cs" />

@@ -71,8 +71,13 @@ namespace WorkAutomatorLogic.Services
 
                     bool isLegal = requiredInteractionTypes.Intersect(havingInteractionTypes).Count() == requiredInteractionTypes.Length;
 
-                    if (isLegal && interaction.CompanyId.HasValue)
-                        isLegal &= interaction.CompanyId == initiator.company_id;
+                    if (isLegal)
+                    {
+                        if (interaction.CompanyId.HasValue)
+                            isLegal &= interaction.CompanyId == initiator.company_id;
+                        else
+                            interaction.CompanyId = initiator.company_id;
+                    }
 
                     if(isLegal && interaction.CompanyId.HasValue && interaction.ObjectIds != null && interaction.ObjectIds.Length != 0)
                     {
