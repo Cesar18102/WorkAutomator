@@ -1,11 +1,15 @@
-﻿namespace WorkAutomatorLogic.Models.Permission
+﻿using System.Collections.Generic;
+
+using Constants;
+
+namespace WorkAutomatorLogic.Models.Permission
 {
     public class Interaction
     {
         public PermissionModelBase Permission { get; set; }
         public int InitiatorAccountId { get; set; }
         public int? CompanyId { get; set; }
-        public int[] SubjectIds { get; set; }
+        public int[] ObjectIds { get; set; }
 
         public Interaction(InteractionDbType type, DbTable table, int initiatorAccountId)
         {

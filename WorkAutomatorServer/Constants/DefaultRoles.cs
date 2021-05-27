@@ -1,4 +1,4 @@
-﻿namespace WorkAutomatorLogic.Models.Roles
+﻿namespace Constants
 {
     public enum DefaultRoles
     {

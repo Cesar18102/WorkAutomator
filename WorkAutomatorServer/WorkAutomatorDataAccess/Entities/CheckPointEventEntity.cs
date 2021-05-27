@@ -24,5 +24,10 @@ namespace WorkAutomatorDataAccess.Entities
         public virtual AccountEntity account { get; set; }
 
         public virtual CheckPointEntity check_point { get; set; }
+
+        public override bool IsOwnedByCompany(int companyId)
+        {
+            return check_point.IsOwnedByCompany(companyId);
+        }
     }
 }

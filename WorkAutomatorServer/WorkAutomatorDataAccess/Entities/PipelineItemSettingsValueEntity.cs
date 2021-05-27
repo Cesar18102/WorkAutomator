@@ -20,5 +20,10 @@ namespace WorkAutomatorDataAccess.Entities
         public virtual PipelineItemEntity pipeline_item { get; set; }
 
         public virtual PipelineItemSettingsPrefabEntity PipelineItemSettingsPrefab { get; set; }
+
+        public override bool IsOwnedByCompany(int companyId)
+        {
+            return PipelineItemSettingsPrefab.IsOwnedByCompany(companyId);
+        }
     }
 }

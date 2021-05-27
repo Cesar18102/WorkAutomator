@@ -140,12 +140,15 @@ namespace WorkAutomatorServer.Controllers
             {
                 foreach (HttpParameterDescriptor parameterDescriptor in parameterDescriptors)
                 {
-                    if (parameterDescriptor.GetCustomAttributes<IdentifiedAttribute>().Count == 0)
+                    Collection<IdentifiedAttribute> identifiedAttributes =
+                        parameterDescriptor.GetCustomAttributes<IdentifiedAttribute>();
+
+                    if (identifiedAttributes.Count == 0)
                         continue;
 
                     object parameterValue = ActionContext.ActionArguments[parameterDescriptor.ParameterName];
 
-                    if (parameterValue == null || !CheckIdentified(parameterValue))
+                    if (parameterValue == null || !CheckIdentified(parameterValue, identifiedAttributes.First().Depth, 0))
                     {
                         errors.Add("All IdDto inheritors must specify id field in indentified-market requests");
                         break;
@@ -157,8 +160,11 @@ namespace WorkAutomatorServer.Controllers
                 throw new ValidationException(errors);
         }
 
-        private bool CheckIdentified(object obj)
+        private bool CheckIdentified(object obj, int maxDeth, int currentDepth = 0)
         {
+            if (currentDepth > maxDeth)
+                return true;
+
             if (obj is IdDto idObj && !idObj.Id.HasValue)
                 return false;
 
@@ -171,7 +177,7 @@ namespace WorkAutomatorServer.Controllers
                 if (!CheckTypeContainsIdentified(type.IsGenericType ? type.GetGenericArguments()[0] : type.GetElementType()))
                     return true;
 
-                return collection.All(item => CheckIdentified(item));
+                return collection.All(item => CheckIdentified(item, maxDeth, currentDepth + 1));
             }
 
             PropertyInfo[] properties = type.GetProperties().Where(
@@ -190,7 +196,7 @@ namespace WorkAutomatorServer.Controllers
                     if (CheckTypeContainsIdentified(property.PropertyType))
                         return false;
                 }
-                else if (!CheckIdentified(value))
+                else if (!CheckIdentified(value, maxDeth, currentDepth + 1))
                     return false;
             }
 

@@ -29,7 +29,7 @@ namespace WorkAutomatorServer.Controllers
         [HttpPost]
         [WireHeadersAspect]
         [AuthorizedAspect]
-        public async Task<HttpResponseMessage> Update([FromBody, Identified] AuthorizedDto<CompanyDto> dto)
+        public async Task<HttpResponseMessage> Update([FromBody, Identified(Depth = 1)] AuthorizedDto<CompanyDto> dto)
         {
             return await Execute(company => CompanyService.UpdateCompany(company), dto);
         }
@@ -45,7 +45,7 @@ namespace WorkAutomatorServer.Controllers
         [HttpPost]
         [WireHeadersAspect]
         [AuthorizedAspect]
-        public async Task<HttpResponseMessage> FireMember([FromBody, Identified] AuthorizedDto<FireHireDto> dto)
+        public async Task<HttpResponseMessage> FireMember([FromBody] AuthorizedDto<FireHireDto> dto)
         {
             return await Execute(hireFireDto => CompanyService.FireMember(hireFireDto), dto);
         }
@@ -53,7 +53,7 @@ namespace WorkAutomatorServer.Controllers
         [HttpPost]
         [WireHeadersAspect]
         [AuthorizedAspect]
-        public async Task<HttpResponseMessage> SetupPlanPoints([FromBody, Identified] AuthorizedDto<CompanyPlanPointsDto> dto)
+        public async Task<HttpResponseMessage> SetupPlanPoints([FromBody, Identified(Depth = 1)] AuthorizedDto<CompanyPlanPointsDto> dto)
         {
             return await Execute(planPointsDto => CompanyService.SetupCompanyPlanPoints(planPointsDto), dto);
         }

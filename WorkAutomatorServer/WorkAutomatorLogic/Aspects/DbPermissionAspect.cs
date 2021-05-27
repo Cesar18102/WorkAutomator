@@ -2,11 +2,13 @@
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 using Autofac;
 
 using MethodBoundaryAspect.Fody.Attributes;
 
+using Constants;
 using Attributes;
 
 using WorkAutomatorLogic.Extensions;
@@ -32,26 +34,43 @@ namespace WorkAutomatorLogic.Aspects
 
             if(Table == DbTable.None)
             {
-                object tableNameParameterValue = arg.Arguments.GetMarkedValueFromArgumentList<TableNameParameterAttribute>(methodParameters).First();
+                object tableNameParameterValue = arg.Arguments.GetMarkedValueFromArgumentList<TableNameParameterAttribute>(methodParameters).FirstOrDefault();
 
                 if (DbTableConverterType != null)
                 {
                     IValueConverter converter = (IValueConverter)Activator.CreateInstance(DbTableConverterType);
                     Table = (DbTable)converter.Convert(tableNameParameterValue);
                 }
-                else
+                else if(tableNameParameterValue != null)
                     Table = (DbTable)tableNameParameterValue;
             }
 
-            Interaction interaction = new Interaction(Action, Table, initiatorAccountId);
+            int? companyId = (int?)arg.Arguments.GetMarkedValueFromArgumentList<CompanyIdAttribute>(methodParameters).FirstOrDefault();
 
-            if(CheckSameCompany)
+            if (Table != DbTable.None)
             {
-                interaction.CompanyId = (int?)arg.Arguments.GetMarkedValueFromArgumentList<CompanyIdAttribute>(methodParameters).FirstOrDefault();
-                interaction.SubjectIds = arg.Arguments.GetMarkedValueFromArgumentList<ObjectIdAttribute>(methodParameters).Cast<int>()?.ToArray() ?? new int[0];
+                Interaction interaction = new Interaction(Action, Table, initiatorAccountId);
+                interaction.CompanyId = companyId;
+
+                Task.Run(() => PermissionService.CheckLegal(interaction)).GetAwaiter().GetResult();
             }
 
-            Task.Run(() => PermissionService.CheckLegal(interaction)).GetAwaiter().GetResult();
+            if (CheckSameCompany)
+            {
+                Dictionary<ObjectIdAttribute, object[]> objectsByTables = arg.Arguments.GetMarkedMapFromArgumentList<ObjectIdAttribute>(
+                    methodParameters
+                );
+
+                foreach(KeyValuePair<ObjectIdAttribute, object[]> objectsOfTable in objectsByTables)
+                {
+                    Interaction interaction = new Interaction(Action, objectsOfTable.Key.Table, initiatorAccountId);
+
+                    interaction.CompanyId = companyId;
+                    interaction.ObjectIds = objectsOfTable.Value.OfType<int>().ToArray();
+
+                    Task.Run(() => PermissionService.CheckLegal(interaction)).GetAwaiter().GetResult();
+                }
+            }
         }
     }
 }

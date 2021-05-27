@@ -29,5 +29,10 @@ namespace WorkAutomatorDataAccess.Entities
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DetectorFaultEventEntity> detector_fault_events { get; set; }
+
+        public override bool IsOwnedByCompany(int companyId)
+        {
+            return detector.IsOwnedByCompany(companyId);
+        }
     }
 }

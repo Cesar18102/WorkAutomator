@@ -31,5 +31,10 @@ namespace WorkAutomatorDataAccess.Entities
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EnterLeavePointEventEntity> enter_leave_point_event { get; set; }
+
+        public override bool IsOwnedByCompany(int companyId)
+        {
+            return Manufactory.IsOwnedByCompany(companyId);
+        }
     }
 }

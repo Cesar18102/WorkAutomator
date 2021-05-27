@@ -42,5 +42,10 @@ namespace WorkAutomatorDataAccess.Entities
         public virtual ICollection<StorageCellEventEntity> storage_cell_event { get; set; }
 
         public virtual StorageCellPrefabEntity StorageCellPrefab { get; set; }
+
+        public override bool IsOwnedByCompany(int companyId)
+        {
+            return StorageCellPrefab.IsOwnedByCompany(companyId);
+        }
     }
 }

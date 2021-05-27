@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.ComponentModel.DataAnnotations.Schema;
 
+using Constants;
 using Attributes;
 
 using WorkAutomatorDataAccess;
@@ -70,7 +71,10 @@ namespace WorkAutomatorLogic.Services
 
                     bool isLegal = requiredInteractionTypes.Intersect(havingInteractionTypes).Count() == requiredInteractionTypes.Length;
 
-                    if(interaction.CompanyId.HasValue && interaction.SubjectIds.Length != 0) //TODO: introduce companyId and subjectIds[]
+                    if (isLegal && interaction.CompanyId.HasValue)
+                        isLegal &= interaction.CompanyId == initiator.company_id;
+
+                    if(isLegal && interaction.CompanyId.HasValue && interaction.ObjectIds.Length != 0)
                     {
                         Type entityType = typeof(EntityBase).Assembly.GetTypes().FirstOrDefault(
                             type => type.GetCustomAttribute<TableAttribute>()?.Name == tableName
@@ -92,11 +96,9 @@ namespace WorkAutomatorLogic.Services
                             }
                         );
 
-                        IEnumerable<Task> tasks = interaction.SubjectIds.Select(
+                        IEnumerable<Task> tasks = interaction.ObjectIds.Select(
                             subjectId => getByIdMethod.Invoke(repo, new object[] { subjectId })
                         ).Cast<Task>();
-
-                        await Task.WhenAll(tasks);
 
                         object[] entities = tasks.Select(task =>
                         {
@@ -116,12 +118,13 @@ namespace WorkAutomatorLogic.Services
                             return entity;
                         }).ToArray();
 
-                        if (entities is CompanyEntity[] companies)
-                            isLegal &= companies.All(company => company.owner_id == initiator.Company?.owner_id);
-                        else
+                        foreach(object entity in entities)
                         {
-                            int companyId = (int)entity.GetType().GetProperty("company_id").GetValue(entity);
-                            isLegal &= companyId == initiator.Company?.owner_id;
+                            isLegal &= (bool)entity.GetType().GetMethod(nameof(EntityBase.IsOwnedByCompany))
+                                                   .Invoke(entity, new object[] { interaction.CompanyId.Value });
+
+                            if (!isLegal)
+                                break;
                         }
                     }
 
@@ -130,7 +133,7 @@ namespace WorkAutomatorLogic.Services
                         if (interaction.CompanyId.HasValue)
                         {
                             notEnoughPermissions = requiredInteractionTypes.Select(
-                                t => $"{t} {dbPermissionModel.DbTable} #{interaction.CompanyId.Value}"
+                                t => $"{t} {dbPermissionModel.DbTable} {string.Join(", ", interaction.ObjectIds.Select(id => "#" + id))}"
                             ).ToArray();
                         }
                         else

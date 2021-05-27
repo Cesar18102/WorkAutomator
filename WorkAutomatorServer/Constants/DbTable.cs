@@ -1,4 +1,4 @@
-﻿namespace WorkAutomatorLogic.Models.Permission
+﻿namespace Constants
 {
     public enum DbTable
     {

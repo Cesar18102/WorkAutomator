@@ -1,6 +1,6 @@
 ﻿using MethodBoundaryAspect.Fody.Attributes;
 
-using WorkAutomatorLogic.Models.Permission;
+using Constants;
 
 namespace WorkAutomatorLogic.Aspects
 {

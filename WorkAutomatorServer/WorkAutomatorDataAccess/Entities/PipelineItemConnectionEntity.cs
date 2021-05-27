@@ -19,5 +19,10 @@ namespace WorkAutomatorDataAccess.Entities
         public virtual PipelineItemEntity SourcePipelineItem { get; set; }
 
         public virtual PipelineItemEntity TargetPipelineItem { get; set; }
+
+        public override bool IsOwnedByCompany(int companyId)
+        {
+            return SourcePipelineItem.IsOwnedByCompany(companyId);
+        }
     }
 }

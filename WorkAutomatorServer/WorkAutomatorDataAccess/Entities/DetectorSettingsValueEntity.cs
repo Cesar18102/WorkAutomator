@@ -20,5 +20,10 @@ namespace WorkAutomatorDataAccess.Entities
         public virtual DetectorEntity detector { get; set; }
 
         public virtual DetectorSettingsPrefabEntity detector_settings_prefab { get; set; }
+
+        public override bool IsOwnedByCompany(int companyId)
+        {
+            return detector.IsOwnedByCompany(companyId);
+        }
     }
 }

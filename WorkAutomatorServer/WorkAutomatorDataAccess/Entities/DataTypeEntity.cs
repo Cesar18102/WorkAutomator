@@ -30,5 +30,10 @@ namespace WorkAutomatorDataAccess.Entities
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PipelineItemSettingsPrefabEntity> pipeline_item_settings_prefab { get; set; }
+
+        public override bool IsOwnedByCompany(int companyId)
+        {
+            return false;
+        }
     }
 }

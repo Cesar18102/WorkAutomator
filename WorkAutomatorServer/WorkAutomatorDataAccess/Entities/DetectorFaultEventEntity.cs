@@ -18,5 +18,10 @@ namespace WorkAutomatorDataAccess.Entities
         public string log { get; set; }
 
         public virtual DetectorFaultEntity detector_fault { get; set; }
+
+        public override bool IsOwnedByCompany(int companyId)
+        {
+            return detector_fault.IsOwnedByCompany(companyId);
+        }
     }
 }

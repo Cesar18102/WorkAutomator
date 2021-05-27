@@ -22,5 +22,10 @@ namespace WorkAutomatorDataAccess.Entities
         public virtual AccountEntity account { get; set; }
 
         public virtual DetectorEntity detector { get; set; }
+
+        public override bool IsOwnedByCompany(int companyId)
+        {
+            return detector.IsOwnedByCompany(companyId);
+        }
     }
 }

@@ -19,5 +19,10 @@ namespace WorkAutomatorDataAccess.Entities
         public virtual ResourceEntity Resource { get; set; }
 
         public virtual StorageCellEntity storage_cell { get; set; }
+
+        public override bool IsOwnedByCompany(int companyId)
+        {
+            return Resource.IsOwnedByCompany(companyId);
+        }
     }
 }

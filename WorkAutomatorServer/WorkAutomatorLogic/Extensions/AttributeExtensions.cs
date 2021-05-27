@@ -2,85 +2,96 @@
 using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
-using System.Collections;
 
 namespace WorkAutomatorLogic.Extensions
 {
     public static class AttributeExtensions
     {
-        public static List<PropertyInfo> FindPropertyPath<TAttribute>(Type type) where TAttribute : Attribute
+        public static List<(TAttribute, List<PropertyInfo>)> FindPropertyPaths<TAttribute>(Type type) where TAttribute : Attribute
         {
-            List<PropertyInfo> propertiesPath = new List<PropertyInfo>();
+            List<(TAttribute, List<PropertyInfo>)> propertiesPath = new List<(TAttribute, List<PropertyInfo>)>();
 
             if (type.IsValueType || type.Equals(typeof(string)))
                 return propertiesPath;
 
             PropertyInfo[] properties = type.GetProperties();
 
-            PropertyInfo found = properties.FirstOrDefault(
+            IEnumerable<PropertyInfo> markedProperties = properties.Where(
                 prop => prop.GetCustomAttribute<TAttribute>() != null
             );
+            PropertyInfo[] notMarkedProperties = properties.Except(markedProperties).ToArray();
 
-            if (found != null)
-            {
-                propertiesPath.Add(found);
-                return propertiesPath;
-            }
+            propertiesPath.AddRange(
+                markedProperties.Select(
+                    prop => (
+                        prop.GetCustomAttribute<TAttribute>(), 
+                        new List<PropertyInfo>() { prop }
+                    )
+                )
+            );
 
-            foreach (PropertyInfo property in properties)
+            foreach (PropertyInfo property in notMarkedProperties)
             {
-                List<PropertyInfo> path = null;
+                List<(TAttribute, List<PropertyInfo>)> subPath = null;
 
                 if (property.PropertyType.IsGenericType && typeof(IEnumerable<>).IsAssignableFrom(property.PropertyType.GetGenericTypeDefinition()))
-                    path = FindPropertyPath<TAttribute>(property.PropertyType.GetGenericArguments()[0]);
+                    subPath = FindPropertyPaths<TAttribute>(property.PropertyType.GetGenericArguments()[0]);
                 else if(property.PropertyType.IsArray)
-                    path = FindPropertyPath<TAttribute>(property.PropertyType.GetElementType());
+                    subPath = FindPropertyPaths<TAttribute>(property.PropertyType.GetElementType());
                 else
-                    path = FindPropertyPath<TAttribute>(property.PropertyType);
+                    subPath = FindPropertyPaths<TAttribute>(property.PropertyType);
 
-                if (path.Count == 0)
-                    continue;
-
-                propertiesPath.Add(property);
-                propertiesPath.AddRange(path);
-
-                break;
+                propertiesPath.AddRange(
+                    subPath.Select(
+                        p => (p.Item1, p.Item2.Prepend(property).ToList())
+                    )
+                );
             }
 
             return propertiesPath;
         }
 
-        public static object[] GetMarkedValue<TAttribute>(this object source) where TAttribute : Attribute
+        public static Dictionary<TAttribute, object[]> GetMarkedMapFromArgumentList<TAttribute>(this object[] arguments, ParameterInfo[] parameters) 
+            where TAttribute : Attribute
         {
-            List<PropertyInfo> path = FindPropertyPath<TAttribute>(source.GetType());
-            return source.GetValueByPath(path);
-        }
+            Dictionary<TAttribute, object[]> result = new Dictionary<TAttribute, object[]>();
 
-        public static object[] GetMarkedValueFromArgumentList<TAttribute>(this object[] arguments, ParameterInfo[] parameters) where TAttribute : Attribute
-        {
             ParameterInfo parameter = parameters.FirstOrDefault(
                 param => param.GetCustomAttribute<TAttribute>() != null
             );
 
             if (parameter != null)
-                return new object[] { arguments[parameter.Position] };
+            {
+                result.Add(
+                    parameter.GetCustomAttribute<TAttribute>(),
+                    new object[] { arguments[parameter.Position] }
+                );
+
+                return result;
+            }
 
             foreach (ParameterInfo param in parameters)
             {
                 object argument = arguments[param.Position];
 
-                List<PropertyInfo> path = FindPropertyPath<TAttribute>(argument.GetType());
+                List<(TAttribute, List<PropertyInfo>)> paths = FindPropertyPaths<TAttribute>(argument.GetType());
 
-                if (path.Count == 0)
+                if (paths.Count == 0)
                     continue;
 
-                return argument.GetValueByPath(path);
+                foreach((TAttribute, List<PropertyInfo>) path in paths)
+                    result.Add(path.Item1, argument.GetValuesByPath(path.Item2));
             }
 
-            return null;
+            return result;
         }
 
-        private static object[] GetValueByPath(this object source, List<PropertyInfo> path)
+        public static object[] GetMarkedValueFromArgumentList<TAttribute>(this object[] arguments, ParameterInfo[] parameters) where TAttribute : Attribute
+        {
+            return arguments.GetMarkedMapFromArgumentList<TAttribute>(parameters)?.SelectMany(kvp => kvp.Value).ToArray();
+        }
+
+        private static object[] GetValuesByPath(this object source, List<PropertyInfo> path)
         {
             if (source == null || path.Count == 0)
                 return new object[] { source };
@@ -88,11 +99,11 @@ namespace WorkAutomatorLogic.Extensions
             PropertyInfo property = path.First();
 
             if (property.PropertyType.IsGenericType && property.GetValue(source) is IEnumerable<object> collection)
-                return collection.SelectMany(value => GetValueByPath(value, path.Skip(1).ToList())).ToArray();
+                return collection.SelectMany(value => GetValuesByPath(value, path.Skip(1).ToList())).ToArray();
             else if (property.PropertyType.IsArray && property.GetValue(source) is object[] array)
-                return array.SelectMany(value => GetValueByPath(value, path.Skip(1).ToList())).ToArray();
+                return array.SelectMany(value => GetValuesByPath(value, path.Skip(1).ToList())).ToArray();
             else
-                return GetValueByPath(path.First().GetValue(source), path.Skip(1).ToList());
+                return GetValuesByPath(path.First().GetValue(source), path.Skip(1).ToList());
         }
     }
 }

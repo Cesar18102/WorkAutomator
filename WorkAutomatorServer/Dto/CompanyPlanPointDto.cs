@@ -1,11 +1,14 @@
-﻿using Attributes;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+
+using Attributes;
+using Constants;
 
 namespace Dto
 {
     public class CompanyPlanPointDto : IdDto
     {
-        [ObjectId]
+        [ObjectId(DbTable.CompanyPlanUniquePoint)]
+        [JsonIgnore]
         public int? PlanPointId => Id;
         
         [JsonProperty("x")]

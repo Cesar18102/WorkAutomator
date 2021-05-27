@@ -1,4 +1,6 @@
-﻿namespace WorkAutomatorLogic.Models.Permission
+﻿using Constants;
+
+namespace WorkAutomatorLogic.Models.Permission
 {
     public interface IValueConverter
     {

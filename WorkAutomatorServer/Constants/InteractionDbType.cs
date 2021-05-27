@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WorkAutomatorLogic.Models.Permission
+namespace Constants
 {
     [Flags]
     public enum InteractionDbType : byte

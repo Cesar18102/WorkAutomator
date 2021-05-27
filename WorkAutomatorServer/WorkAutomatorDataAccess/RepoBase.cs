@@ -74,10 +74,16 @@ namespace WorkAutomatorDataAccess
             Context.Set<TEntity>().Remove(await Get(id));
         }
 
+        public virtual async Task Delete(int[] ids)
+        {
+            foreach (int id in ids)
+                await Delete(id);
+        }
+
         [AddRepoInfoToDatabaseActionValidationExceptionAspect]
         public virtual void Clear()
         {
             Context.Set<TEntity>().RemoveRange(Context.Set<TEntity>());
-        }     
+        }
     }
 }

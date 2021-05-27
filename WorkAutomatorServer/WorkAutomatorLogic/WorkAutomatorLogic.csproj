@@ -112,18 +112,14 @@
     <Compile Include="Models\CompanyModel.cs" />
     <Compile Include="Models\IdModel.cs" />
     <Compile Include="Models\Permission\Converters.cs" />
-    <Compile Include="Models\Permission\DbTable.cs" />
-    <Compile Include="Models\Permission\InteractionDbType.cs" />
     <Compile Include="Models\Permission\Interaction.cs" />
     <Compile Include="Models\Permission\PermissionDbModel.cs" />
     <Compile Include="Models\ManufactoryModel.cs" />
     <Compile Include="Models\ModelBase.cs" />
-    <Compile Include="Models\Permission\InteractionType.cs" />
     <Compile Include="Models\Permission\PermissionModel.cs" />
     <Compile Include="Models\Permission\PermissionModelBase.cs" />
     <Compile Include="Models\PlanPointModel.cs" />
     <Compile Include="Models\PublicKeyModel.cs" />
-    <Compile Include="Models\Roles\DefaultRoles.cs" />
     <Compile Include="Models\Roles\RoleModel.cs" />
     <Compile Include="Models\SessionModel.cs" />
     <Compile Include="Models\WorkerModel.cs" />
@@ -160,6 +156,10 @@
     <ProjectReference Include="..\Attributes\Attributes.csproj">
       <Project>{89371046-9916-460a-9e03-5eb4f85842fd}</Project>
       <Name>Attributes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Constants\Constants.csproj">
+      <Project>{b2259043-714d-459b-97e5-841d588dd52f}</Project>
+      <Name>Constants</Name>
     </ProjectReference>
     <ProjectReference Include="..\Dto\Dto.csproj">
       <Project>{2489724d-32ee-4295-a5a4-111575bfb67a}</Project>

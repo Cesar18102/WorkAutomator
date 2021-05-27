@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Constants;
+
 namespace WorkAutomatorLogic.Models.Permission
 {
     public class PermissionModel : PermissionModelBase

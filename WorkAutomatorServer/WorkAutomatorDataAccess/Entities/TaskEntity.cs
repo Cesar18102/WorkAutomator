@@ -28,5 +28,10 @@ namespace WorkAutomatorDataAccess.Entities
         public virtual AccountEntity Reviewer { get; set; }
 
         public virtual CompanyEntity company { get; set; }
+
+        public override bool IsOwnedByCompany(int companyId)
+        {
+            return company_id == companyId;
+        }
     }
 }

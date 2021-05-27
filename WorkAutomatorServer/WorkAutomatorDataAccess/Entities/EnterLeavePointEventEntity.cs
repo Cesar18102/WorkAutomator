@@ -24,5 +24,10 @@ namespace WorkAutomatorDataAccess.Entities
         public virtual AccountEntity account { get; set; }
 
         public virtual EnterLeavePointEntity enter_leave_point { get; set; }
+
+        public override bool IsOwnedByCompany(int companyId)
+        {
+            return enter_leave_point.IsOwnedByCompany(companyId);
+        }
     }
 }

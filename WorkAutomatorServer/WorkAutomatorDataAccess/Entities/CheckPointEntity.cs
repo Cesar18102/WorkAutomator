@@ -37,5 +37,10 @@ namespace WorkAutomatorDataAccess.Entities
         public virtual ManufactoryEntity Manufactory1 { get; set; }
 
         public virtual ManufactoryEntity Manufactory2 { get; set; }
+
+        public override bool IsOwnedByCompany(int companyId)
+        {
+            return Manufactory1.IsOwnedByCompany(companyId);
+        }
     }
 }

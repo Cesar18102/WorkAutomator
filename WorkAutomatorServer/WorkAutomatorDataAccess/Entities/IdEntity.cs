@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WorkAutomatorDataAccess.Entities
 {
-    public class IdEntity : EntityBase
+    public abstract class IdEntity : EntityBase
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

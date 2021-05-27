@@ -22,5 +22,10 @@ namespace WorkAutomatorDataAccess.Entities
         public virtual AccountEntity account { get; set; }
 
         public virtual PipelineItemEntity pipeline_item { get; set; }
+
+        public override bool IsOwnedByCompany(int companyId)
+        {
+            return pipeline_item.IsOwnedByCompany(companyId);
+        }
     }
 }

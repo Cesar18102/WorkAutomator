@@ -3,16 +3,15 @@ using System.Threading.Tasks;
 
 using Dto;
 
-using WorkAutomatorLogic.Aspects;
-using WorkAutomatorLogic.ServiceInterfaces;
+using Constants;
 
 using WorkAutomatorLogic.Models;
-using WorkAutomatorLogic.Models.Roles;
-using WorkAutomatorLogic.Models.Permission;
+using WorkAutomatorLogic.Aspects;
+using WorkAutomatorLogic.Exceptions;
+using WorkAutomatorLogic.ServiceInterfaces;
 
 using WorkAutomatorDataAccess;
 using WorkAutomatorDataAccess.Entities;
-using WorkAutomatorLogic.Exceptions;
 
 namespace WorkAutomatorLogic.Services
 {
@@ -135,7 +134,7 @@ namespace WorkAutomatorLogic.Services
             });
         }
 
-        [DbPermissionAspect(Action = InteractionDbType.CREATE | InteractionDbType.DELETE, Table = DbTable.CompanyPlanUniquePoint, CheckSameCompany = true)]
+        [DbPermissionAspect(Action = InteractionDbType.CREATE | InteractionDbType.DELETE, CheckSameCompany = true)]
         public async Task<CompanyModel> SetupCompanyPlanPoints(AuthorizedDto<CompanyPlanPointsDto> model)
         {
             return await Execute(async () => {
@@ -143,7 +142,9 @@ namespace WorkAutomatorLogic.Services
                 {
                     CompanyEntity company = await db.GetRepo<CompanyEntity>().Get(model.Data.CompanyId.Value);
 
-                    company.CompanyPlanUniquePoints.Clear();
+                    await db.GetRepo<CompanyPlanUniquePointEntity>().Delete(
+                        company.CompanyPlanUniquePoints.Select(p => p.id).ToArray()
+                    );
 
                     foreach (CompanyPlanPointDto point in model.Data.Points)
                     { 

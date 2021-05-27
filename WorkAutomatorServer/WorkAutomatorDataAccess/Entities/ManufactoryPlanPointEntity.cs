@@ -17,5 +17,10 @@ namespace WorkAutomatorDataAccess.Entities
         public virtual CompanyPlanUniquePointEntity CompanyPlanUniquePoint { get; set; }
 
         public virtual ManufactoryEntity manufactory { get; set; }
+
+        public override bool IsOwnedByCompany(int companyId)
+        {
+            return CompanyPlanUniquePoint.IsOwnedByCompany(companyId);
+        }
     }
 }

@@ -17,7 +17,9 @@ namespace WorkAutomatorDataAccess
 
         Task<TEntity> Create(TEntity item);
 
+        Task Delete(int[] ids);
         Task Delete(int id);
+
         void Clear();
     }
 }

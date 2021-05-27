@@ -36,5 +36,10 @@ namespace WorkAutomatorDataAccess.Entities
         public virtual ICollection<ResourceStorageCellEntity> resource_storage_cell { get; set; }
 
         public virtual UnitEntity Unit { get; set; }
+
+        public override bool IsOwnedByCompany(int companyId)
+        {
+            return company_id == companyId;
+        }
     }
 }

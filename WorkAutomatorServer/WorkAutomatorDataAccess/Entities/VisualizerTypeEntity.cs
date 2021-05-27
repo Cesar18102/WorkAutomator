@@ -22,5 +22,10 @@ namespace WorkAutomatorDataAccess.Entities
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DetectorDataPrefabEntity> detector_data_prefab { get; set; }
+
+        public override bool IsOwnedByCompany(int companyId)
+        {
+            return false;
+        }
     }
 }
