@@ -32,8 +32,14 @@ namespace WorkAutomatorLogic
         private static void Configure(IMapperConfigurationExpression config)
         {
             config.CreateMap<PublicKeyDto, PublicKeyModel>().ReverseMap();
+
             config.CreateMap<CompanyDto, CompanyModel>();
             config.CreateMap<CompanyPlanPointDto, CompanyPlanPointModel>();
+
+            config.CreateMap<ManufactoryPlanPointDto, ManufactoryPlanPointModel>()
+                  .ForMember(model => model.CompanyPlanPointId, cnf => cnf.MapFrom(dto => dto.Id));
+
+            config.CreateMap<ManufactoryDto, ManufactoryModel>();
         }
     }
 }

@@ -9,7 +9,7 @@ namespace WorkAutomatorLogic.Models
         public int CompanyId { get; set; }
 
         [JsonProperty("manufactory_plan_points")]
-        public ICollection<int> ManufactoryPlanPoints { get; set; }
+        public ICollection<ManufactoryPlanPointModel> ManufactoryPlanPoints { get; set; }
 
         /*public ICollection<CheckPointEntity> CheckPoints { get; set; }
         public ICollection<EnterLeavePointEntity> EnterLeavePoints { get; set; }

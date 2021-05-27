@@ -49,6 +49,18 @@ namespace WorkAutomatorLogic
                   .ReverseMap()
                   .ForMember(model => model.PlanImageUrl, cnf => cnf.MapFrom(entity => entity.plan_image_url))
                   .ForMember(model => model.Id, cnf => cnf.MapFrom(entity => entity.owner_id));
+
+            config.CreateMap<ManufactoryPlanPointModel, ManufactoryPlanPointEntity>()
+                  .ForMember(entity => entity.manufactory_id, cnf => cnf.MapFrom(model => model.ManufactoryId))
+                  .ForMember(entity => entity.company_plan_unique_point_id, cnf => cnf.MapFrom(model => model.CompanyPlanPointId))
+                  .ReverseMap()
+                  .ForMember(model => model.ManufactoryId, cnf => cnf.MapFrom(entity => entity.manufactory_id))
+                  .ForMember(model => model.CompanyPlanPointId, cnf => cnf.MapFrom(entity => entity.company_plan_unique_point_id));
+
+            config.CreateMap<ManufactoryModel, ManufactoryEntity>()
+                  .ForMember(entity => entity.company_id, cnf => cnf.MapFrom(model => model.CompanyId))
+                  .ReverseMap()
+                  .ForMember(model => model.CompanyId, cnf => cnf.MapFrom(entity => entity.company_id));
         }
 
         public static IReadOnlyDictionary<DbTable, string> TABLE_NAME_DICTIONARY = new Dictionary<DbTable, string>()

@@ -110,6 +110,7 @@
     <Compile Include="Models\AccountModel.cs" />
     <Compile Include="Models\CompanyModel.cs" />
     <Compile Include="Models\IdModel.cs" />
+    <Compile Include="Models\ManufactoryPlanPointModel.cs" />
     <Compile Include="Models\Permission\Converters.cs" />
     <Compile Include="Models\Permission\Interaction.cs" />
     <Compile Include="Models\Permission\PermissionDbModel.cs" />

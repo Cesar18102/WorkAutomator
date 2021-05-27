@@ -7,7 +7,7 @@ namespace Dto
 {
     public class ManufactoryPlanPointDto : IdDto
     {
-        [ObjectId(DbTable.ManufactoryPlanPoint)]
+        [ObjectId(DbTable.CompanyPlanUniquePoint)]
         [JsonIgnore]
         public int? PointId => Id;
     }

@@ -62,7 +62,7 @@ namespace WorkAutomatorLogic.Aspects
                     methodParameters
                 );
 
-                foreach(KeyValuePair<ObjectIdAttribute, object[]> objectsOfTable in objectsByTables)
+                foreach(KeyValuePair<ObjectIdAttribute, object[]> objectsOfTable in objectsByTables.Where(o => o.Key.Table == Table))
                 {
                     Interaction interaction = new Interaction(Action, objectsOfTable.Key.Table, initiatorAccountId);
 
