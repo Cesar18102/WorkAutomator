@@ -55,7 +55,6 @@
     <Compile Include="IdDto.cs" />
     <Compile Include="LogInDto.cs" />
     <Compile Include="CompanyPlanPointDto.cs" />
-    <Compile Include="CompanyPlanPointsDto.cs" />
     <Compile Include="ManufactoryDto.cs" />
     <Compile Include="ManufactoryPlanPointDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

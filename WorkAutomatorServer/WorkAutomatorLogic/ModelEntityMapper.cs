@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using AutoMapper;
 
@@ -130,7 +131,21 @@ namespace WorkAutomatorLogic
             { DefaultRoles.OWNER, "OWNER" }
         };
 
-        //public static IReadOnlyDictionary<Type, string> DATA_TYPES = new Dictionary<>
+        public static IReadOnlyDictionary<DataType, (string, Type)> DATA_TYPES = new Dictionary<DataType, (string, Type)>()
+        {
+            { DataType.INT, ("int", typeof(int)) },
+            { DataType.INT_ARR, ("int[]", typeof(int[])) },
+            { DataType.FLOAT, ("float", typeof(float)) },
+            { DataType.FLOAT_ARR, ("float[]", typeof(float[])) },
+            { DataType.BOOL, ("bool", typeof(bool)) },
+            { DataType.BOOL_ARR, ("bool[]", typeof(bool[])) }
+        };
+
+        public static IReadOnlyDictionary<VisualizerType, string> VISUALIZER_TYPES = new Dictionary<VisualizerType, string>()
+        {
+            { VisualizerType.SIGNAL, "SIGNAL" },
+            { VisualizerType.VALUE, "VALUE" },
+        };
 
         public static string ToName(this DbTable table)
         {
@@ -145,6 +160,21 @@ namespace WorkAutomatorLogic
         public static string ToName(this DefaultRoles role)
         {
             return DEFAULT_ROLES_NAMES[role];
+        }
+
+        public static string ToName(this DataType dataType)
+        {
+            return DATA_TYPES[dataType].Item1;
+        }
+
+        public static Type ToSystemType(this DataType dataType)
+        {
+            return DATA_TYPES[dataType].Item2;
+        }
+
+        public static string ToName(this VisualizerType visualizerType)
+        {
+            return VISUALIZER_TYPES[visualizerType];
         }
     }
 }

@@ -139,12 +139,48 @@ namespace WorkAutomatorLogic.Services
 
         public async Task InitDataTypes()
         {
-            
+            await Execute(async () =>
+            {
+                using (UnitOfWork db = new UnitOfWork())
+                {
+                    IRepo<DataTypeEntity> dataTypeRepo = db.GetRepo<DataTypeEntity>();
+                    IList<DataTypeEntity> existingDataTypes = await dataTypeRepo.Get();
+
+                    foreach (DataType dataType in ModelEntityMapper.DATA_TYPES.Keys)
+                    {
+                        string dataTypeName = dataType.ToName();
+
+                        if (existingDataTypes.Any(dt => dt.name == dataTypeName))
+                            continue;
+
+                        await dataTypeRepo.Create(new DataTypeEntity() { name = dataTypeName });
+                    }
+
+                    await db.Save();
+                }
+            });
         }
 
         public async Task InitVisualizerTypes()
         {
-            
+            await Execute(async () =>
+            {
+                using (UnitOfWork db = new UnitOfWork())
+                {
+                    IRepo<VisualizerTypeEntity> visualizerTypeRepo = db.GetRepo<VisualizerTypeEntity>();
+                    IList<VisualizerTypeEntity> existingVisualizerTypes = await visualizerTypeRepo.Get();
+
+                    foreach (string visualizerTypeName in ModelEntityMapper.VISUALIZER_TYPES.Values)
+                    {
+                        if (existingVisualizerTypes.Any(vt => vt.name == visualizerTypeName))
+                            continue;
+
+                        await visualizerTypeRepo.Create(new VisualizerTypeEntity() { name = visualizerTypeName });
+                    }
+
+                    await db.Save();
+                }
+            });
         }
     }
 }
