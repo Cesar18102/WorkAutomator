@@ -327,7 +327,8 @@ namespace WorkAutomatorDataAccess
             modelBuilder.Entity<CompanyEntity>()
                 .HasKey(e => e.owner_id)
                 .HasRequired(e => e.Owner)
-                .WithOptional(e => e.OwnedCompany);
+                .WithOptional(e => e.OwnedCompany)
+                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<AccountEntity>()
                 .HasOptional(e => e.OwnedCompany)
@@ -359,13 +360,13 @@ namespace WorkAutomatorDataAccess
 
             modelBuilder.Entity<AccountEntity>()
                 .HasMany(e => e.AssignedTasks)
-                .WithRequired(e => e.Assignee)
+                .WithOptional(e => e.Assignee)
                 .HasForeignKey(e => e.assignee_account_id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<AccountEntity>()
                 .HasMany(e => e.TasksToReview)
-                .WithRequired(e => e.Reviewer)
+                .WithOptional(e => e.Reviewer)
                 .HasForeignKey(e => e.reviewer_account_id)
                 .WillCascadeOnDelete(false);
 
@@ -718,19 +719,19 @@ namespace WorkAutomatorDataAccess
 
             modelBuilder.Entity<ManufactoryEntity>()
                 .HasMany(e => e.StorageCells)
-                .WithRequired(e => e.Manufactory)
+                .WithOptional(e => e.Manufactory)
                 .HasForeignKey(e => e.manufactory_id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<PipelineEntity>()
                 .HasMany(e => e.PipelineItems)
-                .WithRequired(e => e.pipeline)
+                .WithOptional(e => e.pipeline)
                 .HasForeignKey(e => e.pipeline_id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<PipelineItemEntity>()
                 .HasMany(e => e.Detectors)
-                .WithRequired(e => e.PipelineItem)
+                .WithOptional(e => e.PipelineItem)
                 .HasForeignKey(e => e.pipeline_item_id)
                 .WillCascadeOnDelete(false);
 
@@ -902,7 +903,7 @@ namespace WorkAutomatorDataAccess
 
             modelBuilder.Entity<UnitEntity>()
                 .HasMany(e => e.resource)
-                .WithRequired(e => e.Unit)
+                .WithOptional(e => e.Unit)
                 .HasForeignKey(e => e.unit_id)
                 .WillCascadeOnDelete(false);
 
@@ -913,7 +914,8 @@ namespace WorkAutomatorDataAccess
             modelBuilder.Entity<VisualizerTypeEntity>()
                 .HasMany(e => e.detector_data_prefab)
                 .WithOptional(e => e.visualizer_type)
-                .HasForeignKey(e => e.visualizer_type_id);
+                .HasForeignKey(e => e.visualizer_type_id)
+                .WillCascadeOnDelete(false);
         }
     }
 }

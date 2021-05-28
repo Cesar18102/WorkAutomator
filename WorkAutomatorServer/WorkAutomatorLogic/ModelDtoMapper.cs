@@ -37,9 +37,10 @@ namespace WorkAutomatorLogic
             config.CreateMap<CompanyPlanPointDto, CompanyPlanPointModel>();
 
             config.CreateMap<ManufactoryPlanPointDto, ManufactoryPlanPointModel>()
-                  .ForMember(model => model.CompanyPlanPointId, cnf => cnf.MapFrom(dto => dto.Id));
+                  .ForMember(model => model.CompanyPlanPointId, cnf => cnf.MapFrom(dto => dto.CompanyPlanPointId));
 
             config.CreateMap<ManufactoryDto, ManufactoryModel>();
+            config.CreateMap<CheckPointDto, CheckPointModel>();
         }
     }
 }

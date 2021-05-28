@@ -29,6 +29,12 @@ namespace WorkAutomatorLogic.Models
         [JsonProperty("roles")]
         public ICollection<RoleModel> Roles { get; set; }
 
+        [JsonProperty("check_points")]
+        public ICollection<CheckPointModel> CheckPoints { get; set; }
+
+        [JsonProperty("enter_leave_points")]
+        public ICollection<EnterLeavePointModel> EnterLeavePoints { get; set; }
+
         //public ICollection<DetectorPrefabEntity> DetectorPrefabs { get; set; }
         //public virtual ICollection<PipelineItemPrefabEntity> PipelineItemPrefabs { get; set; }
         //public virtual ICollection<PipelineEntity> Pipelines { get; set; }

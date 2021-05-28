@@ -61,6 +61,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PublicKeyDto.cs" />
     <Compile Include="SessionDto.cs" />
+    <Compile Include="SetupPlanDto.cs" />
     <Compile Include="SignUpDto.cs" />
   </ItemGroup>
   <ItemGroup>

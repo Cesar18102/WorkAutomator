@@ -22,7 +22,7 @@ namespace WorkAutomatorDataAccess.Entities
         
         public int detector_prefab_id { get; set; }
 
-        public int pipeline_item_id { get; set; }
+        public int? pipeline_item_id { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DetectorInteractionEventEntity> detector_interaction_event { get; set; }

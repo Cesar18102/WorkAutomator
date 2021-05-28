@@ -18,7 +18,7 @@ namespace WorkAutomatorDataAccess.Entities
         
         public int company_id { get; set; }
 
-        public int unit_id { get; set; }
+        public int? unit_id { get; set; }
 
         [Required]
         [StringLength(1024)]

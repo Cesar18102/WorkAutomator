@@ -7,7 +7,6 @@ using Autofac;
 using WorkAutomatorServer.Aspects;
 
 using Dto;
-using Attributes;
 
 using WorkAutomatorLogic;
 using WorkAutomatorLogic.ServiceInterfaces;
@@ -55,15 +54,6 @@ namespace WorkAutomatorServer.Controllers
         [WireHeadersAspect]
         [AuthorizedAspect]
         [RequiredMaskAspect("dto.Data.Id")]
-        public async Task<HttpResponseMessage> SetupPlanPoints([FromBody] AuthorizedDto<CompanyPlanPointsDto> dto)
-        {
-            return await Execute(planPointsDto => CompanyService.SetupCompanyPlanPoints(planPointsDto), dto);
-        }
-
-        [HttpPost]
-        [WireHeadersAspect]
-        [AuthorizedAspect]
-        [RequiredMaskAspect("dto.Data.Id")]
         public async Task<HttpResponseMessage> Get([FromBody] AuthorizedDto<CompanyIdDto> dto)
         {
             return await Execute(companyIdDto => CompanyService.GetCompany(companyIdDto), dto);
@@ -72,17 +62,9 @@ namespace WorkAutomatorServer.Controllers
         [HttpPost]
         [WireHeadersAspect]
         [AuthorizedAspect]
-        public async Task<HttpResponseMessage> SetupCheckPoint([FromBody] AuthorizedDto<CheckPointDto> dto)
+        public async Task<HttpResponseMessage> SetupPlan([FromBody] AuthorizedDto<SetupPlanDto> dto)
         {
-            return await Execute(checkPointDto => CompanyService.SetupCheckPoint(checkPointDto), dto);
-        }
-
-        [HttpPost]
-        [WireHeadersAspect]
-        [AuthorizedAspect]
-        public async Task<HttpResponseMessage> SetupEnterLeavePoint([FromBody] AuthorizedDto<EnterLeavePointDto> dto)
-        {
-            return await Execute(enterLeavePointDto => CompanyService.SetupEnterLeavePoint(enterLeavePointDto), dto);
+            return await Execute(plan => CompanyService.SetupPlan(plan), dto);
         }
     }
 }

@@ -8,6 +8,6 @@ namespace WorkAutomatorLogic.ServiceInterfaces
 {
     public interface IManufactoryService
     {
-        Task<ManufactoryModel> CreateManufactory(AuthorizedDto<ManufactoryDto> manufactory);
+        
     }
 }

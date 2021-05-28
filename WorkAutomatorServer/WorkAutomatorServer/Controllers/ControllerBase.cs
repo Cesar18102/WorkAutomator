@@ -47,6 +47,9 @@ namespace WorkAutomatorServer.Controllers
             { typeof(AlreadyHiredException), HttpStatusCode.Conflict },
             { typeof(NotHiredException), HttpStatusCode.NotFound },
 
+            { typeof(PointsBusyException), HttpStatusCode.Conflict },
+            { typeof(InvalidPointsException), HttpStatusCode.BadRequest }
+
 
             //{ typeof(NotFoundException), HttpStatusCode.NotFound },
             //{ typeof(NotAppropriateRoleException), HttpStatusCode.Forbidden },

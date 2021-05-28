@@ -10,6 +10,9 @@ namespace Dto
         [ObjectId(DbTable.CompanyPlanUniquePoint)]
         [JsonIgnore]
         public int? PlanPointId => Id;
+
+        [JsonProperty("fake_id")]
+        public int? FakeId { get; set; }
         
         [JsonProperty("x")]
         public double X { get; set; }

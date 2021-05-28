@@ -11,7 +11,6 @@ using MethodBoundaryAspect.Fody.Attributes;
 using Constants;
 using Attributes;
 
-using WorkAutomatorLogic.Extensions;
 using WorkAutomatorLogic.Models.Permission;
 using WorkAutomatorLogic.ServiceInterfaces;
 
@@ -58,19 +57,19 @@ namespace WorkAutomatorLogic.Aspects
 
             if (CheckSameCompany)
             {
-                Dictionary<ObjectIdAttribute, object[]> objectsByTables = arg.Arguments.GetMarkedMapFromArgumentList<ObjectIdAttribute>(
+                Dictionary<(Guid, ObjectIdAttribute), object[]> objectsByTables = arg.Arguments.GetMarkedMapFromArgumentList<ObjectIdAttribute>(
                     methodParameters
                 );
 
-                foreach(KeyValuePair<ObjectIdAttribute, object[]> objectsOfTable in objectsByTables.Where(o => o.Key.Table == Table))
-                {
-                    Interaction interaction = new Interaction(Action, objectsOfTable.Key.Table, initiatorAccountId);
+                int[] idsToCheck = objectsByTables.Where(o => o.Key.Item2.Table == Table)
+                    .SelectMany(o => o.Value).OfType<int>().ToArray();
 
-                    interaction.CompanyId = companyId;
-                    interaction.ObjectIds = objectsOfTable.Value.OfType<int>().ToArray();
+                Interaction interaction = new Interaction(Action, Table, initiatorAccountId);
 
-                    Task.Run(() => PermissionService.CheckLegal(interaction)).GetAwaiter().GetResult();
-                }
+                interaction.CompanyId = companyId;
+                interaction.ObjectIds = idsToCheck;
+
+                Task.Run(() => PermissionService.CheckLegal(interaction)).GetAwaiter().GetResult();
             }
         }
     }

@@ -22,11 +22,11 @@ namespace WorkAutomatorDataAccess.Entities
         }
 
         
-        public int pipeline_id { get; set; }
+        public int? pipeline_id { get; set; }
 
         public int pipeline_item_prefab_id { get; set; }
 
-        public int manufactory_id { get; set; }
+        public int? manufactory_id { get; set; }
 
         public double x { get; set; }
 

@@ -11,6 +11,14 @@ namespace WorkAutomatorLogic.Exceptions
 
         public override string Message => "There were some validation errors: " +
             string.Join("\n", InvalidFieldInfos.Select(info => $"{info.Field}: {info.Reason}"));
+
+        public void Add(Type type, string field, string reason)
+        {
+            if (InvalidFieldInfos.Any(info => info.Type.Equals(type) && info.Field == field && info.Reason == reason))
+                return;
+
+            InvalidFieldInfos.Add(new InvalidFieldInfo(type, field, reason));
+        }
     }
 
     public class InvalidFieldInfo

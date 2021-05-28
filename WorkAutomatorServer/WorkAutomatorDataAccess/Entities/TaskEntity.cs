@@ -19,9 +19,9 @@ namespace WorkAutomatorDataAccess.Entities
 
         public int company_id { get; set; }
 
-        public int assignee_account_id { get; set; }
+        public int? assignee_account_id { get; set; }
 
-        public int reviewer_account_id { get; set; }
+        public int? reviewer_account_id { get; set; }
 
         public virtual AccountEntity Assignee { get; set; }
 

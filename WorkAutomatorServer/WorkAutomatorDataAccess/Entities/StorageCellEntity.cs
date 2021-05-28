@@ -19,7 +19,7 @@ namespace WorkAutomatorDataAccess.Entities
         }
 
         
-        public int manufactory_id { get; set; }
+        public int? manufactory_id { get; set; }
 
         public int storage_cell_prefab_id { get; set; }
 

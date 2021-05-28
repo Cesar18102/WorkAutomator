@@ -129,6 +129,10 @@
     <Compile Include="Migrations\202105251952343_init.designer.cs">
       <DependentUpon>202105251952343_init.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202105281559350_cascades.cs" />
+    <Compile Include="Migrations\202105281559350_cascades.designer.cs">
+      <DependentUpon>202105281559350_cascades.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Repos\AccountRepo.cs" />
     <Compile Include="RepoBase.cs" />
@@ -144,6 +148,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202105251952343_init.resx">
       <DependentUpon>202105251952343_init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202105281559350_cascades.resx">
+      <DependentUpon>202105281559350_cascades.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

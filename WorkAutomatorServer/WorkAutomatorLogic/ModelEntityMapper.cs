@@ -61,6 +61,9 @@ namespace WorkAutomatorLogic
                   .ForMember(entity => entity.company_id, cnf => cnf.MapFrom(model => model.CompanyId))
                   .ReverseMap()
                   .ForMember(model => model.CompanyId, cnf => cnf.MapFrom(entity => entity.company_id));
+
+            config.CreateMap<CheckPointModel, CheckPointEntity>().ReverseMap();
+            config.CreateMap<EnterLeavePointModel, EnterLeavePointEntity>().ReverseMap();
         }
 
         public static IReadOnlyDictionary<DbTable, string> TABLE_NAME_DICTIONARY = new Dictionary<DbTable, string>()

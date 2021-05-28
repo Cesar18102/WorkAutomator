@@ -17,13 +17,6 @@ namespace WorkAutomatorServer.Controllers
     {
         private static IManufactoryService ManufactoryService = LogicDependencyHolder.Dependencies.Resolve<IManufactoryService>();
 
-        [HttpPost]
-        [WireHeadersAspect]
-        [AuthorizedAspect]
-        [RequiredMaskAspect("dto.Data.CompanyId", "dto.Data.ManufactoryPlanPoints.Id")]
-        public async Task<HttpResponseMessage> Create([FromBody] AuthorizedDto<ManufactoryDto> dto)
-        {
-            return await Execute(manufactory => ManufactoryService.CreateManufactory(manufactory), dto);
-        }
+        
     }
 }

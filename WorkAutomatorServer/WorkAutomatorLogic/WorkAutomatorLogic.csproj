@@ -88,6 +88,8 @@
   <ItemGroup>
     <Compile Include="Aspects\DbPermissionAspect.cs" />
     <Compile Include="Aspects\PermissionAspect.cs" />
+    <Compile Include="Exceptions\InvalidPointsException.cs" />
+    <Compile Include="Exceptions\PointsBusyException.cs" />
     <Compile Include="ModelDtoMapper.cs" />
     <Compile Include="Exceptions\AlreadyHiredException.cs" />
     <Compile Include="Exceptions\DataValidationException.cs" />

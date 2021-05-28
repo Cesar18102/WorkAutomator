@@ -51,10 +51,10 @@ namespace Attributes
             return propertiesPath;
         }
 
-        public static Dictionary<TAttribute, object[]> GetMarkedMapFromArgumentList<TAttribute>(this object[] arguments, ParameterInfo[] parameters) 
+        public static Dictionary<(Guid, TAttribute), object[]> GetMarkedMapFromArgumentList<TAttribute>(this object[] arguments, ParameterInfo[] parameters) 
             where TAttribute : Attribute
         {
-            Dictionary<TAttribute, object[]> result = new Dictionary<TAttribute, object[]>();
+            Dictionary<(Guid, TAttribute), object[]> result = new Dictionary<(Guid, TAttribute), object[]>();
 
             ParameterInfo parameter = parameters.FirstOrDefault(
                 param => param.GetCustomAttribute<TAttribute>() != null
@@ -63,7 +63,7 @@ namespace Attributes
             if (parameter != null)
             {
                 result.Add(
-                    parameter.GetCustomAttribute<TAttribute>(),
+                    (Guid.NewGuid(), parameter.GetCustomAttribute<TAttribute>()),
                     new object[] { arguments[parameter.Position] }
                 );
 
@@ -80,7 +80,7 @@ namespace Attributes
                     continue;
 
                 foreach((TAttribute, List<PropertyInfo>) path in paths)
-                    result.Add(path.Item1, argument.GetValuesByPath(path.Item2));
+                    result.Add((Guid.NewGuid(), path.Item1), argument.GetValuesByPath(path.Item2));
             }
 
             return result;
