@@ -703,7 +703,7 @@ namespace WorkAutomatorDataAccess
 
             modelBuilder.Entity<ManufactoryEntity>()
                 .HasMany(e => e.PipelineItems)
-                .WithRequired(e => e.Manufactory)
+                .WithOptional(e => e.Manufactory)
                 .HasForeignKey(e => e.manufactory_id)
                 .WillCascadeOnDelete(false);
 

@@ -37,6 +37,8 @@ namespace WorkAutomatorLogic
             builder.RegisterType<ManufactoryService>().As<IManufactoryService>().SingleInstance();
             builder.RegisterType<RoleService>().As<IRoleService>().SingleInstance();
             builder.RegisterType<PrefabService>().As<IPrefabService>().SingleInstance();
+            builder.RegisterType<PipelineItemService>().As<IPipelineItemService>().SingleInstance();
+            builder.RegisterType<StorageCellService>().As<IStorageCellService>().SingleInstance();
 
             return builder.Build();
         }

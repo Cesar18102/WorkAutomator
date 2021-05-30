@@ -2,9 +2,11 @@
 
 using Dto;
 using Dto.Prefabs;
+using Dto.Pipeline;
 
 using WorkAutomatorLogic.Models;
 using WorkAutomatorLogic.Models.Prefabs;
+using WorkAutomatorLogic.Models.Pipeline;
 
 namespace WorkAutomatorLogic
 {
@@ -62,6 +64,12 @@ namespace WorkAutomatorLogic
                   .ForPath(model => model.OptionDataType.Id, cnf => cnf.MapFrom(dto => dto.OptionDataTypeId));
 
             config.CreateMap<DetectorPrefabDto, DetectorPrefabModel>();
+
+            config.CreateMap<PipelineItemSettingsValueDto, PipelineItemSettingsValueModel>()
+                  .ForPath(model => model.Prefab.Id, cnf => cnf.MapFrom(dto => dto.PipelineItemSettingsPrefabId));
+
+            config.CreateMap<PipelineItemDto, PipelineItemModel>()
+                  .ForPath(model => model.Prefab.Id, cnf => cnf.MapFrom(dto => dto.PrefabId));
         }
     }
 }

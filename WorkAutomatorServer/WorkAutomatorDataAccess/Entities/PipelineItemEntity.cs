@@ -28,9 +28,9 @@ namespace WorkAutomatorDataAccess.Entities
 
         public int? manufactory_id { get; set; }
 
-        public double x { get; set; }
+        public double? x { get; set; }
 
-        public double y { get; set; }
+        public double? y { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DetectorEntity> Detectors { get; set; }
@@ -61,7 +61,7 @@ namespace WorkAutomatorDataAccess.Entities
 
         public override bool IsOwnedByCompany(int companyId)
         {
-            return pipeline.IsOwnedByCompany(companyId);
+            return PipelineItemPrefab.IsOwnedByCompany(companyId);
         }
     }
 }

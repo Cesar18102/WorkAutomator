@@ -5,9 +5,11 @@ using AutoMapper;
 
 using Constants;
 
-using WorkAutomatorLogic.Models;
 using WorkAutomatorDataAccess.Entities;
+
+using WorkAutomatorLogic.Models;
 using WorkAutomatorLogic.Models.Prefabs;
+using WorkAutomatorLogic.Models.Pipeline;
 
 namespace WorkAutomatorLogic
 {
@@ -124,25 +126,39 @@ namespace WorkAutomatorLogic
                   .ForMember(model => model.VisualizerType, cnf => cnf.MapFrom(entity => entity.visualizer_type));
 
             config.CreateMap<DetectorFaultPrefabModel, DetectorFaultPrefabEntity>()
-                  .ForMember(entity => entity.fault_condition, cnf => cnf.MapFrom(entity => entity.FaultCondition))
+                  .ForMember(entity => entity.fault_condition, cnf => cnf.MapFrom(model => model.FaultCondition))
                   .ReverseMap()
                   .ForMember(model => model.FaultCondition, cnf => cnf.MapFrom(entity => entity.fault_condition));
 
             config.CreateMap<DetectorSettingsPrefabModel, DetectorSettingsPrefabEntity>()
-                  .ForMember(entity => entity.option_name, cnf => cnf.MapFrom(entity => entity.OptionName))
-                  .ForMember(entity => entity.option_description, cnf => cnf.MapFrom(entity => entity.OptionDescription))
-                  .ForMember(entity => entity.option_data_type_id, cnf => cnf.MapFrom(entity => entity.OptionDataType.Id))
+                  .ForMember(entity => entity.option_name, cnf => cnf.MapFrom(model => model.OptionName))
+                  .ForMember(entity => entity.option_description, cnf => cnf.MapFrom(model => model.OptionDescription))
+                  .ForMember(entity => entity.option_data_type_id, cnf => cnf.MapFrom(model => model.OptionDataType.Id))
                   .ReverseMap()
                   .ForMember(model => model.OptionName, cnf => cnf.MapFrom(entity => entity.option_name))
                   .ForMember(model => model.OptionDescription, cnf => cnf.MapFrom(entity => entity.option_description))
                   .ForMember(model => model.OptionDataType, cnf => cnf.MapFrom(entity => entity.DataType));
 
             config.CreateMap<DetectorPrefabModel, DetectorPrefabEntity>()
-                  .ForMember(entity => entity.company_id, cnf => cnf.MapFrom(entity => entity.CompanyId))
-                  .ForMember(entity => entity.image_url, cnf => cnf.MapFrom(entity => entity.ImageUrl))
+                  .ForMember(entity => entity.company_id, cnf => cnf.MapFrom(model => model.CompanyId))
+                  .ForMember(entity => entity.image_url, cnf => cnf.MapFrom(model => model.ImageUrl))
                   .ReverseMap()
                   .ForMember(model => model.CompanyId, cnf => cnf.MapFrom(entity => entity.company_id))
                   .ForMember(model => model.ImageUrl, cnf => cnf.MapFrom(entity => entity.image_url));
+
+            config.CreateMap<PipelineItemSettingsValueModel, PipelineItemSettingsValueEntity>()
+                  .ForMember(entity => entity.pipeline_item_settings_prefab_id, cnf => cnf.MapFrom(model => model.Prefab.Id))
+                  .ForMember(entity => entity.option_data_value_base64, cnf => cnf.MapFrom(model => model.ValueBase64))
+                  .ReverseMap()
+                  .ForMember(model => model.Prefab, cnf => cnf.MapFrom(entity => entity.PipelineItemSettingsPrefab))
+                  .ForMember(model => model.ValueBase64, cnf => cnf.MapFrom(entity => entity.option_data_value_base64));
+
+            config.CreateMap<PipelineItemModel, PipelineItemEntity>()
+                  .ForMember(entity => entity.PipelineItemSettingsValues, cnf => cnf.MapFrom(model => model.SettingsValues))
+                  .ForMember(entity => entity.pipeline_item_prefab_id, cnf => cnf.MapFrom(model => model.Prefab.Id))
+                  .ReverseMap()
+                  .ForMember(model => model.SettingsValues, cnf => cnf.MapFrom(entity => entity.PipelineItemSettingsValues))
+                  .ForMember(model => model.Prefab, cnf => cnf.MapFrom(entity => entity.PipelineItemPrefab));
         }
 
         public static IReadOnlyDictionary<DbTable, string> TABLE_NAME_DICTIONARY = new Dictionary<DbTable, string>()

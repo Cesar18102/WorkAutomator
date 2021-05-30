@@ -137,6 +137,14 @@
     <Compile Include="Migrations\202105290937342_no_superadmin_field.designer.cs">
       <DependentUpon>202105290937342_no_superadmin_field.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202105301328525_non-located-pipeline-items-and-storage-cells.cs" />
+    <Compile Include="Migrations\202105301328525_non-located-pipeline-items-and-storage-cells.designer.cs">
+      <DependentUpon>202105301328525_non-located-pipeline-items-and-storage-cells.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202105301448005_non-located-pipeline-items-and-storage-cells-2.cs" />
+    <Compile Include="Migrations\202105301448005_non-located-pipeline-items-and-storage-cells-2.designer.cs">
+      <DependentUpon>202105301448005_non-located-pipeline-items-and-storage-cells-2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Repos\AccountRepo.cs" />
     <Compile Include="RepoBase.cs" />
@@ -158,6 +166,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202105290937342_no_superadmin_field.resx">
       <DependentUpon>202105290937342_no_superadmin_field.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202105301328525_non-located-pipeline-items-and-storage-cells.resx">
+      <DependentUpon>202105301328525_non-located-pipeline-items-and-storage-cells.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202105301448005_non-located-pipeline-items-and-storage-cells-2.resx">
+      <DependentUpon>202105301448005_non-located-pipeline-items-and-storage-cells-2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

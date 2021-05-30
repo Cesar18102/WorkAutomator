@@ -174,7 +174,10 @@
     <Compile Include="Controllers\ControllerBase.cs" />
     <Compile Include="Controllers\KeyController.cs" />
     <Compile Include="Controllers\ManufactoryController.cs" />
+    <Compile Include="Controllers\PipelineController.cs" />
+    <Compile Include="Controllers\PipelineItemController.cs" />
     <Compile Include="Controllers\PrefabController.cs" />
+    <Compile Include="Controllers\StorageCellController.cs" />
     <Compile Include="Exceptions\ServerExceptionBase.cs" />
     <Compile Include="Exceptions\ValidationException.cs" />
     <Compile Include="Global.asax.cs">

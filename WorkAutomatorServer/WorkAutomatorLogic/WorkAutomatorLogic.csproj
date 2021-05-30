@@ -124,6 +124,8 @@
     <Compile Include="Models\Permission\PermissionModel.cs" />
     <Compile Include="Models\Permission\PermissionModelBase.cs" />
     <Compile Include="Models\CompanyPlanPointModel.cs" />
+    <Compile Include="Models\Pipeline\PipelineItemModel.cs" />
+    <Compile Include="Models\Pipeline\PipelineItemSettingsValueModel.cs" />
     <Compile Include="Models\Prefabs\DetectorDataPrefabModel.cs" />
     <Compile Include="Models\Prefabs\DetectorFaultPrefabModel.cs" />
     <Compile Include="Models\Prefabs\DetectorPrefabModel.cs" />
@@ -145,23 +147,27 @@
     <Compile Include="ServiceInterfaces\IInitService.cs" />
     <Compile Include="ServiceInterfaces\IKeyService.cs" />
     <Compile Include="ServiceInterfaces\IManufactoryService.cs" />
+    <Compile Include="ServiceInterfaces\IPipelineItemService.cs" />
     <Compile Include="ServiceInterfaces\IPrefabService.cs" />
     <Compile Include="ServiceInterfaces\IProfileService.cs" />
     <Compile Include="ServiceInterfaces\IPermissionService.cs" />
     <Compile Include="ServiceInterfaces\IRoleService.cs" />
     <Compile Include="ServiceInterfaces\ISessionService.cs" />
+    <Compile Include="ServiceInterfaces\IStorageCellService.cs" />
     <Compile Include="Services\AuthService.cs" />
     <Compile Include="Services\CompanyService.cs" />
     <Compile Include="Services\InitService.cs" />
     <Compile Include="Services\KeyService.cs" />
     <Compile Include="Services\ManufactoryService.cs" />
     <Compile Include="Services\PermissionService.cs" />
+    <Compile Include="Services\PipelineItemService.cs" />
     <Compile Include="Services\PrefabService.cs" />
     <Compile Include="Services\RoleService.cs" />
     <Compile Include="Services\RSAService.cs" />
     <Compile Include="Services\ServiceBase.cs" />
     <Compile Include="Services\SessionService.cs" />
     <Compile Include="Services\SHA256HashingService.cs" />
+    <Compile Include="Services\StorageCellService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

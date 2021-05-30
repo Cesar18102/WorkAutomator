@@ -23,9 +23,9 @@ namespace WorkAutomatorDataAccess.Entities
 
         public int storage_cell_prefab_id { get; set; }
 
-        public double x { get; set; }
+        public double? x { get; set; }
 
-        public double y { get; set; }
+        public double? y { get; set; }
 
         public virtual ManufactoryEntity Manufactory { get; set; }
 
