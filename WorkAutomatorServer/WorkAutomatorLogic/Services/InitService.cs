@@ -109,6 +109,26 @@ namespace WorkAutomatorLogic.Services
                         await roleRepo.Create(authorizedRole);
                     }
 
+                    if (defaultRoles.FirstOrDefault(role => role.name == DefaultRoles.HIRED.ToName()) == null)
+                    {
+                        RoleEntity hiredRole = new RoleEntity()
+                        {
+                            is_default = true,
+                            name = DefaultRoles.HIRED.ToName()
+                        };
+
+                        hiredRole.DbPermissions.AddRange(
+                            permissions.Where(p =>
+                                p.table_name == DbTable.Account.ToName() && (
+                                    p.DbPermissionType.name == InteractionDbType.READ.ToName() ||
+                                    p.DbPermissionType.name == InteractionDbType.UPDATE.ToName()
+                                )
+                            ).ToArray()
+                        );
+
+                        await roleRepo.Create(hiredRole);
+                    }
+
                     if (defaultRoles.FirstOrDefault(role => role.name == DefaultRoles.OWNER.ToName()) == null)
                     {
                         RoleEntity ownerRole = new RoleEntity()
@@ -119,10 +139,15 @@ namespace WorkAutomatorLogic.Services
 
                         ownerRole.DbPermissions.AddRange(
                             permissions.Where(p =>
-                                p.table_name != DbTable.DbPermissionType.ToName() &&
-                                p.table_name != DbTable.DbPermission.ToName() &&
-                                p.table_name != DbTable.DataType.ToName() &&
-                                p.table_name != DbTable.VisualizerType.ToName() && (
+                                (
+                                    (
+                                        p.table_name != DbTable.DbPermissionType.ToName() &&
+                                        p.table_name != DbTable.DbPermission.ToName() &&
+                                        p.table_name != DbTable.DataType.ToName() &&
+                                        p.table_name != DbTable.VisualizerType.ToName()
+                                    ) || p.DbPermissionType.name == InteractionDbType.READ.ToName()
+                                ) &&
+                                (
                                     p.table_name != DbTable.Company.ToName() ||
                                     p.DbPermissionType.name != InteractionDbType.CREATE.ToName()
                                 )
@@ -130,6 +155,26 @@ namespace WorkAutomatorLogic.Services
                         );
 
                         await roleRepo.Create(ownerRole);
+                    }
+
+                    if (defaultRoles.FirstOrDefault(role => role.name == DefaultRoles.SUPERADMIN.ToName()) == null)
+                    {
+                        RoleEntity superadminRole = new RoleEntity()
+                        {
+                            is_default = true,
+                            name = DefaultRoles.SUPERADMIN.ToName()
+                        };
+
+                        superadminRole.DbPermissions.AddRange(
+                            permissions.Where(
+                                p => p.table_name == DbTable.DataType.ToName() || 
+                                     p.table_name == DbTable.DbPermissionType.ToName() ||
+                                     p.table_name == DbTable.DbPermission.ToName() || 
+                                     p.table_name == DbTable.VisualizerType.ToName()
+                            ).ToArray()
+                        );
+
+                        await roleRepo.Create(superadminRole);
                     }
 
                     await db.Save();

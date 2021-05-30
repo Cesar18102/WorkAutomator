@@ -10,6 +10,7 @@ namespace WorkAutomatorLogic.Models.Permission
         public int InitiatorAccountId { get; set; }
         public int? CompanyId { get; set; }
         public int[] ObjectIds { get; set; }
+        public bool CheckSameCompany { get; set; }
 
         public Interaction(InteractionDbType type, DbTable table, int initiatorAccountId)
         {

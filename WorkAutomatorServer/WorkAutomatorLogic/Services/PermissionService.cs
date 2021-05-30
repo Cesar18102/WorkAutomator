@@ -71,6 +71,9 @@ namespace WorkAutomatorLogic.Services
 
                     bool isLegal = requiredInteractionTypes.Intersect(havingInteractionTypes).Count() == requiredInteractionTypes.Length;
 
+                    if (interaction.CompanyId.HasValue && await db.GetRepo<CompanyEntity>().FirstOrDefault(company => company.owner_id == interaction.CompanyId.Value) == null)
+                        throw new NotFoundException("Company");
+
                     if (isLegal)
                     {
                         if (interaction.CompanyId.HasValue)
@@ -79,7 +82,7 @@ namespace WorkAutomatorLogic.Services
                             interaction.CompanyId = initiator.company_id;
                     }
 
-                    if(isLegal && interaction.CompanyId.HasValue && interaction.ObjectIds != null && interaction.ObjectIds.Length != 0)
+                    if(isLegal && interaction.ObjectIds != null && interaction.ObjectIds.Length != 0)
                     {
                         Type entityType = typeof(EntityBase).Assembly.GetTypes().FirstOrDefault(
                             type => type.GetCustomAttribute<TableAttribute>()?.Name == tableName
@@ -123,22 +126,31 @@ namespace WorkAutomatorLogic.Services
                             return entity;
                         }).ToArray();
 
-                        foreach(object entity in entities)
+                        if (interaction.CheckSameCompany && interaction.CompanyId.HasValue)
                         {
-                            isLegal &= (bool)entity.GetType().GetMethod(nameof(EntityBase.IsOwnedByCompany))
-                                                   .Invoke(entity, new object[] { interaction.CompanyId.Value });
+                            foreach (object entity in entities)
+                            {
+                                isLegal &= (bool)entity.GetType().GetMethod(nameof(EntityBase.IsOwnedByCompany))
+                                                       .Invoke(entity, new object[] { interaction.CompanyId.Value });
 
-                            if (!isLegal)
-                                break;
+                                if (!isLegal)
+                                    break;
+                            }
                         }
                     }
 
                     if (!isLegal)
                     {
-                        if (interaction.CompanyId.HasValue)
+                        if (interaction.CompanyId.HasValue && interaction.CheckSameCompany && interaction.ObjectIds != null && interaction.ObjectIds.Length != 0)
                         {
                             notEnoughPermissions = requiredInteractionTypes.Select(
                                 t => $"{t} {dbPermissionModel.DbTable} {string.Join(", ", interaction.ObjectIds.Select(id => "#" + id))}"
+                            ).ToArray();
+                        }
+                        else if(interaction.CompanyId.HasValue && interaction.CheckSameCompany)
+                        {
+                            notEnoughPermissions = requiredInteractionTypes.Select(
+                                t => $"{t} {dbPermissionModel.DbTable} for company #{interaction.CompanyId.Value}"
                             ).ToArray();
                         }
                         else

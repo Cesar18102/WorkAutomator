@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 using Dto;
 
@@ -12,7 +13,6 @@ using WorkAutomatorLogic.ServiceInterfaces;
 
 using WorkAutomatorDataAccess;
 using WorkAutomatorDataAccess.Entities;
-using System.Collections.Generic;
 
 namespace WorkAutomatorLogic.Services
 {
@@ -28,25 +28,17 @@ namespace WorkAutomatorLogic.Services
 
                     company.Owner = await db.GetRepo<AccountEntity>().Get(model.Session.UserId);
 
-                    company.Owner.Roles.Remove(
-                        company.Owner.Roles.First(
-                            role => role.name == DefaultRoles.AUTHORIZED.ToName()
-                        )
-                    );
+                    IList<RoleEntity> defaultRoles = await db.GetRepo<RoleEntity>().Get(role => role.is_default);
 
-                    string ownerRoleName = DefaultRoles.OWNER.ToName();
-                    company.Owner.Roles.Add(
-                        await db.GetRepo<RoleEntity>().FirstOrDefault(
-                            role => role.is_default && role.name == ownerRoleName
-                        )
-                    );
+                    company.Owner.Roles.Remove(defaultRoles.FirstOrDefault(role => role.name == DefaultRoles.AUTHORIZED.ToName()));
+                    company.Owner.Roles.Add(defaultRoles.FirstOrDefault(role => role.name == DefaultRoles.OWNER.ToName()));
 
                     CompanyEntity created = await db.GetRepo<CompanyEntity>().Create(company);
                     company.Owner.Company = created;
 
                     await db.Save();
 
-                    return created.ToModel<CompanyModel>();
+                    return await GetCompany(created.owner_id);
                 }
             });
         }
@@ -64,7 +56,7 @@ namespace WorkAutomatorLogic.Services
 
                     await db.Save();
 
-                    return modifying.ToModel<CompanyModel>();
+                    return await GetCompany(modifying.owner_id);
                 }
             });
         }
@@ -85,17 +77,14 @@ namespace WorkAutomatorLogic.Services
 
                     account.company_id = model.Data.CompanyId;
 
+                    IList<RoleEntity> defaultRoles = await db.GetRepo<RoleEntity>().Get(role => role.is_default);
+
+                    account.Roles.Remove(defaultRoles.FirstOrDefault(role => role.name == DefaultRoles.AUTHORIZED.ToName()));
+                    account.Roles.Add(defaultRoles.FirstOrDefault(role => role.name == DefaultRoles.HIRED.ToName()));
+
                     await db.Save();
 
-                    string authorizedRoleName = DefaultRoles.AUTHORIZED.ToName();
-                    account.Roles.Remove(
-                        await db.GetRepo<RoleEntity>().FirstOrDefault(
-                            role => role.is_default && role.name == authorizedRoleName
-                        )
-                    );
-
-                    CompanyEntity company = await db.GetRepo<CompanyEntity>().Get(model.Data.CompanyId.Value);
-                    return company.ToModel<CompanyModel>();
+                    return await GetCompany(account.company_id.Value);
                 }
             });
         }
@@ -120,17 +109,12 @@ namespace WorkAutomatorLogic.Services
                     account.company_id = null;
                     account.Roles.Clear();
 
-                    string authorizedRoleName = DefaultRoles.AUTHORIZED.ToName();
-                    account.Roles.Add(
-                        await db.GetRepo<RoleEntity>().FirstOrDefault(
-                            role => role.is_default && role.name == authorizedRoleName
-                        )
-                    );
+                    IList<RoleEntity> defaultRoles = await db.GetRepo<RoleEntity>().Get(role => role.is_default);
+                    account.Roles.Add(defaultRoles.FirstOrDefault(role => role.name == DefaultRoles.AUTHORIZED.ToName()));
 
                     await db.Save();
 
-                    CompanyEntity company = await db.GetRepo<CompanyEntity>().Get(model.Data.CompanyId.Value);
-                    return company.ToModel<CompanyModel>();
+                    return await GetCompany(account.company_id.Value);
                 }
             });
         }
@@ -159,11 +143,6 @@ namespace WorkAutomatorLogic.Services
                 }
             });
         }
-
-
-        [DbPermissionAspect(Action = InteractionDbType.CREATE, Table = DbTable.CheckPoint)]
-        [DbPermissionAspect(Action = InteractionDbType.READ, Table = DbTable.CompanyPlanUniquePoint, CheckSameCompany = true)]
-
 
         private void ValidatePlan(AuthorizedDto<SetupPlanDto> plan)
         {
@@ -466,7 +445,7 @@ namespace WorkAutomatorLogic.Services
             );
         }
 
-        [DbPermissionAspect(Action = InteractionDbType.READ, Table = DbTable.Company)]
+        [DbPermissionAspect(Action = InteractionDbType.READ, Table = DbTable.Company, CheckSameCompany = true)]
         [DbPermissionAspect(Action = InteractionDbType.CREATE | InteractionDbType.UPDATE | InteractionDbType.DELETE, Table = DbTable.Manufactory, CheckSameCompany = true)]
         [DbPermissionAspect(Action = InteractionDbType.CREATE | InteractionDbType.UPDATE | InteractionDbType.DELETE, Table = DbTable.CompanyPlanUniquePoint, CheckSameCompany = true)]
         [DbPermissionAspect(Action = InteractionDbType.CREATE | InteractionDbType.UPDATE | InteractionDbType.DELETE, Table = DbTable.ManufactoryPlanPoint, CheckSameCompany = true)]

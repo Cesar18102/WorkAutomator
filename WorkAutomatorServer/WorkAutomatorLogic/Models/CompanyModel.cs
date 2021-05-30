@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using Newtonsoft.Json;
-
+using WorkAutomatorLogic.Models.Prefabs;
 using WorkAutomatorLogic.Models.Roles;
 
 namespace WorkAutomatorLogic.Models
@@ -35,11 +35,15 @@ namespace WorkAutomatorLogic.Models
         [JsonProperty("enter_leave_points")]
         public ICollection<EnterLeavePointModel> EnterLeavePoints { get; set; }
 
+        [JsonProperty("pipeline_item_prefabs")]
+        public ICollection<PipelineItemPrefabModel> PipelineItemPrefabs { get; set; }
+
+        [JsonProperty("storage_cell_prefabs")]
+        public ICollection<StorageCellPrefabModel> StorageCellPrefabs { get; set; }
+
         //public ICollection<DetectorPrefabEntity> DetectorPrefabs { get; set; }
-        //public virtual ICollection<PipelineItemPrefabEntity> PipelineItemPrefabs { get; set; }
         //public virtual ICollection<PipelineEntity> Pipelines { get; set; }
         //public virtual ICollection<ResourceEntity> Resources { get; set; }
-        //public virtual ICollection<StorageCellPrefabEntity> StorageCellPrefabs { get; set; }
         //public virtual ICollection<TaskEntity> Tasks { get; set; }
         //public virtual ICollection<UnitEntity> Units { get; set; }
     }

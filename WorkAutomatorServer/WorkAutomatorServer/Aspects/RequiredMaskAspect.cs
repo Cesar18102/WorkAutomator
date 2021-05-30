@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -31,31 +30,48 @@ namespace WorkAutomatorServer.Aspects
 
             foreach (string required in Requireds)
             {
-                string[] parameterPath = required.Split('.');
+                int countPresented = 0;
+                string[] xoredExpressions = required.Split('^');
 
-                HttpParameterDescriptor parameter = parameterDescriptors.First(param => param.ParameterName == parameterPath[0]);
-
-                if (parameter == null)
+                foreach (string expression in xoredExpressions)
                 {
-                    RaiseValidationException(args);
-                    return;
+                    string[] parameterPath = expression.Split('.');
+
+                    HttpParameterDescriptor parameter = parameterDescriptors.First(param => param.ParameterName == parameterPath[0]);
+
+                    if (parameter == null)
+                    {
+                        RaiseValidationException(args, "Al least one of xored required fields must be presented");
+                        return;
+                    }
+
+                    int parameterPosition = parameterDescriptors.IndexOf(parameter);
+                    if (IsValuePresented(parameterPath.Skip(1), args.Arguments[parameterPosition]))
+                        ++countPresented;
+
+                    if (countPresented > 1)
+                    {
+                        RaiseValidationException(args, "Only one of xored required fields must be presented");
+                        return;
+                    }
                 }
 
-                int parameterPosition = parameterDescriptors.IndexOf(parameter);
-
-                CheckValuePresented(parameterPath.Skip(1), args.Arguments[parameterPosition], args);
+                if(countPresented == 0)
+                {
+                    RaiseValidationException(args, "Al least one of xored required fields must be presented");
+                    return;
+                }
             }
         }
 
-        private void RaiseValidationException(MethodExecutionArgs args)
+        private void RaiseValidationException(MethodExecutionArgs args, string message)
         {
-            Response response = new Response()
-            {
-                Error = new ErrorPart(
-                    ControllerBase.ErrorStatusCodes.Keys.ToList().IndexOf(typeof(ValidationException)) + 1, 
-                    new ValidationException("All IdDto inheritors must specify id field in indentified-market requests")
-                )
-            };
+            Response response = new Response();
+
+            response.Error = new ErrorPart(
+                ControllerBase.ErrorStatusCodes.Keys.ToList().IndexOf(typeof(ValidationException)) + 1,
+                new ValidationException(message)
+            );
 
             Task<HttpResponseMessage> responseMessage = Task.Run(() => (args.Instance as ControllerBase).Request.CreateResponse(
                 ControllerBase.ErrorStatusCodes[typeof(ValidationException)], response
@@ -65,38 +81,31 @@ namespace WorkAutomatorServer.Aspects
             args.FlowBehavior = FlowBehavior.Return;
         }
 
-        private void CheckValuePresented(IEnumerable<string> requiredPath, object context, MethodExecutionArgs args)
+        private bool IsValuePresented(IEnumerable<string> requiredPath, object context)
         {
             if (requiredPath.Count() == 0)
-            {
-                if (context == null)
-                    RaiseValidationException(args);
-
-                return;
-            }
-
-            Type type = context.GetType();
-
+                return context != null;
+            
             if (context is IEnumerable<object> collection)
             {
                 foreach (object item in collection)
-                    CheckValuePresented(requiredPath, item, args);
+                    if (!IsValuePresented(requiredPath, item))
+                        return false;
+
+                return true;
             }
             else
             {
-                PropertyInfo nextProperty = type.GetProperties().First(
+                PropertyInfo nextProperty = context.GetType().GetProperties().First(
                     property => property.Name == requiredPath.First()
                 );
 
                 object value = nextProperty.GetValue(context);
 
                 if (value == null)
-                {
-                    RaiseValidationException(args);
-                    return;
-                }
+                    return false;
 
-                CheckValuePresented(requiredPath.Skip(1), value, args);
+                return IsValuePresented(requiredPath.Skip(1), value);
             }
         }
     }

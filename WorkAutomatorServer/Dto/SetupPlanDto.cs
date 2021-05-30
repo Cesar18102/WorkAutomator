@@ -3,12 +3,14 @@
 using Newtonsoft.Json;
 
 using Attributes;
+using Constants;
 
 namespace Dto
 {
     public class SetupPlanDto : DtoBase
     {
         [CompanyId]
+        [ObjectId(DbTable.Company)]
         [Required(AllowEmptyStrings = false)]
         [JsonProperty("company_id")]
         public int? CompanyId { get; set; }

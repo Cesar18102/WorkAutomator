@@ -3,6 +3,8 @@
     public enum DefaultRoles
     {
         AUTHORIZED,
-        OWNER
+        HIRED,
+        OWNER,
+        SUPERADMIN
     }
 }

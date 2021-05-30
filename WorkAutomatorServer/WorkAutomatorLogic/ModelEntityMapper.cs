@@ -7,6 +7,7 @@ using Constants;
 
 using WorkAutomatorLogic.Models;
 using WorkAutomatorDataAccess.Entities;
+using WorkAutomatorLogic.Models.Prefabs;
 
 namespace WorkAutomatorLogic
 {
@@ -65,6 +66,83 @@ namespace WorkAutomatorLogic
 
             config.CreateMap<CheckPointModel, CheckPointEntity>().ReverseMap();
             config.CreateMap<EnterLeavePointModel, EnterLeavePointEntity>().ReverseMap();
+
+            config.CreateMap<DataTypeModel, DataTypeEntity>().ReverseMap();
+            config.CreateMap<VisualizerTypeModel, VisualizerTypeEntity>().ReverseMap();
+
+            config.CreateMap<PipelineItemSettingsPrefabModel, PipelineItemSettingsPrefabEntity>()
+                  .ForMember(entity => entity.option_name, cnf => cnf.MapFrom(model => model.OptionName))
+                  .ForMember(entity => entity.option_data_type_id, cnf => cnf.MapFrom(model => model.OptionDataType.Id))
+                  .ForMember(entity => entity.option_description, cnf => cnf.MapFrom(model => model.OptionDescription))
+                  .ReverseMap()
+                  .ForMember(model => model.OptionName, cnf => cnf.MapFrom(entity => entity.option_name))
+                  .ForMember(model => model.OptionDataType, cnf => cnf.MapFrom(entity => entity.DataType))
+                  .ForMember(model => model.OptionDescription, cnf => cnf.MapFrom(entity => entity.option_description));
+
+            config.CreateMap<PipelineItemPrefabModel, PipelineItemPrefabEntity>()
+                  .ForMember(entity => entity.company_id, cnf => cnf.MapFrom(model => model.CompanyId))
+                  .ForMember(entity => entity.image_url, cnf => cnf.MapFrom(model => model.ImageUrl))
+                  .ForMember(entity => entity.input_x, cnf => cnf.MapFrom(model => model.InputX))
+                  .ForMember(entity => entity.input_y, cnf => cnf.MapFrom(model => model.InputY))
+                  .ForMember(entity => entity.output_x, cnf => cnf.MapFrom(model => model.OutputX))
+                  .ForMember(entity => entity.output_y, cnf => cnf.MapFrom(model => model.OutputY))
+                  .ReverseMap()
+                  .ForMember(model => model.CompanyId, cnf => cnf.MapFrom(entity => entity.company_id))
+                  .ForMember(model => model.ImageUrl, cnf => cnf.MapFrom(entity => entity.image_url))
+                  .ForMember(model => model.InputX, cnf => cnf.MapFrom(entity => entity.input_x))
+                  .ForMember(model => model.InputY, cnf => cnf.MapFrom(entity => entity.input_y))
+                  .ForMember(model => model.OutputX, cnf => cnf.MapFrom(entity => entity.output_x))
+                  .ForMember(model => model.OutputY, cnf => cnf.MapFrom(entity => entity.output_y));
+
+            config.CreateMap<StorageCellPrefabModel, StorageCellPrefabEntity>()
+                  .ForMember(entity => entity.company_id, cnf => cnf.MapFrom(model => model.CompanyId))
+                  .ForMember(entity => entity.image_url, cnf => cnf.MapFrom(model => model.ImageUrl))
+                  .ForMember(entity => entity.input_x, cnf => cnf.MapFrom(model => model.InputX))
+                  .ForMember(entity => entity.input_y, cnf => cnf.MapFrom(model => model.InputY))
+                  .ForMember(entity => entity.output_x, cnf => cnf.MapFrom(model => model.OutputX))
+                  .ForMember(entity => entity.output_y, cnf => cnf.MapFrom(model => model.OutputY))
+                  .ReverseMap()
+                  .ForMember(model => model.CompanyId, cnf => cnf.MapFrom(entity => entity.company_id))
+                  .ForMember(model => model.ImageUrl, cnf => cnf.MapFrom(entity => entity.image_url))
+                  .ForMember(model => model.InputX, cnf => cnf.MapFrom(entity => entity.input_x))
+                  .ForMember(model => model.InputY, cnf => cnf.MapFrom(entity => entity.input_y))
+                  .ForMember(model => model.OutputX, cnf => cnf.MapFrom(entity => entity.output_x))
+                  .ForMember(model => model.OutputY, cnf => cnf.MapFrom(entity => entity.output_y));
+
+            config.CreateMap<DetectorDataPrefabModel, DetectorDataPrefabEntity>()
+                  .ForMember(entity => entity.field_name, cnf => cnf.MapFrom(model => model.FieldName))
+                  .ForMember(entity => entity.field_description, cnf => cnf.MapFrom(model => model.FieldDescription))
+                  .ForMember(entity => entity.field_data_type_id, cnf => cnf.MapFrom(model => model.FieldDataType.Id))
+                  .ForMember(entity => entity.argument_name, cnf => cnf.MapFrom(model => model.ArgumentName))
+                  .ForMember(entity => entity.visualizer_type_id, cnf => cnf.MapFrom(model => model.VisualizerType.Id))
+                  .ForMember(entity => entity.visualizer_type, cnf => cnf.Ignore())
+                  .ReverseMap()
+                  .ForMember(model => model.FieldName, cnf => cnf.MapFrom(entity => entity.field_name))
+                  .ForMember(model => model.FieldDescription, cnf => cnf.MapFrom(entity => entity.field_description))
+                  .ForMember(model => model.FieldDataType, cnf => cnf.MapFrom(entity => entity.DataType))
+                  .ForMember(model => model.ArgumentName, cnf => cnf.MapFrom(entity => entity.argument_name))
+                  .ForMember(model => model.VisualizerType, cnf => cnf.MapFrom(entity => entity.visualizer_type));
+
+            config.CreateMap<DetectorFaultPrefabModel, DetectorFaultPrefabEntity>()
+                  .ForMember(entity => entity.fault_condition, cnf => cnf.MapFrom(entity => entity.FaultCondition))
+                  .ReverseMap()
+                  .ForMember(model => model.FaultCondition, cnf => cnf.MapFrom(entity => entity.fault_condition));
+
+            config.CreateMap<DetectorSettingsPrefabModel, DetectorSettingsPrefabEntity>()
+                  .ForMember(entity => entity.option_name, cnf => cnf.MapFrom(entity => entity.OptionName))
+                  .ForMember(entity => entity.option_description, cnf => cnf.MapFrom(entity => entity.OptionDescription))
+                  .ForMember(entity => entity.option_data_type_id, cnf => cnf.MapFrom(entity => entity.OptionDataType.Id))
+                  .ReverseMap()
+                  .ForMember(model => model.OptionName, cnf => cnf.MapFrom(entity => entity.option_name))
+                  .ForMember(model => model.OptionDescription, cnf => cnf.MapFrom(entity => entity.option_description))
+                  .ForMember(model => model.OptionDataType, cnf => cnf.MapFrom(entity => entity.DataType));
+
+            config.CreateMap<DetectorPrefabModel, DetectorPrefabEntity>()
+                  .ForMember(entity => entity.company_id, cnf => cnf.MapFrom(entity => entity.CompanyId))
+                  .ForMember(entity => entity.image_url, cnf => cnf.MapFrom(entity => entity.ImageUrl))
+                  .ReverseMap()
+                  .ForMember(model => model.CompanyId, cnf => cnf.MapFrom(entity => entity.company_id))
+                  .ForMember(model => model.ImageUrl, cnf => cnf.MapFrom(entity => entity.image_url));
         }
 
         public static IReadOnlyDictionary<DbTable, string> TABLE_NAME_DICTIONARY = new Dictionary<DbTable, string>()
@@ -128,7 +206,9 @@ namespace WorkAutomatorLogic
         public static IReadOnlyDictionary<DefaultRoles, string> DEFAULT_ROLES_NAMES = new Dictionary<DefaultRoles, string>()
         {
             { DefaultRoles.AUTHORIZED, "AUTHORIZED" },
-            { DefaultRoles.OWNER, "OWNER" }
+            { DefaultRoles.HIRED, "HIRED" },
+            { DefaultRoles.OWNER, "OWNER" },
+            { DefaultRoles.SUPERADMIN, "SUPERADMIN" }
         };
 
         public static IReadOnlyDictionary<DataType, (string, Type)> DATA_TYPES = new Dictionary<DataType, (string, Type)>()

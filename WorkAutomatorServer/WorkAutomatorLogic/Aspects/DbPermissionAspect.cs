@@ -32,7 +32,7 @@ namespace WorkAutomatorLogic.Aspects
 
             int initiatorAccountId = (int)arg.Arguments.GetMarkedValueFromArgumentList<InitiatorAccountIdAttribute>(methodParameters).First();
 
-            if(Table == DbTable.None)
+            if (Table == DbTable.None)
             {
                 object tableNameParameterValue = arg.Arguments.GetMarkedValueFromArgumentList<TableNameParameterAttribute>(methodParameters).FirstOrDefault();
 
@@ -41,36 +41,26 @@ namespace WorkAutomatorLogic.Aspects
                     IValueConverter converter = (IValueConverter)Activator.CreateInstance(DbTableConverterType);
                     Table = (DbTable)converter.Convert(tableNameParameterValue);
                 }
-                else if(tableNameParameterValue != null)
+                else if (tableNameParameterValue != null)
                     Table = (DbTable)tableNameParameterValue;
             }
 
             int? companyId = (int?)arg.Arguments.GetMarkedValueFromArgumentList<CompanyIdAttribute>(methodParameters).FirstOrDefault();
 
-            if (Table != DbTable.None && !CheckSameCompany)
-            {
-                Interaction interaction = new Interaction(Action, Table, initiatorAccountId);
-                interaction.CompanyId = companyId;
+            Dictionary<(Guid, ObjectIdAttribute), object[]> objectsByTables = arg.Arguments.GetMarkedMapFromArgumentList<ObjectIdAttribute>(
+                methodParameters
+            );
 
-                Task.Run(() => PermissionService.CheckLegal(interaction)).GetAwaiter().GetResult();
-            }
+            int[] idsToCheck = objectsByTables.Where(o => o.Key.Item2.Table == Table)
+                .SelectMany(o => o.Value).OfType<int>().ToArray();
 
-            if (CheckSameCompany)
-            {
-                Dictionary<(Guid, ObjectIdAttribute), object[]> objectsByTables = arg.Arguments.GetMarkedMapFromArgumentList<ObjectIdAttribute>(
-                    methodParameters
-                );
+            Interaction interaction = new Interaction(Action, Table, initiatorAccountId);
 
-                int[] idsToCheck = objectsByTables.Where(o => o.Key.Item2.Table == Table)
-                    .SelectMany(o => o.Value).OfType<int>().ToArray();
+            interaction.CheckSameCompany = this.CheckSameCompany;
+            interaction.CompanyId = companyId;
+            interaction.ObjectIds = idsToCheck;
 
-                Interaction interaction = new Interaction(Action, Table, initiatorAccountId);
-
-                interaction.CompanyId = companyId;
-                interaction.ObjectIds = idsToCheck;
-
-                Task.Run(() => PermissionService.CheckLegal(interaction)).GetAwaiter().GetResult();
-            }
+            Task.Run(() => PermissionService.CheckLegal(interaction)).GetAwaiter().GetResult();
         }
     }
 }

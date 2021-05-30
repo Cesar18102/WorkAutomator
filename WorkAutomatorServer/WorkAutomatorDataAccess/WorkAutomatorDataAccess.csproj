@@ -133,6 +133,10 @@
     <Compile Include="Migrations\202105281559350_cascades.designer.cs">
       <DependentUpon>202105281559350_cascades.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202105290937342_no_superadmin_field.cs" />
+    <Compile Include="Migrations\202105290937342_no_superadmin_field.designer.cs">
+      <DependentUpon>202105290937342_no_superadmin_field.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Repos\AccountRepo.cs" />
     <Compile Include="RepoBase.cs" />
@@ -151,6 +155,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202105281559350_cascades.resx">
       <DependentUpon>202105281559350_cascades.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202105290937342_no_superadmin_field.resx">
+      <DependentUpon>202105290937342_no_superadmin_field.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

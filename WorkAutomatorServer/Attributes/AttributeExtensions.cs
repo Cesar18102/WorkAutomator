@@ -34,7 +34,7 @@ namespace Attributes
             {
                 List<(TAttribute, List<PropertyInfo>)> subPath = null;
 
-                if (property.PropertyType.IsGenericType && typeof(IEnumerable<>).IsAssignableFrom(property.PropertyType.GetGenericTypeDefinition()))
+                if (property.PropertyType.IsGenericType && (typeof(IEnumerable<>).IsAssignableFrom(property.PropertyType.GetGenericTypeDefinition()) || typeof(ICollection<>).IsAssignableFrom(property.PropertyType.GetGenericTypeDefinition())))
                     subPath = FindPropertyPaths<TAttribute>(property.PropertyType.GetGenericArguments()[0]);
                 else if(property.PropertyType.IsArray)
                     subPath = FindPropertyPaths<TAttribute>(property.PropertyType.GetElementType());

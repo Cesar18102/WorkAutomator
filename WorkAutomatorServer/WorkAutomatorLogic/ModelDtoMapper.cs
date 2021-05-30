@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 
 using Dto;
+using Dto.Prefabs;
 
 using WorkAutomatorLogic.Models;
+using WorkAutomatorLogic.Models.Prefabs;
 
 namespace WorkAutomatorLogic
 {
@@ -41,6 +43,25 @@ namespace WorkAutomatorLogic
 
             config.CreateMap<ManufactoryDto, ManufactoryModel>();
             config.CreateMap<CheckPointDto, CheckPointModel>();
+
+            config.CreateMap<PipelineItemSettingsPrefabDto, PipelineItemSettingsPrefabModel>()
+                  .ForPath(model => model.OptionDataType.Id, cnf => cnf.MapFrom(dto => dto.OptionDataTypeId));
+
+            config.CreateMap<PipelineItemPrefabDto, PipelineItemPrefabModel>()
+                  .ForMember(model => model.PipelineItemSettingsPrefabs, cnf => cnf.MapFrom(dto => dto.SettingsPrefabs));
+
+            config.CreateMap<StorageCellPrefabDto, StorageCellPrefabModel>();
+
+            config.CreateMap<DetectorDataPrefabDto, DetectorDataPrefabModel>()
+                  .ForPath(model => model.FieldDataType.Id, cnf => cnf.MapFrom(dto => dto.FieldDataTypeId))
+                  .ForPath(model => model.VisualizerType.Id, cnf => cnf.MapFrom(dto => dto.VisualizerTypeId));
+
+            config.CreateMap<DetectorFaultPrefabDto, DetectorFaultPrefabModel>();
+
+            config.CreateMap<DetectorSettingsPrefabDto, DetectorSettingsPrefabModel>()
+                  .ForPath(model => model.OptionDataType.Id, cnf => cnf.MapFrom(dto => dto.OptionDataTypeId));
+
+            config.CreateMap<DetectorPrefabDto, DetectorPrefabModel>();
         }
     }
 }
