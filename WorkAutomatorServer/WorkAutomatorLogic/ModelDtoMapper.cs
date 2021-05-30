@@ -66,9 +66,20 @@ namespace WorkAutomatorLogic
             config.CreateMap<DetectorPrefabDto, DetectorPrefabModel>();
 
             config.CreateMap<PipelineItemSettingsValueDto, PipelineItemSettingsValueModel>()
-                  .ForPath(model => model.Prefab.Id, cnf => cnf.MapFrom(dto => dto.PipelineItemSettingsPrefabId));
+                  .ForPath(model => model.Prefab.Id, cnf => cnf.MapFrom(dto => dto.PrefabId));
 
             config.CreateMap<PipelineItemDto, PipelineItemModel>()
+                  .ForPath(model => model.Prefab.Id, cnf => cnf.MapFrom(dto => dto.PrefabId));
+
+            config.CreateMap<StorageCellDto, StorageCellModel>()
+                  .ForPath(model => model.Prefab.Id, cnf => cnf.MapFrom(dto => dto.PrefabId));
+
+            config.CreateMap<DetectorFaultDto, DetectorFaultPrefabModel>();
+
+            config.CreateMap<DetectorSettingsValueDto, DetectorSettingsValueModel>()
+                  .ForPath(model => model.Prefab.Id, cnf => cnf.MapFrom(dto => dto.PrefabId));
+
+            config.CreateMap<DetectorDto, DetectorModel>()
                   .ForPath(model => model.Prefab.Id, cnf => cnf.MapFrom(dto => dto.PrefabId));
         }
     }

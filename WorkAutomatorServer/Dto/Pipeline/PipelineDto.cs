@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+
+using Newtonsoft.Json;
 
 using Attributes;
 using Constants;
@@ -15,10 +17,13 @@ namespace Dto.Pipeline
         [JsonProperty("company_id")]
         public int? CompanyId { get; set; }
 
-        [JsonProperty("pipeline_items")]
-        public PipelineItemDto PipelineItems { get; set; }
+        [JsonProperty("connections")]
+        public ICollection<PipelineConnectionDto> Connections { get; set; }
 
-        [JsonProperty("storage_cells")]
-        public StorageCellDto StorageCells { get; set; }
+        [JsonProperty("pipeline_item_placemetns")]
+        public ICollection<PipelineItemPlacementDto> PipelineItemPlacements { get; set; }
+
+        [JsonProperty("storage_cell_placemetns")]
+        public ICollection<StorageCellPlacementDto> StorageCellPlacements { get; set; }
     }
 }

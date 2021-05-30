@@ -159,6 +159,27 @@ namespace WorkAutomatorLogic
                   .ReverseMap()
                   .ForMember(model => model.SettingsValues, cnf => cnf.MapFrom(entity => entity.PipelineItemSettingsValues))
                   .ForMember(model => model.Prefab, cnf => cnf.MapFrom(entity => entity.PipelineItemPrefab));
+
+            config.CreateMap<StorageCellModel, StorageCellEntity>()
+                 .ForMember(entity => entity.storage_cell_prefab_id, cnf => cnf.MapFrom(model => model.Prefab.Id))
+                 .ReverseMap()
+                 .ForMember(model => model.Prefab, cnf => cnf.MapFrom(entity => entity.StorageCellPrefab));
+
+            config.CreateMap<DetectorSettingsValueModel, DetectorSettingsValueEntity>()
+                  .ForMember(entity => entity.detector_settings_prefab_id, cnf => cnf.MapFrom(model => model.Prefab.Id))
+                  .ForMember(entity => entity.option_data_value_base64, cnf => cnf.MapFrom(model => model.ValueBase64))
+                  .ReverseMap()
+                  .ForMember(model => model.Prefab, cnf => cnf.MapFrom(entity => entity.detector_settings_prefab))
+                  .ForMember(model => model.ValueBase64, cnf => cnf.MapFrom(entity => entity.option_data_value_base64));
+
+            config.CreateMap<DetectorModel, DetectorEntity>()
+                  .ForMember(entity => entity.detector_prefab_id, cnf => cnf.MapFrom(model => model.Prefab.Id))
+                  .ForMember(entity => entity.DetectorFaultPrefabs, cnf => cnf.MapFrom(model => model.TrackedDetectorFaults))
+                  .ForMember(entity => entity.DetectorSettingsValues, cnf => cnf.MapFrom(model => model.SettingsValues))
+                  .ReverseMap()
+                  .ForMember(model => model.SettingsValues, cnf => cnf.MapFrom(entity => entity.DetectorSettingsValues))
+                  .ForMember(model => model.Prefab, cnf => cnf.MapFrom(entity => entity.DetectorPrefab))
+                  .ForMember(model => model.TrackedDetectorFaults, cnf => cnf.MapFrom(entity => entity.DetectorFaultPrefabs));
         }
 
         public static IReadOnlyDictionary<DbTable, string> TABLE_NAME_DICTIONARY = new Dictionary<DbTable, string>()
@@ -184,7 +205,6 @@ namespace WorkAutomatorLogic
             { DbTable.DetectorSettingsPrefab, "detector_settings_prefab" },
             { DbTable.DetectorPrefab, "detector_prefab" },
             { DbTable.DetectorFaultPrefab, "detector_fault_prefab" },
-            { DbTable.DetectorFault, "detector_fault" },
             { DbTable.DetectorFaultEvent, "detector_fault_event" },
             { DbTable.DetectorSettingsValue, "detector_settings_value" },
             { DbTable.PipelineItemSettingsPrefab, "pipeline_item_settings_prefab" },

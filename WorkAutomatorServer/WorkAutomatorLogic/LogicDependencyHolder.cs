@@ -39,6 +39,8 @@ namespace WorkAutomatorLogic
             builder.RegisterType<PrefabService>().As<IPrefabService>().SingleInstance();
             builder.RegisterType<PipelineItemService>().As<IPipelineItemService>().SingleInstance();
             builder.RegisterType<StorageCellService>().As<IStorageCellService>().SingleInstance();
+            builder.RegisterType<DetectorService>().As<IDetectorService>().SingleInstance();
+            builder.RegisterType<PipelineService>().As<IPipelineService>().SingleInstance();
 
             return builder.Build();
         }

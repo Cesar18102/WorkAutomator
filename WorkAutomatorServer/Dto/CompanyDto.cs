@@ -14,12 +14,10 @@ namespace Dto
         [JsonIgnore]
         public int? CompanyId => Id;
 
-        [Required(AllowEmptyStrings = false)]
         [JsonProperty("name")]
         public string Name { get; set; }
 
         [Url]
-        [Required(AllowEmptyStrings = false)]
         [JsonProperty("plan_image_url")]
         public string PlanImageUrl { get; set; }
     }

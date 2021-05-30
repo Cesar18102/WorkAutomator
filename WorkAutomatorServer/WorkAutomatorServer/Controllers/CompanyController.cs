@@ -20,6 +20,7 @@ namespace WorkAutomatorServer.Controllers
         [HttpPost]
         [WireHeadersAspect]
         [AuthorizedAspect]
+        [RequiredMaskAspect("dto.Data.Name", "dto.Data.PlanImageUrl")]
         public async Task<HttpResponseMessage> Create([FromBody] AuthorizedDto<CompanyDto> dto)
         {
             return await Execute(company => CompanyService.CreateCompany(company), dto);
@@ -28,7 +29,7 @@ namespace WorkAutomatorServer.Controllers
         [HttpPost]
         [WireHeadersAspect]
         [AuthorizedAspect]
-        [RequiredMaskAspect("dto.Data.Id")]
+        [RequiredMaskAspect("dto.Data.Id", "dto.Data.Name", "dto.Data.PlanImageUrl")]
         public async Task<HttpResponseMessage> Update([FromBody] AuthorizedDto<CompanyDto> dto)
         {
             return await Execute(company => CompanyService.UpdateCompany(company), dto);

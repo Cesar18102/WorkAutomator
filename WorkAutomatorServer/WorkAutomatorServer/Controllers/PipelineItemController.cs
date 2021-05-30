@@ -1,13 +1,12 @@
-﻿using Autofac;
-using Dto;
-using Dto.Pipeline;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+
+using Autofac;
+
+using Dto;
+using Dto.Pipeline;
+
 using WorkAutomatorLogic;
 using WorkAutomatorLogic.ServiceInterfaces;
 using WorkAutomatorServer.Aspects;
@@ -34,6 +33,22 @@ namespace WorkAutomatorServer.Controllers
         public async Task<HttpResponseMessage> SetupSettings([FromBody] AuthorizedDto<PipelineItemDto> dto)
         {
             return await Execute(pipelineItem => PipelineItemService.SetupSettings(pipelineItem), dto);
+        }
+
+        [HttpPost]
+        [WireHeadersAspect]
+        [AuthorizedAspect]
+        public async Task<HttpResponseMessage> SetupDetector([FromBody] AuthorizedDto<SetupDetectorDto> dto)
+        {
+            return await Execute(setupDetectorDto => PipelineItemService.SetupDetector(setupDetectorDto), dto);
+        }
+
+        [HttpPost]
+        [WireHeadersAspect]
+        [AuthorizedAspect]
+        public async Task<HttpResponseMessage> Get([FromBody] AuthorizedDto<CompanyDto> dto)
+        {
+            return await Execute(d => PipelineItemService.Get(d), dto);
         }
     }
 }

@@ -41,7 +41,6 @@ namespace WorkAutomatorDataAccess
         public virtual DbSet<DetectorEntity> Detector { get; set; }
         public virtual DbSet<DetectorDataEntity> DetectorData { get; set; }
         public virtual DbSet<DetectorDataPrefabEntity> DetectorDataPrefab { get; set; }
-        public virtual DbSet<DetectorFaultEntity> DetectorFault { get; set; }
         public virtual DbSet<DetectorFaultEventEntity> DetectorFaultEvent { get; set; }
         public virtual DbSet<DetectorFaultPrefabEntity> DetectorFaultPrefab { get; set; }
         public virtual DbSet<DetectorInteractionEventEntity> DetectorInteractionEvent { get; set; }
@@ -206,9 +205,6 @@ namespace WorkAutomatorDataAccess
 
             modelBuilder.Entity<DetectorEntity>()
                 .ToTable("detector");
-
-            modelBuilder.Entity<DetectorFaultEntity>()
-                .ToTable("detector_fault");
 
             modelBuilder.Entity<DetectorFaultEventEntity>()
                 .ToTable("detector_fault_event");
@@ -536,12 +532,6 @@ namespace WorkAutomatorDataAccess
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<DetectorEntity>()
-                .HasMany(e => e.DetectorFaults)
-                .WithRequired(e => e.detector)
-                .HasForeignKey(e => e.detector_id)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<DetectorEntity>()
                 .HasMany(e => e.DetectorDatas)
                 .WithRequired(e => e.detector)
                 .HasForeignKey(e => e.detector_id)
@@ -562,6 +552,26 @@ namespace WorkAutomatorDataAccess
                     cs.MapRightKey("role_id");
                     cs.ToTable("role_detector_permission");
                 });
+
+            modelBuilder.Entity<DetectorEntity>()
+                .HasMany(e => e.DetectorFaultPrefabs)
+                .WithMany(e => e.Detectors)
+                .Map(cs =>
+                {
+                    cs.MapLeftKey("detector_id");
+                    cs.MapRightKey("detector_fault_prefab_id");
+                    cs.ToTable("detector_tracked_fault_prefab");
+                });
+
+            modelBuilder.Entity<DetectorEntity>()
+                .HasMany(e => e.detector_fault_events)
+                .WithRequired(e => e.detector)
+                .HasForeignKey(e => e.detector_id);
+
+            modelBuilder.Entity<DetectorFaultPrefabEntity>()
+                .HasMany(e => e.DetectorsFaultEvents)
+                .WithRequired(e => e.detector_fault_prefab)
+                .HasForeignKey(e => e.detector_fault_prefab_id);
 
             modelBuilder.Entity<DetectorDataEntity>()
                 .Property(e => e.field_data_value_base64)
@@ -585,16 +595,6 @@ namespace WorkAutomatorDataAccess
                 .HasForeignKey(e => e.detector_data_prefab_id)
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<DetectorFaultEntity>()
-                .Property(e => e.log)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<DetectorFaultEntity>()
-                .HasMany(e => e.detector_fault_events)
-                .WithRequired(e => e.detector_fault)
-                .HasForeignKey(e => e.detector_fault_id)
-                .WillCascadeOnDelete(false);
-
             modelBuilder.Entity<DetectorFaultEventEntity>()
                 .Property(e => e.log)
                 .IsUnicode(false);
@@ -606,12 +606,6 @@ namespace WorkAutomatorDataAccess
             modelBuilder.Entity<DetectorFaultPrefabEntity>()
                 .Property(e => e.fault_condition)
                 .IsUnicode(false);
-
-            modelBuilder.Entity<DetectorFaultPrefabEntity>()
-                .HasMany(e => e.detector_fault)
-                .WithRequired(e => e.detector_fault_prefab)
-                .HasForeignKey(e => e.detector_fault_prefab_id)
-                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<DetectorInteractionEventEntity>()
                 .Property(e => e.log)

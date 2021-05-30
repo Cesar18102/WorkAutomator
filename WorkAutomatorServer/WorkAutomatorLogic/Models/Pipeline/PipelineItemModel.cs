@@ -14,6 +14,13 @@ namespace WorkAutomatorLogic.Models.Pipeline
         [JsonProperty("settings_values")]
         public ICollection<PipelineItemSettingsValueModel> SettingsValues { get; set; }
 
-        //detectors
+        [JsonProperty("detectors")]
+        public ICollection<DetectorModel> Detectors { get; set; }
+
+        [JsonProperty("x")]
+        public double? x { get; set; }
+
+        [JsonProperty("y")]
+        public double? y { get; set; }
     }
 }

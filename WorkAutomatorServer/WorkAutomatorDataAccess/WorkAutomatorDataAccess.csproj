@@ -92,7 +92,6 @@
     <Compile Include="Entities\DetectorEntity.cs" />
     <Compile Include="Entities\DetectorDataEntity.cs" />
     <Compile Include="Entities\DetectorDataPrefabEntity.cs" />
-    <Compile Include="Entities\DetectorFaultEntity.cs" />
     <Compile Include="Entities\DetectorFaultEventEntity.cs" />
     <Compile Include="Entities\DetectorFaultPrefabEntity.cs" />
     <Compile Include="Entities\DetectorInteractionEventEntity.cs" />
@@ -145,6 +144,10 @@
     <Compile Include="Migrations\202105301448005_non-located-pipeline-items-and-storage-cells-2.designer.cs">
       <DependentUpon>202105301448005_non-located-pipeline-items-and-storage-cells-2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202105301612490_detector_faults_fix.cs" />
+    <Compile Include="Migrations\202105301612490_detector_faults_fix.designer.cs">
+      <DependentUpon>202105301612490_detector_faults_fix.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Repos\AccountRepo.cs" />
     <Compile Include="RepoBase.cs" />
@@ -172,6 +175,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202105301448005_non-located-pipeline-items-and-storage-cells-2.resx">
       <DependentUpon>202105301448005_non-located-pipeline-items-and-storage-cells-2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202105301612490_detector_faults_fix.resx">
+      <DependentUpon>202105301612490_detector_faults_fix.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -57,10 +57,17 @@
     <Compile Include="CompanyPlanPointDto.cs" />
     <Compile Include="ManufactoryDto.cs" />
     <Compile Include="ManufactoryPlanPointDto.cs" />
+    <Compile Include="Pipeline\DetectorDto.cs" />
+    <Compile Include="Pipeline\DetectorFaultDto.cs" />
+    <Compile Include="Pipeline\DetectorSettingsValueDto.cs" />
     <Compile Include="Pipeline\PipelineDto.cs" />
+    <Compile Include="Pipeline\PipelineConnectionDto.cs" />
     <Compile Include="Pipeline\PipelineItemDto.cs" />
+    <Compile Include="Pipeline\PipelineItemPlacementDto.cs" />
     <Compile Include="Pipeline\PipelineItemSettingsValueDto.cs" />
+    <Compile Include="Pipeline\SetupDetectorDto.cs" />
     <Compile Include="Pipeline\StorageCellDto.cs" />
+    <Compile Include="Pipeline\StorageCellPlacementDto.cs" />
     <Compile Include="Prefabs\DetectorDataPrefabDto.cs" />
     <Compile Include="Prefabs\DetectorFaultPrefabDto.cs" />
     <Compile Include="Prefabs\DetectorPrefabDto.cs" />

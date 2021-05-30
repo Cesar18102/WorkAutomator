@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Constants;
@@ -37,6 +38,7 @@ namespace WorkAutomatorLogic.Services
         }
 
         [DbPermissionAspect(Action = InteractionDbType.READ, Table = DbTable.PipelineItem, CheckSameCompany = true)]
+        [DbPermissionAspect(Action = InteractionDbType.READ, Table = DbTable.PipelineItemSettingsPrefab, CheckSameCompany = true)]
         [DbPermissionAspect(Action = InteractionDbType.CREATE | InteractionDbType.UPDATE | InteractionDbType.DELETE, Table = DbTable.PipelineItemSettingsValue, CheckSameCompany = true)]
         public async Task<PipelineItemModel> SetupSettings(AuthorizedDto<PipelineItemDto> dto)
         {
@@ -58,14 +60,14 @@ namespace WorkAutomatorLogic.Services
                         else
                         {
                             bool isValidSettingsPrefabId = pipelineItemEntity.PipelineItemPrefab.PipelineItemSettingsPrefabs.Any(
-                                settingsPrefab => settingsPrefab.id == settingsValueDto.PipelineItemSettingsPrefabId.Value
+                                settingsPrefab => settingsPrefab.id == settingsValueDto.PrefabId.Value
                             );
 
                             if (!isValidSettingsPrefabId)
                                 throw new NotFoundException("PipelineItemSettingsPrefab");
 
                             PipelineItemSettingsValueEntity settingWithSameSettingPrefab = pipelineItemEntity.PipelineItemSettingsValues.FirstOrDefault(
-                                setting => setting.pipeline_item_settings_prefab_id == settingsValueDto.PipelineItemSettingsPrefabId.Value
+                                setting => setting.pipeline_item_settings_prefab_id == settingsValueDto.PrefabId.Value
                             );
 
                             if (settingWithSameSettingPrefab != null)
@@ -76,7 +78,7 @@ namespace WorkAutomatorLogic.Services
                                 {
                                     pipeline_item_id = pipelineItemEntity.id,
                                     option_data_value_base64 = settingsValueDto.ValueBase64,
-                                    pipeline_item_settings_prefab_id = settingsValueDto.PipelineItemSettingsPrefabId.Value
+                                    pipeline_item_settings_prefab_id = settingsValueDto.PrefabId.Value
                                 };
 
                                 pipelineItemEntity.PipelineItemSettingsValues.Add(settingsValueEntity);
@@ -86,6 +88,42 @@ namespace WorkAutomatorLogic.Services
 
                     await db.Save();
                     return pipelineItemEntity.ToModel<PipelineItemModel>();
+                }
+            });
+        }
+
+        [DbPermissionAspect(Action = InteractionDbType.READ | InteractionDbType.UPDATE, Table = DbTable.PipelineItem, CheckSameCompany = true)]
+        [DbPermissionAspect(Action = InteractionDbType.READ | InteractionDbType.UPDATE, Table = DbTable.Detector, CheckSameCompany = true)]
+        public async Task<PipelineItemModel> SetupDetector(AuthorizedDto<SetupDetectorDto> dto)
+        {
+            return await Execute(async () => {
+                using (UnitOfWork db = new UnitOfWork())
+                {
+                    DetectorEntity detector = await db.GetRepo<DetectorEntity>().FirstOrDefault(d => d.id == dto.Data.DetectorId.Value);
+                    detector.pipeline_item_id = dto.Data.PipelineItemId.Value;
+
+                    await db.Save();
+
+                    PipelineItemEntity pipelineItemEntity = await db.GetRepo<PipelineItemEntity>().FirstOrDefault(
+                        p => p.id == dto.Data.PipelineItemId.Value
+                    );
+
+                    return pipelineItemEntity.ToModel<PipelineItemModel>();
+                }
+            });
+        }
+
+        [DbPermissionAspect(Action = InteractionDbType.READ, Table = DbTable.PipelineItem, CheckSameCompany = true)]
+        public async Task<ICollection<PipelineItemModel>> Get(AuthorizedDto<CompanyDto> dto)
+        {
+            return await Execute(async () => {
+                using (UnitOfWork db = new UnitOfWork())
+                {
+                    IList<PipelineItemEntity> pipelineItems = await db.GetRepo<PipelineItemEntity>().Get(
+                        p => p.PipelineItemPrefab.company_id == dto.Data.CompanyId.Value
+                    );
+
+                    return ModelEntityMapper.Mapper.Map<IList<PipelineItemModel>>(pipelineItems);
                 }
             });
         }

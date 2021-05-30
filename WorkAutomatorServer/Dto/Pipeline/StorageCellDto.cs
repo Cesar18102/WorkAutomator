@@ -14,8 +14,7 @@ namespace Dto.Pipeline
         public int? StorageCellId => Id;
 
         [ObjectId(DbTable.StorageCellPrefab)]
-        [Required(AllowEmptyStrings = false)]
-        [JsonProperty("storage_cell_prefab_id")]
-        public int? StorageCellPrefabId { get; set; }
+        [JsonProperty("prefab_id")]
+        public int? PrefabId { get; set; }
     }
 }

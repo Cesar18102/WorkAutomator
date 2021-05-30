@@ -172,6 +172,7 @@
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\CompanyController.cs" />
     <Compile Include="Controllers\ControllerBase.cs" />
+    <Compile Include="Controllers\DetectorController.cs" />
     <Compile Include="Controllers\KeyController.cs" />
     <Compile Include="Controllers\ManufactoryController.cs" />
     <Compile Include="Controllers\PipelineController.cs" />

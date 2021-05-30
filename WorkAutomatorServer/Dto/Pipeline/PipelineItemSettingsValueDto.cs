@@ -12,8 +12,8 @@ namespace Dto.Pipeline
         public int? PipelineItemSettingValueId => Id;
 
         [ObjectId(DbTable.PipelineItemSettingsPrefab)]
-        [JsonProperty("pipeline_item_settings_prefab_id")]
-        public int? PipelineItemSettingsPrefabId { get; set; }
+        [JsonProperty("prefab_id")]
+        public int? PrefabId { get; set; }
 
         [JsonProperty("value_base64")]
         public string ValueBase64 { get; set; }

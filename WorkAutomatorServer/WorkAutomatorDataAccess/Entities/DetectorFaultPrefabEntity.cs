@@ -12,7 +12,8 @@ namespace WorkAutomatorDataAccess.Entities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public DetectorFaultPrefabEntity()
         {
-            detector_fault = new HashSet<DetectorFaultEntity>();
+            Detectors = new HashSet<DetectorEntity>();
+            DetectorsFaultEvents = new HashSet<DetectorFaultEventEntity>();
         }
 
         
@@ -25,10 +26,13 @@ namespace WorkAutomatorDataAccess.Entities
         [Column(TypeName = "text")]
         public string fault_condition { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DetectorFaultEntity> detector_fault { get; set; }
-
         public virtual DetectorPrefabEntity detector_prefab { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<DetectorEntity> Detectors { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<DetectorFaultEventEntity> DetectorsFaultEvents { get; set; }
 
         public override bool IsOwnedByCompany(int companyId)
         {

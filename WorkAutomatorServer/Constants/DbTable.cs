@@ -24,7 +24,6 @@
         DetectorSettingsPrefab,
         DetectorPrefab,
         DetectorFaultPrefab,
-        DetectorFault,
         DetectorFaultEvent,
         DetectorSettingsValue,
         PipelineItemSettingsPrefab,

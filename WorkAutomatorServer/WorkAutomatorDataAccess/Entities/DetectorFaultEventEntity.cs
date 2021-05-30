@@ -9,19 +9,20 @@ namespace WorkAutomatorDataAccess.Entities
     [Table("detector_fault_event")]
     public partial class DetectorFaultEventEntity : IdEntity
     {
-        
-        public int detector_fault_id { get; set; }
+        public int detector_id { get; set; }
+        public int detector_fault_prefab_id { get; set; }
 
         public DateTime timespan { get; set; }
 
         [Column(TypeName = "text")]
         public string log { get; set; }
 
-        public virtual DetectorFaultEntity detector_fault { get; set; }
+        public virtual DetectorEntity detector { get; set; }
+        public virtual DetectorFaultPrefabEntity detector_fault_prefab { get; set; }
 
         public override bool IsOwnedByCompany(int companyId)
         {
-            return detector_fault.IsOwnedByCompany(companyId);
+            return detector.IsOwnedByCompany(companyId);
         }
     }
 }
