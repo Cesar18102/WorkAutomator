@@ -106,12 +106,10 @@
     <Compile Include="Entities\ManufactoryPlanPointEntity.cs" />
     <Compile Include="Entities\PipelineEntity.cs" />
     <Compile Include="Entities\PipelineItemEntity.cs" />
-    <Compile Include="Entities\PipelineItemConnectionEntity.cs" />
     <Compile Include="Entities\PipelineItemInteractionEventEntity.cs" />
     <Compile Include="Entities\PipelineItemPrefabEntity.cs" />
     <Compile Include="Entities\PipelineItemSettingsPrefabEntity.cs" />
     <Compile Include="Entities\PipelineItemSettingsValueEntity.cs" />
-    <Compile Include="Entities\PipelineItemStorageConnectionEntity.cs" />
     <Compile Include="Entities\ResourceEntity.cs" />
     <Compile Include="Entities\ResourceStorageCellEntity.cs" />
     <Compile Include="Entities\RoleEntity.cs" />
@@ -148,6 +146,14 @@
     <Compile Include="Migrations\202105301612490_detector_faults_fix.designer.cs">
       <DependentUpon>202105301612490_detector_faults_fix.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202105310124168_pipeline-connections.cs" />
+    <Compile Include="Migrations\202105310124168_pipeline-connections.designer.cs">
+      <DependentUpon>202105310124168_pipeline-connections.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202106012005121_storage-cells-pipeline.cs" />
+    <Compile Include="Migrations\202106012005121_storage-cells-pipeline.designer.cs">
+      <DependentUpon>202106012005121_storage-cells-pipeline.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Repos\AccountRepo.cs" />
     <Compile Include="RepoBase.cs" />
@@ -178,6 +184,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202105301612490_detector_faults_fix.resx">
       <DependentUpon>202105301612490_detector_faults_fix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202105310124168_pipeline-connections.resx">
+      <DependentUpon>202105310124168_pipeline-connections.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202106012005121_storage-cells-pipeline.resx">
+      <DependentUpon>202106012005121_storage-cells-pipeline.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

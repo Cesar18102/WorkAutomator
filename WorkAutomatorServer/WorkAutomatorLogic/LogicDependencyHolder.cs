@@ -41,6 +41,7 @@ namespace WorkAutomatorLogic
             builder.RegisterType<StorageCellService>().As<IStorageCellService>().SingleInstance();
             builder.RegisterType<DetectorService>().As<IDetectorService>().SingleInstance();
             builder.RegisterType<PipelineService>().As<IPipelineService>().SingleInstance();
+            builder.RegisterType<IntersectionService>().AsSelf().SingleInstance();
 
             return builder.Build();
         }

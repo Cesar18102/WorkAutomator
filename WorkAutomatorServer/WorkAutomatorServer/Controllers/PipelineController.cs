@@ -23,7 +23,8 @@ namespace WorkAutomatorServer.Controllers
         [AuthorizedAspect]
         [RequiredMaskAspect(
             "dto.Data.CompanyId", "dto.Data.Connections.InputPipelineItems.Id", "dto.Data.Connections.OutputPipelineItems.Id",
-            "dto.Data.Connections.InputStorageCells.Id", "dto.Data.Connections.OutputStorageCells.Id"
+            "dto.Data.Connections.InputStorageCells.Id", "dto.Data.Connections.OutputStorageCells.Id",
+            "dto.Data.PipelineItemPlacements.Id", "dto.Data.StorageCellPlacements.Id"
         )]
         public async Task<HttpResponseMessage> Create([FromBody] AuthorizedDto<PipelineDto> dto)
         {
@@ -35,11 +36,12 @@ namespace WorkAutomatorServer.Controllers
         [AuthorizedAspect]
         [RequiredMaskAspect(
             "dto.Data.Id", "dto.Data.Connections.InputPipelineItems.Id", "dto.Data.Connections.OutputPipelineItems.Id",
-            "dto.Data.Connections.InputStorageCells.Id", "dto.Data.Connections.OutputStorageCells.Id"
+            "dto.Data.Connections.InputStorageCells.Id", "dto.Data.Connections.OutputStorageCells.Id",
+            "dto.Data.PipelineItemPlacements.Id", "dto.Data.StorageCellPlacements.Id"
         )]
         public async Task<HttpResponseMessage> Update([FromBody] AuthorizedDto<PipelineDto> dto)
         {
-            return await Execute(pipeline => PipelineService.Create(pipeline), dto);
+            return await Execute(pipeline => PipelineService.Update(pipeline), dto);
         }
     }
 }

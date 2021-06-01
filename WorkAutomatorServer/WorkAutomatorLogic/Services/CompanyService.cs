@@ -256,6 +256,14 @@ namespace WorkAutomatorLogic.Services
                         "fake_company_plan_point_id's for one manufactory must be unique"
                     );
                 }
+
+                if (manufactory.ManufactoryPlanPoints.Length < 3)
+                {
+                    dataValidationException.Add(
+                        typeof(ManufactoryDto), nameof(ManufactoryDto.ManufactoryPlanPoints),
+                        "at least 3 company_plan_poin_id's must be specified for a manufactory"
+                    );
+                }
             }
 
             int[] realCheckPointCompanyPlanPointIds = plan.Data.CheckPoints

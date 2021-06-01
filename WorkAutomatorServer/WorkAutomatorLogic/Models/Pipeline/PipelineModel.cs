@@ -6,7 +6,10 @@ namespace WorkAutomatorLogic.Models.Pipeline
 {
     public class PipelineModel : IdModel
     {
-        [JsonProperty("pipeline_items")]
-        public ICollection<PipelineItemModel> PipelineItems { get; set; }
+        [JsonProperty("company_id")]
+        public int CompanyId { get; set; }
+
+        [JsonProperty("connections")]
+        public ICollection<PipelineItemConnectionModel> Connections { get; set; }
     }
 }

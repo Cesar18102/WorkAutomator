@@ -13,6 +13,7 @@ namespace WorkAutomatorDataAccess.Entities
         public PipelineEntity()
         {
             PipelineItems = new HashSet<PipelineItemEntity>();
+            StorageCells = new HashSet<StorageCellEntity>();
         }
 
         
@@ -22,6 +23,9 @@ namespace WorkAutomatorDataAccess.Entities
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PipelineItemEntity> PipelineItems { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<StorageCellEntity> StorageCells { get; set; }
 
         public override bool IsOwnedByCompany(int companyId)
         {

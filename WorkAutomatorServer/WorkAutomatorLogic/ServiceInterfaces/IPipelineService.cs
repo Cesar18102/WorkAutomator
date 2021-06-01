@@ -3,11 +3,13 @@
 using Dto;
 using Dto.Pipeline;
 
+using WorkAutomatorLogic.Models.Pipeline;
+
 namespace WorkAutomatorLogic.ServiceInterfaces
 {
     public interface IPipelineService
     {
-        Task Create(AuthorizedDto<PipelineDto> dto);
-        Task Update(AuthorizedDto<PipelineDto> dto);
+        Task<PipelineModel> Create(AuthorizedDto<PipelineDto> dto);
+        Task<PipelineModel> Update(AuthorizedDto<PipelineDto> dto);
     }
 }

@@ -89,6 +89,7 @@
     <Compile Include="Aspects\DbPermissionAspect.cs" />
     <Compile Include="Aspects\PermissionAspect.cs" />
     <Compile Include="Exceptions\InvalidPointsException.cs" />
+    <Compile Include="Exceptions\PlacementException.cs" />
     <Compile Include="Exceptions\PointsBusyException.cs" />
     <Compile Include="ModelDtoMapper.cs" />
     <Compile Include="Exceptions\AlreadyHiredException.cs" />
@@ -126,6 +127,7 @@
     <Compile Include="Models\CompanyPlanPointModel.cs" />
     <Compile Include="Models\Pipeline\DetectorModel.cs" />
     <Compile Include="Models\Pipeline\DetectorSettingsValueModel.cs" />
+    <Compile Include="Models\Pipeline\PipelineItemConnectionModel.cs" />
     <Compile Include="Models\Pipeline\PipelineItemModel.cs" />
     <Compile Include="Models\Pipeline\PipelineItemSettingsValueModel.cs" />
     <Compile Include="Models\Pipeline\PipelineModel.cs" />
@@ -164,6 +166,7 @@
     <Compile Include="Services\CompanyService.cs" />
     <Compile Include="Services\DetectorService.cs" />
     <Compile Include="Services\InitService.cs" />
+    <Compile Include="Services\IntersectionService.cs" />
     <Compile Include="Services\KeyService.cs" />
     <Compile Include="Services\ManufactoryService.cs" />
     <Compile Include="Services\PermissionService.cs" />

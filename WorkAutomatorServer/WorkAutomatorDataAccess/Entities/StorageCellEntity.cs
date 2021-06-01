@@ -12,13 +12,15 @@ namespace WorkAutomatorDataAccess.Entities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public StorageCellEntity()
         {
-            pipeline_item_storage_connection = new HashSet<PipelineItemStorageConnectionEntity>();
+            InputPipelineItems = new HashSet<PipelineItemEntity>();
+            OutputPipelineItems = new HashSet<PipelineItemEntity>();
             ResourcesAtStorageCell = new HashSet<ResourceStorageCellEntity>();
             PermissionsGranted = new HashSet<RoleEntity>();
             storage_cell_event = new HashSet<StorageCellEventEntity>();
         }
 
-        
+        public int? pipeline_id { get; set; }
+
         public int? manufactory_id { get; set; }
 
         public int storage_cell_prefab_id { get; set; }
@@ -27,10 +29,14 @@ namespace WorkAutomatorDataAccess.Entities
 
         public double? y { get; set; }
 
+        public virtual PipelineEntity pipeline { get; set; }
         public virtual ManufactoryEntity Manufactory { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PipelineItemStorageConnectionEntity> pipeline_item_storage_connection { get; set; }
+        public virtual ICollection<PipelineItemEntity> InputPipelineItems { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PipelineItemEntity> OutputPipelineItems { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ResourceStorageCellEntity> ResourcesAtStorageCell { get; set; }

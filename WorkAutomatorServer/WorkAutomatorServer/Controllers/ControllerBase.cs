@@ -1,22 +1,13 @@
 ﻿using System;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
-
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 using System.Net;
 using System.Net.Http;
 
 using System.Web.Http;
-using System.Web.Http.Controllers;
 using System.Web.Http.ModelBinding;
-
-using Newtonsoft.Json.Linq;
-
-using Attributes;
-using Dto;
 
 using WorkAutomatorLogic.Exceptions;
 
@@ -48,7 +39,8 @@ namespace WorkAutomatorServer.Controllers
             { typeof(NotHiredException), HttpStatusCode.NotFound },
 
             { typeof(PointsBusyException), HttpStatusCode.Conflict },
-            { typeof(InvalidPointsException), HttpStatusCode.BadRequest }
+            { typeof(InvalidPointsException), HttpStatusCode.BadRequest },
+            { typeof(PlacementException), HttpStatusCode.BadRequest }
 
 
             //{ typeof(NotFoundException), HttpStatusCode.NotFound },

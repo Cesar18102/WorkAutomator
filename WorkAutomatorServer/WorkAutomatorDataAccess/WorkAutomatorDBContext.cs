@@ -53,12 +53,10 @@ namespace WorkAutomatorDataAccess
         public virtual DbSet<ManufactoryPlanPointEntity> ManufactoryPlanPoint { get; set; }
         public virtual DbSet<PipelineEntity> Pipeline { get; set; }
         public virtual DbSet<PipelineItemEntity> PipelineItem { get; set; }
-        public virtual DbSet<PipelineItemConnectionEntity> PipelineItemConnection { get; set; }
         public virtual DbSet<PipelineItemInteractionEventEntity> PipelineItemInteractionEvent { get; set; }
         public virtual DbSet<PipelineItemPrefabEntity> PipelineItemPrefab { get; set; }
         public virtual DbSet<PipelineItemSettingsPrefabEntity> PipelineItemSettingsPrefab { get; set; }
         public virtual DbSet<PipelineItemSettingsValueEntity> PipelineItemSettingsValue { get; set; }
-        public virtual DbSet<PipelineItemStorageConnectionEntity> PipelineItemStorageConnection { get; set; }
         public virtual DbSet<ResourceEntity> Resource { get; set; }
         public virtual DbSet<ResourceStorageCellEntity> ResourceStorageCell { get; set; }
         public virtual DbSet<RoleEntity> Role { get; set; }
@@ -239,9 +237,6 @@ namespace WorkAutomatorDataAccess
             modelBuilder.Entity<PipelineEntity>()
                 .ToTable("pipeline");
 
-            modelBuilder.Entity<PipelineItemConnectionEntity>()
-                .ToTable("pipeline_item_connection");
-
             modelBuilder.Entity<PipelineItemEntity>()
                 .ToTable("pipeline_item");
 
@@ -256,9 +251,6 @@ namespace WorkAutomatorDataAccess
 
             modelBuilder.Entity<PipelineItemSettingsValueEntity>()
                 .ToTable("pipeline_item_settings_value");
-
-            modelBuilder.Entity<PipelineItemStorageConnectionEntity>()
-                .ToTable("pipeline_item_storage_connection");
 
             modelBuilder.Entity<ResourceEntity>()
                 .ToTable("resource");
@@ -723,6 +715,12 @@ namespace WorkAutomatorDataAccess
                 .HasForeignKey(e => e.pipeline_id)
                 .WillCascadeOnDelete(false);
 
+            modelBuilder.Entity<PipelineEntity>()
+                .HasMany(e => e.StorageCells)
+                .WithOptional(e => e.pipeline)
+                .HasForeignKey(e => e.pipeline_id)
+                .WillCascadeOnDelete(false);
+
             modelBuilder.Entity<PipelineItemEntity>()
                 .HasMany(e => e.Detectors)
                 .WithOptional(e => e.PipelineItem)
@@ -742,22 +740,34 @@ namespace WorkAutomatorDataAccess
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<PipelineItemEntity>()
-                .HasMany(e => e.InputPipelineItemConnections)
-                .WithRequired(e => e.SourcePipelineItem)
-                .HasForeignKey(e => e.pipeline_item1_id)
-                .WillCascadeOnDelete(false);
+                .HasMany(e => e.InputPipelineItems)
+                .WithMany(e => e.OutputPipelineItems)
+                .Map(cnf =>
+                {
+                    cnf.MapLeftKey("output_pipeline_item_id");
+                    cnf.MapRightKey("input_pipeline_item_id");
+                    cnf.ToTable("pipeline_item_pipeline_item_connection");
+                });
 
             modelBuilder.Entity<PipelineItemEntity>()
-                .HasMany(e => e.OutputPipelineItemConnections)
-                .WithRequired(e => e.TargetPipelineItem)
-                .HasForeignKey(e => e.pipeline_item2_id)
-                .WillCascadeOnDelete(false);
+                .HasMany(e => e.InputStorageCells)
+                .WithMany(e => e.OutputPipelineItems)
+                .Map(cnf =>
+                {
+                    cnf.MapLeftKey("output_pipeline_item_id");
+                    cnf.MapRightKey("input_storage_cell_id");
+                    cnf.ToTable("input_storage_cell_connection");
+                });
 
             modelBuilder.Entity<PipelineItemEntity>()
-                .HasMany(e => e.PipelineItemStorageConnections)
-                .WithRequired(e => e.pipeline_item)
-                .HasForeignKey(e => e.pipeline_item_id)
-                .WillCascadeOnDelete(false);
+                .HasMany(e => e.OutputStorageCells)
+                .WithMany(e => e.InputPipelineItems)
+                .Map(cnf =>
+                {
+                    cnf.MapLeftKey("input_pipeline_item_id");
+                    cnf.MapRightKey("output_storage_cell_id");
+                    cnf.ToTable("output_storage_cell_connection");
+                });
 
             modelBuilder.Entity<PipelineItemEntity>()
                 .HasMany(e => e.PermissionsGranted)
@@ -836,12 +846,6 @@ namespace WorkAutomatorDataAccess
             modelBuilder.Entity<RoleEntity>()
                 .Property(e => e.name)
                 .IsUnicode(false);
-
-            modelBuilder.Entity<StorageCellEntity>()
-                .HasMany(e => e.pipeline_item_storage_connection)
-                .WithRequired(e => e.StorageCell)
-                .HasForeignKey(e => e.storage_cell_id)
-                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<StorageCellEntity>()
                 .HasMany(e => e.ResourcesAtStorageCell)
