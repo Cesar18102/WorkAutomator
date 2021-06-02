@@ -11,7 +11,7 @@ namespace WorkAutomatorLogic.Models
         public ICollection<RoleModel> Roles { get; set; }
         public ICollection<AccountModel> Subs { get; set; }
         public ICollection<AccountModel> Bosses { get; set; }
-        /*public ICollection<TaskEntity> AssignedTasks { get; set; }
-        public ICollection<TaskEntity> TasksToReview { get; set; }*/
+        public ICollection<TaskModel> AssignedTasks { get; set; }
+        public ICollection<TaskModel> TasksToReview { get; set; }
     }
 }

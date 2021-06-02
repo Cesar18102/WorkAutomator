@@ -7,8 +7,11 @@ namespace WorkAutomatorDataAccess.Entities
     using System.Data.Entity.Spatial;
 
     [Table("detector_fault_event")]
-    public partial class DetectorFaultEventEntity : IdEntity
+    public partial class DetectorFaultEventEntity : EntityBase
     {
+        [Key]
+        public int associated_task_id { get; set; }
+
         public int detector_id { get; set; }
         public int detector_fault_prefab_id { get; set; }
 
@@ -19,6 +22,7 @@ namespace WorkAutomatorDataAccess.Entities
 
         public bool is_fixed { get; set; }
 
+        public TaskEntity AssociatedTask { get; set; }
         public virtual DetectorEntity detector { get; set; }
         public virtual DetectorFaultPrefabEntity detector_fault_prefab { get; set; }
 

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Linq;
 using System.Collections.Generic;
 
 using AutoMapper;
@@ -10,8 +10,9 @@ using WorkAutomatorDataAccess.Entities;
 using WorkAutomatorLogic.Models;
 using WorkAutomatorLogic.Models.Prefabs;
 using WorkAutomatorLogic.Models.Pipeline;
-using System.Linq;
 using WorkAutomatorLogic.Models.DetectorData;
+using WorkAutomatorLogic.Models.Roles;
+using WorkAutomatorLogic.Models.Permission;
 
 namespace WorkAutomatorLogic
 {
@@ -40,12 +41,31 @@ namespace WorkAutomatorLogic
 
         private static void Configure(IMapperConfigurationExpression config)
         {
+            config.CreateMap<PermissionDbModel, DbPermissionEntity>()
+                  .ForMember(entity => entity.DbPermissionType, cnf => cnf.Ignore())
+                  .ForMember(entity => entity.table_name, cnf => cnf.Ignore())
+                  .ReverseMap()
+                  .ForMember(model => model.InteractionDbType, cnf => cnf.ConvertUsing(new DbInteractionTypeToEnumConverter(), entity => entity.DbPermissionType.name))
+                  .ForMember(model => model.DbTable, cnf => cnf.ConvertUsing(new TableNameToEnumConverter(), entity => entity.table_name));
+
+            config.CreateMap<RoleModel, RoleEntity>()
+                  .ForMember(entity => entity.company_id, cnf => cnf.MapFrom(model => model.CompanyId))
+                  .ForMember(entity => entity.is_default, cnf => cnf.MapFrom(model => model.IsDefault))
+                  .ReverseMap()
+                  .ForMember(model => model.CompanyId, cnf => cnf.MapFrom(entity => entity.company_id))
+                  .ForMember(model => model.IsDefault, cnf => cnf.MapFrom(entity => entity.is_default));
+
             config.CreateMap<AccountModel, AccountEntity>()
                   .ForMember(entity => entity.first_name, cnf => cnf.MapFrom(model => model.FirstName))
                   .ForMember(entity => entity.last_name, cnf => cnf.MapFrom(model => model.LastName))
                   .ReverseMap()
                   .ForMember(model => model.FirstName, cnf => cnf.MapFrom(entity => entity.first_name))
                   .ForMember(model => model.LastName, cnf => cnf.MapFrom(entity => entity.last_name));
+
+            config.CreateMap<WorkerModel, AccountEntity>()
+                  .ForMember(entity => entity.company_id, cnf => cnf.MapFrom(model => model.CompanyId))
+                  .ReverseMap()
+                  .ForMember(model => model.CompanyId, cnf => cnf.MapFrom(entity => entity.company_id));
 
             config.CreateMap<CompanyPlanPointModel, CompanyPlanUniquePointEntity>().ReverseMap();
 
@@ -200,6 +220,15 @@ namespace WorkAutomatorLogic
                   .ReverseMap()
                   .ForMember(model => model.DataPrefab, cnf => cnf.MapFrom(entity => entity.detector_data_prefab))
                   .ForMember(model => model.DataBase64, cnf => cnf.MapFrom(entity => entity.field_data_value_base64));
+
+            config.CreateMap<TaskModel, TaskEntity>()
+                  .ForMember(entity => entity.company_id, cnf => cnf.MapFrom(model => model.CompanyId))
+                  .ForMember(entity => entity.is_done, cnf => cnf.MapFrom(model => model.IsDone))
+                  .ForMember(entity => entity.is_reviewed, cnf => cnf.MapFrom(model => model.IsReviewed))
+                  .ReverseMap()
+                  .ForMember(model => model.CompanyId, cnf => cnf.MapFrom(entity => entity.company_id))
+                  .ForMember(model => model.IsDone, cnf => cnf.MapFrom(entity => entity.is_done))
+                  .ForMember(model => model.IsReviewed, cnf => cnf.MapFrom(entity => entity.is_reviewed));
         }
 
         public static IReadOnlyDictionary<DbTable, string> TABLE_NAME_DICTIONARY = new Dictionary<DbTable, string>()
@@ -309,6 +338,22 @@ namespace WorkAutomatorLogic
         public static string ToName(this VisualizerType visualizerType)
         {
             return VISUALIZER_TYPES[visualizerType];
+        }
+
+        private class DbInteractionTypeToEnumConverter : IValueConverter<string, InteractionDbType>
+        {
+            public InteractionDbType Convert(string sourceMember, ResolutionContext context)
+            {
+                return INTERACTION_DB_TYPES.First(i => i.Value == sourceMember).Key;
+            }
+        }
+
+        private class TableNameToEnumConverter : IValueConverter<string, DbTable>
+        {
+            public DbTable Convert(string sourceMember, ResolutionContext context)
+            {
+                return TABLE_NAME_DICTIONARY.First(i => i.Value == sourceMember).Key;
+            }
         }
     }
 }

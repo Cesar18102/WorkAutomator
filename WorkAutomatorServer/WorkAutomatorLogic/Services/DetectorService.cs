@@ -64,6 +64,8 @@ namespace WorkAutomatorLogic.Services
 
                     DetectorEntity detectorEntity = await detectorRepo.FirstOrDefault(pi => pi.id == dto.Data.Id.Value);
 
+                    //CREATE EVENT
+
                     foreach (DetectorSettingsValueDto settingsValueDto in dto.Data.SettingsValues)
                     {
                         if (settingsValueDto.Id.HasValue)
@@ -188,6 +190,11 @@ namespace WorkAutomatorLogic.Services
 
                         if (isFaultOccured)
                         {
+                            TaskEntity associatedTask = new TaskEntity()
+                            {
+                                //TODO
+                            };
+
                             DetectorFaultEventEntity faultEvent = new DetectorFaultEventEntity()
                             {
                                 detector_id = detector.id,
@@ -195,6 +202,8 @@ namespace WorkAutomatorLogic.Services
                                 timespan = DateTime.Now,
                                 is_fixed = false
                             };
+
+                            //CREATE TASK
 
                             await detectorFaultEventRepo.Create(faultEvent);
                         }

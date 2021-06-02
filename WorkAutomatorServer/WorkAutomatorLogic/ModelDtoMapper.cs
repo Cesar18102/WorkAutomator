@@ -3,6 +3,7 @@
 using Dto;
 using Dto.Prefabs;
 using Dto.Pipeline;
+using Dto.Tasks;
 
 using WorkAutomatorLogic.Models;
 using WorkAutomatorLogic.Models.Prefabs;
@@ -81,6 +82,8 @@ namespace WorkAutomatorLogic
 
             config.CreateMap<DetectorDto, DetectorModel>()
                   .ForPath(model => model.Prefab.Id, cnf => cnf.MapFrom(dto => dto.PrefabId));
+
+            config.CreateMap<TaskDto, TaskModel>();
         }
     }
 }

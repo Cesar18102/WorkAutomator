@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using Dto;
 
@@ -9,6 +10,7 @@ namespace WorkAutomatorLogic.ServiceInterfaces
     public interface ICompanyService
     {
         Task<CompanyModel> GetCompany(AuthorizedDto<CompanyIdDto> model);
+        Task<ICollection<WorkerModel>> GetWorkers(AuthorizedDto<CompanyIdDto> model);
 
         Task<CompanyModel> CreateCompany(AuthorizedDto<CompanyDto> model);
         Task<CompanyModel> UpdateCompany(AuthorizedDto<CompanyDto> model);

@@ -87,67 +87,6 @@ namespace WorkAutomatorDataAccess
                     entry.Entity, new ValidationContext(entry.Entity), 
                     errors, true
                 );
-
-                /*Type entityType = entry.Entity.GetType();
-
-                PropertyInfo[] indexes = entityType.GetProperties().Where(
-                    p =>
-                    {
-                        IndexAttribute index = p.GetCustomAttribute<IndexAttribute>();
-                        return index != null && index.IsUnique;
-                    }
-                ).ToArray();
-
-                if (indexes.Length == 0)
-                    continue;
-
-                ParameterExpression parameter = Expression.Parameter(entityType);
-
-                Expression body = Expression.Equal(
-                    Expression.Property(parameter, indexes.First()),
-                    Expression.Constant(indexes.First().GetValue(entry.Entity))
-                );
-
-                foreach(PropertyInfo index in indexes.Skip(1))
-                {
-                    body = Expression.Or(
-                        body, 
-                        Expression.Equal(
-                            Expression.Property(parameter, index),
-                            Expression.Constant(index.GetValue(entry.Entity))
-                        )
-                    );
-                }
-
-                LambdaExpression expression = Expression.Lambda(body, parameter);
-
-                Type repoType = typeof(IRepo<>).MakeGenericType(entityType);
-
-                RepoDependencyHolder.ContextType repoKey = this is WorkAutomatorDBContextTest ?
-                    RepoDependencyHolder.ContextType.TEST : RepoDependencyHolder.ContextType.REAL;
-
-                var repo = RepoDependencyHolder.Dependencies.ResolveKeyed(repoKey, repoType);
-
-                MethodInfo firstOrDefaultMethod = repoType.GetMethods().First(
-                    method => method.Name == "FirstOrDefault"
-                );
-
-                object task = firstOrDefaultMethod.Invoke(repo, new object[] { expression });
-
-                object awaiter = typeof(Task<>)
-                    .MakeGenericType(entityType)
-                    .GetMethod(nameof(Task<object>.GetAwaiter))
-                    .Invoke(task, new object[] { });
-
-                object result = typeof(TaskAwaiter<>)
-                    .MakeGenericType(entityType)
-                    .GetMethod(nameof(TaskAwaiter<object>.GetResult))
-                    .Invoke(awaiter, new object[] { });
-
-                if (result == null)
-                    continue;
-
-                errors.Add(new ValidationResult("Unique attribute value duplication"));*/
             }
 
             if (errors.Count != 0)
@@ -356,6 +295,12 @@ namespace WorkAutomatorDataAccess
                 .HasMany(e => e.TasksToReview)
                 .WithOptional(e => e.Reviewer)
                 .HasForeignKey(e => e.reviewer_account_id)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<AccountEntity>()
+                .HasMany(e => e.CreatedTasks)
+                .WithOptional(e => e.Creator)
+                .HasForeignKey(e => e.creator_account_id)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<CheckPointEntity>()
@@ -890,6 +835,12 @@ namespace WorkAutomatorDataAccess
             modelBuilder.Entity<TaskEntity>()
                 .Property(e => e.description)
                 .IsUnicode(false);
+
+            modelBuilder.Entity<DetectorFaultEventEntity>()
+                .HasKey(e => e.associated_task_id)
+                .HasRequired(e => e.AssociatedTask)
+                .WithOptional(e => e.AssociatedFault)
+                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<UnitEntity>()
                 .Property(e => e.name)

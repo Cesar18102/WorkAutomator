@@ -2,8 +2,9 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
-using Dto;
+using Autofac;
 
+using Dto;
 using Constants;
 
 using WorkAutomatorLogic.Models;
@@ -61,6 +62,7 @@ namespace WorkAutomatorLogic.Services
             });
         }
 
+        [DbPermissionAspect(Action = InteractionDbType.READ, Table = DbTable.Account)]
         [DbPermissionAspect(Action = InteractionDbType.UPDATE, Table = DbTable.Company, CheckSameCompany = true)]
         public async Task<CompanyModel> HireMember(AuthorizedDto<FireHireDto> model)
         {
@@ -68,6 +70,7 @@ namespace WorkAutomatorLogic.Services
                 using (UnitOfWork db = new UnitOfWork())
                 {
                     AccountEntity account = await db.GetRepo<AccountEntity>().Get(model.Data.AccountId.Value);
+                    CompanyEntity company = await db.GetRepo<CompanyEntity>().Get(model.Data.CompanyId.Value);
 
                     if (account == null)
                         throw new NotFoundException("Account");
@@ -82,6 +85,8 @@ namespace WorkAutomatorLogic.Services
                     account.Roles.Remove(defaultRoles.FirstOrDefault(role => role.name == DefaultRoles.AUTHORIZED.ToName()));
                     account.Roles.Add(defaultRoles.FirstOrDefault(role => role.name == DefaultRoles.HIRED.ToName()));
 
+                    account.Bosses.Add(company.Owner);
+
                     await db.Save();
 
                     return await GetCompany(account.company_id.Value);
@@ -89,6 +94,7 @@ namespace WorkAutomatorLogic.Services
             });
         }
 
+        [DbPermissionAspect(Action = InteractionDbType.READ, Table = DbTable.Account)]
         [DbPermissionAspect(Action = InteractionDbType.UPDATE, Table = DbTable.Company, CheckSameCompany = true)]
         public async Task<CompanyModel> FireMember(AuthorizedDto<FireHireDto> model)
         {
@@ -108,13 +114,21 @@ namespace WorkAutomatorLogic.Services
 
                     account.company_id = null;
                     account.Roles.Clear();
+                    account.Bosses.Clear();
+                    account.Subs.Clear();
+
+                    foreach (TaskEntity task in account.AssignedTasks)
+                        task.assignee_account_id = null;
+
+                    foreach (TaskEntity task in account.TasksToReview)
+                        task.reviewer_account_id = null;
 
                     IList<RoleEntity> defaultRoles = await db.GetRepo<RoleEntity>().Get(role => role.is_default);
                     account.Roles.Add(defaultRoles.FirstOrDefault(role => role.name == DefaultRoles.AUTHORIZED.ToName()));
 
                     await db.Save();
 
-                    return await GetCompany(account.company_id.Value);
+                    return await GetCompany(model.Data.CompanyId.Value);
                 }
             });
         }
@@ -627,6 +641,18 @@ namespace WorkAutomatorLogic.Services
                     await db.Save();
 
                     return await GetCompany(company.owner_id);
+                }
+            });
+        }
+
+        [DbPermissionAspect(Action = InteractionDbType.READ, Table = DbTable.Company, CheckSameCompany = true)]
+        public async Task<ICollection<WorkerModel>> GetWorkers(AuthorizedDto<CompanyIdDto> model)
+        {
+            return await Execute(async () => {
+                using (UnitOfWork db = new UnitOfWork())
+                {
+                    CompanyEntity company = await db.GetRepo<CompanyEntity>().Get(model.Data.CompanyId.Value);
+                    return ModelEntityMapper.Mapper.Map<ICollection<WorkerModel>>(company.Members);
                 }
             });
         }

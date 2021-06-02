@@ -53,6 +53,8 @@ namespace WorkAutomatorLogic.Services
 
                     PipelineItemEntity pipelineItemEntity = await pipelineItemRepo.FirstOrDefault(pi => pi.id == dto.Data.Id.Value);
 
+                    //CREATE EVENT
+
                     foreach (PipelineItemSettingsValueDto settingsValueDto in dto.Data.SettingsValues)
                     {
                         if (settingsValueDto.Id.HasValue)

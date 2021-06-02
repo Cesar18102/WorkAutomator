@@ -126,6 +126,14 @@
     <Compile Include="Migrations\202106012333455_reinit.designer.cs">
       <DependentUpon>202106012333455_reinit.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202106021058138_fault-associated-task.cs" />
+    <Compile Include="Migrations\202106021058138_fault-associated-task.designer.cs">
+      <DependentUpon>202106021058138_fault-associated-task.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202106021129417_is-reviewed-task.cs" />
+    <Compile Include="Migrations\202106021129417_is-reviewed-task.designer.cs">
+      <DependentUpon>202106021129417_is-reviewed-task.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Repos\AccountRepo.cs" />
     <Compile Include="RepoBase.cs" />
@@ -141,6 +149,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202106012333455_reinit.resx">
       <DependentUpon>202106012333455_reinit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202106021058138_fault-associated-task.resx">
+      <DependentUpon>202106021058138_fault-associated-task.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202106021129417_is-reviewed-task.resx">
+      <DependentUpon>202106021129417_is-reviewed-task.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

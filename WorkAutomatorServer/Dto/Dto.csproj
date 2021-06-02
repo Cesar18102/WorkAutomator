@@ -45,6 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountDto.cs" />
+    <Compile Include="RoleDto.cs" />
+    <Compile Include="Tasks\AssignTaskDto.cs" />
     <Compile Include="AuthorizedDto.cs" />
     <Compile Include="CheckPointDto.cs" />
     <Compile Include="CompanyDto.cs" />
@@ -82,8 +85,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PublicKeyDto.cs" />
     <Compile Include="SessionDto.cs" />
+    <Compile Include="SetRemoveBossDto.cs" />
     <Compile Include="SetupPlanDto.cs" />
     <Compile Include="SignUpDto.cs" />
+    <Compile Include="Tasks\ReviewTaskDto.cs" />
+    <Compile Include="Tasks\TaskDto.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

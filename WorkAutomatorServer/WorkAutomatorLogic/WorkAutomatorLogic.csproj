@@ -169,9 +169,11 @@
     <Compile Include="Models\PublicKeyModel.cs" />
     <Compile Include="Models\Roles\RoleModel.cs" />
     <Compile Include="Models\SessionModel.cs" />
+    <Compile Include="Models\TaskModel.cs" />
     <Compile Include="Models\VisualizerTypeModel.cs" />
     <Compile Include="Models\WorkerModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceInterfaces\IAccountService.cs" />
     <Compile Include="ServiceInterfaces\IAsymmetricEncryptionService.cs" />
     <Compile Include="ServiceInterfaces\IAuthService.cs" />
     <Compile Include="ServiceInterfaces\ICompanyService.cs" />
@@ -188,6 +190,8 @@
     <Compile Include="ServiceInterfaces\IRoleService.cs" />
     <Compile Include="ServiceInterfaces\ISessionService.cs" />
     <Compile Include="ServiceInterfaces\IStorageCellService.cs" />
+    <Compile Include="ServiceInterfaces\ITaskService.cs" />
+    <Compile Include="Services\AccountService.cs" />
     <Compile Include="Services\AuthService.cs" />
     <Compile Include="Services\CompanyService.cs" />
     <Compile Include="Services\DataTypeService.cs" />
@@ -207,6 +211,7 @@
     <Compile Include="Services\SessionService.cs" />
     <Compile Include="Services\SHA256HashingService.cs" />
     <Compile Include="Services\StorageCellService.cs" />
+    <Compile Include="Services\TaskService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

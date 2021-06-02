@@ -1,5 +1,5 @@
 ﻿using Autofac;
-using System.Threading.Tasks;
+
 using WorkAutomatorLogic.ServiceInterfaces;
 using WorkAutomatorLogic.Services;
 
@@ -44,6 +44,8 @@ namespace WorkAutomatorLogic
             builder.RegisterType<IntersectionService>().AsSelf().SingleInstance();
             builder.RegisterType<DataTypeService>().AsSelf().SingleInstance();
             builder.RegisterType<FaultConditionParseService>().AsSelf().SingleInstance();
+            builder.RegisterType<AccountService>().As<IAccountService>().SingleInstance();
+            builder.RegisterType<TaskService>().As<ITaskService>().SingleInstance();
 
             return builder.Build();
         }

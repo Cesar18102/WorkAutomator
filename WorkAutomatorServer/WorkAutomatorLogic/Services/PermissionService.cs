@@ -7,12 +7,10 @@ using System.Runtime.CompilerServices;
 using System.ComponentModel.DataAnnotations.Schema;
 
 using Constants;
-using Attributes;
 
 using WorkAutomatorDataAccess;
 using WorkAutomatorDataAccess.Entities;
 
-using WorkAutomatorLogic.Aspects;
 using WorkAutomatorLogic.Exceptions;
 using WorkAutomatorLogic.Extensions;
 using WorkAutomatorLogic.Models.Permission;
@@ -22,24 +20,6 @@ namespace WorkAutomatorLogic.Services
 {
     internal class PermissionService : IPermissionService
     {
-        [DbPermissionAspect(Table = DbTable.DbPermission, Action = InteractionDbType.CREATE)]
-        public Task CreateDbPermission(PermissionDbModel dbPermission, [InitiatorAccountId] int creatorAccountId)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        [DbPermissionAspect(DbTableConverterType = typeof(PermissionModelBaseToTableNameConverter), Action = InteractionDbType.CREATE)]
-        public Task GrantPermission([TableNameParameter] PermissionModelBase permission, [InitiatorAccountId] int grantingByAccountId, int grantingToRoleId)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        [DbPermissionAspect(DbTableConverterType = typeof(PermissionModelBaseToTableNameConverter), Action = InteractionDbType.DELETE)]
-        public Task UnGrantPermission([TableNameParameter] PermissionModelBase permission, [InitiatorAccountId] int grantingByAccountId, int grantingToRoleId)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public async Task<bool> IsLegal(Interaction interaction)
         {
             try { await CheckLegal(interaction); return true; }

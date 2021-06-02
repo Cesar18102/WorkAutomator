@@ -7,13 +7,16 @@ using WorkAutomatorLogic.Models.Prefabs;
 
 namespace WorkAutomatorLogic.Models.DetectorData
 {
-    public class DetectorFaultEventModel
+    public class DetectorFaultEventModel : IdModel
     {
         [JsonProperty("detector")]
         public DetectorModel Detector { get; set; }
 
         [JsonProperty("fault")]
         public DetectorFaultPrefabModel Fault { get; set; }
+
+        [JsonProperty("associated_task")]
+        public TaskModel AssociatedTask {get; set;}
 
         [JsonProperty("timespan")]
         public DateTime Timespan { get; set; }

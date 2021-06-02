@@ -63,6 +63,15 @@ namespace WorkAutomatorServer.Controllers
         [HttpPost]
         [WireHeadersAspect]
         [AuthorizedAspect]
+        [RequiredMaskAspect("dto.Data.Id")]
+        public async Task<HttpResponseMessage> GetWorkers([FromBody] AuthorizedDto<CompanyIdDto> dto)
+        {
+            return await Execute(companyIdDto => CompanyService.GetWorkers(companyIdDto), dto);
+        }
+
+        [HttpPost]
+        [WireHeadersAspect]
+        [AuthorizedAspect]
         public async Task<HttpResponseMessage> SetupPlan([FromBody] AuthorizedDto<SetupPlanDto> dto)
         {
             return await Execute(plan => CompanyService.SetupPlan(plan), dto);

@@ -19,12 +19,17 @@ namespace WorkAutomatorDataAccess.Entities
 
         public int company_id { get; set; }
 
+        public int? creator_account_id { get; set; }
         public int? assignee_account_id { get; set; }
-
         public int? reviewer_account_id { get; set; }
 
-        public virtual AccountEntity Assignee { get; set; }
+        public bool is_done { get; set; }
+        public bool is_reviewed { get; set; }
 
+        public virtual DetectorFaultEventEntity AssociatedFault { get; set; }
+
+        public virtual AccountEntity Assignee { get; set; }
+        public virtual AccountEntity Creator { get; set; }
         public virtual AccountEntity Reviewer { get; set; }
 
         public virtual CompanyEntity company { get; set; }
