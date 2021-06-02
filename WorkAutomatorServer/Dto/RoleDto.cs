@@ -21,10 +21,12 @@ namespace Dto
         [JsonProperty("name")]
         public string Name { get; set; }
 
+        [Required(AllowEmptyStrings = false)]
         [ObjectId(DbTable.DbPermission)]
         [JsonProperty("db_permission_ids")]
         public ICollection<int> DbPermissionIds { get; set; }
 
+        [Required(AllowEmptyStrings = false)]
         [ObjectId(DbTable.Manufactory)]
         [JsonProperty("manufactory_ids")]
         public ICollection<int> ManufactoryIds { get; set; }
@@ -33,10 +35,12 @@ namespace Dto
         [JsonProperty("storage_cell_ids")]
         public ICollection<int> StorageCellIds { get; set; }
 
+        [Required(AllowEmptyStrings = false)]
         [ObjectId(DbTable.PipelineItem)]
         [JsonProperty("pipeline_item_ids")]
         public ICollection<int> PipelineItemIds { get; set; }
 
+        [Required(AllowEmptyStrings = false)]
         [ObjectId(DbTable.Detector)]
         [JsonProperty("detector_ids")]
         public ICollection<int> DetectorIds { get; set; }

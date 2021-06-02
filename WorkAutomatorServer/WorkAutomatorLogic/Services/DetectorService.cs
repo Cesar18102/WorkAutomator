@@ -8,8 +8,9 @@ using Autofac;
 using Constants;
 
 using Dto;
-using Dto.DetectorData;
 using Dto.Pipeline;
+using Dto.Interaction;
+using Dto.DetectorData;
 
 using WorkAutomatorDataAccess;
 using WorkAutomatorDataAccess.Entities;
@@ -24,6 +25,7 @@ namespace WorkAutomatorLogic.Services
 {
     internal class DetectorService : ServiceBase, IDetectorService
     {
+        private static RoleService RoleService = LogicDependencyHolder.Dependencies.Resolve<RoleService>();
         private static DataTypeService DataTypeService = LogicDependencyHolder.Dependencies.Resolve<DataTypeService>();
         private static FaultConditionParseService FaultConditionParseService = LogicDependencyHolder.Dependencies.Resolve<FaultConditionParseService>();
 
@@ -47,11 +49,20 @@ namespace WorkAutomatorLogic.Services
                     await db.GetRepo<DetectorEntity>().Create(detectorEntity);
                     await db.Save();
 
+                    RoleEntity ownerRole = await RoleService.GetCompanyOwnerRole(detectorPrefabEntity.company_id);
+                    ownerRole.DetectorPermissions.Add(detectorEntity);
+
+                    RoleEntity creatorRole = await RoleService.GetCompanyWorkerRole(dto.Session.UserId);
+                    creatorRole.DetectorPermissions.Add(detectorEntity);
+
+                    await db.Save();
+
                     return detectorEntity.ToModel<DetectorModel>();
                 }
             });
         }
 
+        [PermissionAspect(Type = InteractionType.DETECTOR)]
         [DbPermissionAspect(Action = InteractionDbType.READ, Table = DbTable.Detector, CheckSameCompany = true)]
         [DbPermissionAspect(Action = InteractionDbType.READ, Table = DbTable.DetectorSettingsPrefab, CheckSameCompany = true)]
         [DbPermissionAspect(Action = InteractionDbType.CREATE | InteractionDbType.UPDATE | InteractionDbType.DELETE, Table = DbTable.DetectorSettingsValue, CheckSameCompany = true)]
@@ -64,7 +75,15 @@ namespace WorkAutomatorLogic.Services
 
                     DetectorEntity detectorEntity = await detectorRepo.FirstOrDefault(pi => pi.id == dto.Data.Id.Value);
 
-                    //CREATE EVENT
+                    DetectorInteractionEventEntity detectorEvent = new DetectorInteractionEventEntity()
+                    {
+                        account_id = dto.Session.UserId,
+                        detector_id = detectorEntity.id,
+                        timespan = DateTime.Now,
+                        log = $"Settings setup for Detector #{detectorEntity.id} by {dto.Session.UserId}"
+                    };
+
+                    await db.GetRepo<DetectorInteractionEventEntity>().Create(detectorEvent);
 
                     foreach (DetectorSettingsValueDto settingsValueDto in dto.Data.SettingsValues)
                     {
@@ -190,20 +209,32 @@ namespace WorkAutomatorLogic.Services
 
                         if (isFaultOccured)
                         {
+                            int? assigneeAccountId = detector.DetectorPrefab.company.Members.FirstOrDefault(
+                                member => member.Roles.SelectMany(r => r.PipelineItemPermissions)
+                                    .SelectMany(pip => pip.Detectors).Contains(detector)
+                            )?.id;
+
+                            int? reviewerAccountId = detector.DetectorPrefab.company.Members.Where(m => m.id != assigneeAccountId).FirstOrDefault(
+                                member => member.Roles.SelectMany(r => r.PipelineItemPermissions)
+                                    .SelectMany(pip => pip.Detectors).Contains(detector)
+                            )?.id;
+
                             TaskEntity associatedTask = new TaskEntity()
                             {
-                                //TODO
+                                company_id = detector.DetectorPrefab.company_id,
+                                name = $"Fix a fault \"{faultPrefab.name}\" on pipeline item #{detector.pipeline_item_id} \"{detector.PipelineItem.PipelineItemPrefab.name}\"",
+                                assignee_account_id = assigneeAccountId,
+                                reviewer_account_id = reviewerAccountId
                             };
-
+                            
                             DetectorFaultEventEntity faultEvent = new DetectorFaultEventEntity()
                             {
                                 detector_id = detector.id,
                                 detector_fault_prefab_id = faultPrefab.id,
                                 timespan = DateTime.Now,
-                                is_fixed = false
+                                is_fixed = false,
+                                AssociatedTask = associatedTask
                             };
-
-                            //CREATE TASK
 
                             await detectorFaultEventRepo.Create(faultEvent);
                         }
@@ -274,6 +305,41 @@ namespace WorkAutomatorLogic.Services
                     ).ToArray();
 
                     return ModelEntityMapper.Mapper.Map<ICollection<DetectorFaultEventModel>>(faults);
+                }
+            });
+        }
+
+        [DbPermissionAspect(Action = InteractionDbType.READ, Table = DbTable.Detector, CheckSameCompany = true)]
+        public async Task TryInteract(DetectorInteractionDto dto)
+        {
+            await Execute(async () => {
+                using (UnitOfWork db = new UnitOfWork())
+                {
+                    DetectorEntity detector = await db.GetRepo<DetectorEntity>().Get(dto.DetectorId.Value);
+                    AccountEntity account = await db.GetRepo<AccountEntity>().Get(dto.AccountId.Value);
+
+                    DetectorInteractionEventEntity detectorEvent = new DetectorInteractionEventEntity()
+                    {
+                        account_id = account.id,
+                        detector_id = detector.id,
+                        timespan = DateTime.Now
+                    };
+
+                    NotPermittedException ex = null;
+
+                    if (account.Roles.SelectMany(r => r.DetectorPermissions).Any(m => m.id == detector.id))
+                        detectorEvent.log = $"Interaction with Detector #{detector.id} by Account #{account.id}: SUCCESS";
+                    else
+                    {
+                        detectorEvent.log = $"Interaction with Detector #{detector.id} by Account #{account.id}: ACCESS DENIED";
+                        ex = new NotPermittedException(detectorEvent.log);
+                    }
+
+                    await db.GetRepo<DetectorInteractionEventEntity>().Create(detectorEvent);
+                    await db.Save();
+
+                    if (ex != null)
+                        throw ex;
                 }
             });
         }

@@ -46,7 +46,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountDto.cs" />
+    <Compile Include="Interaction\CheckoutDto.cs" />
+    <Compile Include="Interaction\DetectorInteractionDto.cs" />
+    <Compile Include="Interaction\EnterLeaveDto.cs" />
     <Compile Include="GrantUngrantRoleDto.cs" />
+    <Compile Include="Interaction\PipelineItemInteractionDto.cs" />
+    <Compile Include="Interaction\StorageCellInteractionDto.cs" />
     <Compile Include="RoleDto.cs" />
     <Compile Include="Tasks\AssignTaskDto.cs" />
     <Compile Include="AuthorizedDto.cs" />

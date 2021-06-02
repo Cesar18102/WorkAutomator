@@ -197,10 +197,11 @@
     <Compile Include="Controllers\ControllerBase.cs" />
     <Compile Include="Controllers\DetectorController.cs" />
     <Compile Include="Controllers\KeyController.cs" />
-    <Compile Include="Controllers\ManufactoryController.cs" />
+    <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\PipelineController.cs" />
     <Compile Include="Controllers\PipelineItemController.cs" />
     <Compile Include="Controllers\PrefabController.cs" />
+    <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\StorageCellController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
     <Compile Include="Exceptions\ServerExceptionBase.cs" />

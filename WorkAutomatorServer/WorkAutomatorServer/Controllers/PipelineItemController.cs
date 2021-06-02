@@ -5,6 +5,7 @@ using System.Web.Http;
 using Autofac;
 
 using Dto;
+using Dto.Interaction;
 using Dto.Pipeline;
 
 using WorkAutomatorLogic;
@@ -49,6 +50,12 @@ namespace WorkAutomatorServer.Controllers
         public async Task<HttpResponseMessage> Get([FromBody] AuthorizedDto<CompanyDto> dto)
         {
             return await Execute(d => PipelineItemService.Get(d), dto);
+        }
+
+        [HttpPost]
+        public async Task<HttpResponseMessage> TryInteract([FromBody] PipelineItemInteractionDto dto)
+        {
+            return await Execute(d => PipelineItemService.TryInteract(d), dto);
         }
     }
 }

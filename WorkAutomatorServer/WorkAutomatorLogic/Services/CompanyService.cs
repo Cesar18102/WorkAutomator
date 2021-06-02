@@ -19,6 +19,8 @@ namespace WorkAutomatorLogic.Services
 {
     internal class CompanyService : ServiceBase, ICompanyService
     {
+        private static RoleService RoleService = LogicDependencyHolder.Dependencies.Resolve<RoleService>();
+
         [DbPermissionAspect(Action = InteractionDbType.CREATE, Table = DbTable.Company)]
         public async Task<CompanyModel> CreateCompany(AuthorizedDto<CompanyDto> model)
         {
@@ -38,6 +40,8 @@ namespace WorkAutomatorLogic.Services
                     company.Owner.Company = created;
 
                     await db.Save();
+
+                    await RoleService.CreateCompanyOwnerRole(company.owner_id);
 
                     return await GetCompany(created.owner_id);
                 }
@@ -88,6 +92,8 @@ namespace WorkAutomatorLogic.Services
                     account.Bosses.Add(company.Owner);
 
                     await db.Save();
+
+                    await RoleService.CreateCompanyWorkerRole(company.owner_id, account.id);
 
                     return await GetCompany(account.company_id.Value);
                 }
@@ -639,6 +645,8 @@ namespace WorkAutomatorLogic.Services
                     await companyPlanPointRepo.Delete(companyPlanPointsToRemove.Select(companyPlanPoint => companyPlanPoint.id).ToArray());
 
                     await db.Save();
+
+                    await RoleService.UpdateCompanyOwnerRole(company.owner_id);
 
                     return await GetCompany(company.owner_id);
                 }

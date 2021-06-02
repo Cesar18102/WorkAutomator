@@ -6,6 +6,7 @@ using Autofac;
 
 using Dto;
 using Dto.DetectorData;
+using Dto.Interaction;
 using Dto.Pipeline;
 
 using WorkAutomatorLogic;
@@ -79,6 +80,12 @@ namespace WorkAutomatorServer.Controllers
         public async Task<HttpResponseMessage> GetAllFaults([FromBody] AuthorizedDto<GetDetectorDataDto> dto)
         {
             return await Execute(d => DetectorService.GetAllFaults(d), dto);
+        }
+
+        [HttpPost]
+        public async Task<HttpResponseMessage> TryInteract([FromBody] DetectorInteractionDto dto)
+        {
+            return await Execute(d => DetectorService.TryInteract(d), dto);
         }
     }
 }

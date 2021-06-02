@@ -6,6 +6,7 @@ using Autofac;
 
 using Dto;
 using Dto.Pipeline;
+using Dto.Interaction;
 
 using WorkAutomatorLogic;
 using WorkAutomatorLogic.ServiceInterfaces;
@@ -32,6 +33,12 @@ namespace WorkAutomatorServer.Controllers
         public async Task<HttpResponseMessage> Get([FromBody] AuthorizedDto<CompanyDto> dto)
         {
             return await Execute(d => StorageCellService.Get(d), dto);
+        }
+
+        [HttpPost]
+        public async Task<HttpResponseMessage> TryInteract([FromBody] StorageCellInteractionDto dto)
+        {
+            return await Execute(d => StorageCellService.TryInteract(d), dto);
         }
     }
 }

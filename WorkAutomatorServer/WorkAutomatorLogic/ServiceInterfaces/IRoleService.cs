@@ -1,6 +1,8 @@
-﻿using Dto;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
+using Dto;
+
+using WorkAutomatorLogic.Models;
 using WorkAutomatorLogic.Models.Roles;
 
 namespace WorkAutomatorLogic.ServiceInterfaces
@@ -10,7 +12,7 @@ namespace WorkAutomatorLogic.ServiceInterfaces
         Task<RoleModel> CreateRole(AuthorizedDto<RoleDto> role);
         Task<RoleModel> UpdateRole(AuthorizedDto<RoleDto> role);
 
-        Task GrantRole(AuthorizedDto<GrantUngrantRoleDto> role);
-        Task UnGrantRole(AuthorizedDto<GrantUngrantRoleDto> role);
+        Task<WorkerModel> GrantRole(AuthorizedDto<GrantUngrantRoleDto> role);
+        Task<WorkerModel> UnGrantRole(AuthorizedDto<GrantUngrantRoleDto> role);
     }
 }
