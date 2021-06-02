@@ -33,15 +33,15 @@ namespace WorkAutomatorLogic.Services
                 AccountEntity initiator = await db.GetRepo<AccountEntity>().Get(interaction.InitiatorAccountId);
                 string[] notEnoughPermissions = null;
 
-                if (interaction.Permission is PermissionDbModel dbPermissionModel)
+                if (interaction.InteractionType == InteractionType.DB)
                 {
-                    string tableName = ModelEntityMapper.TABLE_NAME_DICTIONARY[dbPermissionModel.DbTable];
+                    string tableName = ModelEntityMapper.TABLE_NAME_DICTIONARY[interaction.Table];
 
                     DbPermissionEntity[] dbPermissions = initiator.Roles.SelectMany(role => role.DbPermissions).Where(
                         dbPermission => tableName == dbPermission.table_name
                     ).ToArray();
 
-                    string[] requiredInteractionTypes = dbPermissionModel.InteractionDbType.GetFlags().Select(
+                    string[] requiredInteractionTypes = interaction.InteractionDbType.GetFlags().Select(
                         flag => ModelEntityMapper.INTERACTION_DB_TYPES[flag]
                     ).ToArray();
 
@@ -124,28 +124,28 @@ namespace WorkAutomatorLogic.Services
                         if (interaction.CompanyId.HasValue && interaction.CheckSameCompany && interaction.ObjectIds != null && interaction.ObjectIds.Length != 0)
                         {
                             notEnoughPermissions = requiredInteractionTypes.Select(
-                                t => $"{t} {dbPermissionModel.DbTable} {string.Join(", ", interaction.ObjectIds.Select(id => "#" + id))}"
+                                t => $"{t} {interaction.Table} {string.Join(", ", interaction.ObjectIds.Select(id => "#" + id))}"
                             ).ToArray();
                         }
                         else if(interaction.CompanyId.HasValue && interaction.CheckSameCompany)
                         {
                             notEnoughPermissions = requiredInteractionTypes.Select(
-                                t => $"{t} {dbPermissionModel.DbTable} for company #{interaction.CompanyId.Value}"
+                                t => $"{t} {interaction.Table} for company #{interaction.CompanyId.Value}"
                             ).ToArray();
                         }
                         else
                         {
                             notEnoughPermissions = requiredInteractionTypes.Except(havingInteractionTypes).Select(
-                                t => $"{t} {dbPermissionModel.DbTable}"
+                                t => $"{t} {interaction.Table}"
                             ).ToArray();
                         }
                     }
                 }
-                else if (interaction.Permission is PermissionModel commonPermission)
+                else
                 {
                     Func<RoleEntity, IEnumerable<IdEntity>> permittedTargetCollectionSelector = null;
 
-                    switch (commonPermission.InteractionType)
+                    switch (interaction.InteractionType)
                     {
                         case InteractionType.DETECTOR:
                             permittedTargetCollectionSelector = role => role.DetectorPermissions;
@@ -164,15 +164,16 @@ namespace WorkAutomatorLogic.Services
                             break;
                     }
 
-                    bool isLegal = initiator.Roles.SelectMany(permittedTargetCollectionSelector).FirstOrDefault(
-                        target => target.id == commonPermission.InteractionTargetId
-                    ) == null;
+                    int[] permittedIds = initiator.Roles.SelectMany(permittedTargetCollectionSelector)
+                        .Select(target => target.id).ToArray();
 
-                    if (!isLegal)
+                    int[] notProvidedPermissions = interaction.ObjectIds.Except(permittedIds).ToArray();
+
+                    if (notProvidedPermissions.Length != 0)
                     {
-                        notEnoughPermissions = new string[1] {
-                            $"Permission to interact with {commonPermission.InteractionType} #{commonPermission.InteractionTargetId}"
-                        };
+                        notEnoughPermissions = notProvidedPermissions.Select(
+                            permission => $"Permission to interact with {interaction.InteractionType} #{permission}"
+                        ).ToArray();
                     }
                 }
 

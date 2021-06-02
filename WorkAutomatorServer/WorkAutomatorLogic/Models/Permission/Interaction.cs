@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-
-using Constants;
+﻿using Constants;
 
 namespace WorkAutomatorLogic.Models.Permission
 {
     public class Interaction
     {
-        public PermissionModelBase Permission { get; set; }
+        public InteractionType InteractionType { get; set; }
+        public InteractionDbType InteractionDbType { get; set; }
+        public DbTable Table { get; set; }
         public int InitiatorAccountId { get; set; }
         public int? CompanyId { get; set; }
         public int[] ObjectIds { get; set; }
@@ -14,19 +14,15 @@ namespace WorkAutomatorLogic.Models.Permission
 
         public Interaction(InteractionDbType type, DbTable table, int initiatorAccountId)
         {
-            Permission = new PermissionDbModel(type, table);
+            InteractionType = InteractionType.DB;
+            InteractionDbType = type;
+            Table = table;
             InitiatorAccountId = initiatorAccountId;
         }
 
-        public Interaction(InteractionType type, int targetId, int initiatorAccountId)
+        public Interaction(InteractionType type, int initiatorAccountId)
         {
-            Permission = new PermissionModel(type, targetId);
-            InitiatorAccountId = initiatorAccountId;
-        }
-
-        public Interaction(PermissionModelBase permission, int initiatorAccountId)
-        {
-            Permission = permission;
+            InteractionType = type;
             InitiatorAccountId = initiatorAccountId;
         }
     }

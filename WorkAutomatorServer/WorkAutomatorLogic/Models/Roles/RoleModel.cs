@@ -1,7 +1,9 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+
+using Newtonsoft.Json;
 
 using WorkAutomatorLogic.Models.Permission;
+using WorkAutomatorLogic.Models.Pipeline;
 
 namespace WorkAutomatorLogic.Models.Roles
 {
@@ -20,15 +22,15 @@ namespace WorkAutomatorLogic.Models.Roles
         public ICollection<PermissionDbModel> DbPermissions { get; set; }
 
         [JsonProperty("detector_permissions")]
-        public ICollection<int> DetectorPermissions { get; set; }
+        public ICollection<DetectorModel> DetectorPermissions { get; set; }
 
         [JsonProperty("manufactory_permissions")]
-        public ICollection<int> ManufactoryPermissions { get; set; }
+        public ICollection<ManufactoryModel> ManufactoryPermissions { get; set; }
 
         [JsonProperty("pipeline_item_permissions")]
-        public ICollection<int> PipelineItemPermissions { get; set; }
+        public ICollection<PipelineItemModel> PipelineItemPermissions { get; set; }
 
         [JsonProperty("storage_cell_permissions")]
-        public ICollection<int> StorageCellPermissions { get; set; }
+        public ICollection<StorageCellModel> StorageCellPermissions { get; set; }
     }
 }
