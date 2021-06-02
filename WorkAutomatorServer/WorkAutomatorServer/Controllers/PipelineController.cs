@@ -43,5 +43,23 @@ namespace WorkAutomatorServer.Controllers
         {
             return await Execute(pipeline => PipelineService.Update(pipeline), dto);
         }
+
+        [HttpPost]
+        [WireHeadersAspect]
+        [AuthorizedAspect]
+        [RequiredMaskAspect("dto.Data.Id")]
+        public async Task<HttpResponseMessage> Scrap([FromBody] AuthorizedDto<PipelineDto> dto)
+        {
+            return await Execute(pipeline => PipelineService.Scrap(pipeline), dto);
+        }
+
+        [HttpPost]
+        [WireHeadersAspect]
+        [AuthorizedAspect]
+        [RequiredMaskAspect("dto.Data.Id")]
+        public async Task<HttpResponseMessage> Get([FromBody] AuthorizedDto<CompanyDto> dto)
+        {
+            return await Execute(company => PipelineService.Get(company), dto);
+        }
     }
 }

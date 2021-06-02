@@ -10,6 +10,8 @@ using WorkAutomatorDataAccess.Entities;
 using WorkAutomatorLogic.Models;
 using WorkAutomatorLogic.Models.Prefabs;
 using WorkAutomatorLogic.Models.Pipeline;
+using System.Linq;
+using WorkAutomatorLogic.Models.DetectorData;
 
 namespace WorkAutomatorLogic
 {
@@ -158,12 +160,14 @@ namespace WorkAutomatorLogic
                   .ForMember(entity => entity.pipeline_item_prefab_id, cnf => cnf.MapFrom(model => model.Prefab.Id))
                   .ReverseMap()
                   .ForMember(model => model.SettingsValues, cnf => cnf.MapFrom(entity => entity.PipelineItemSettingsValues))
-                  .ForMember(model => model.Prefab, cnf => cnf.MapFrom(entity => entity.PipelineItemPrefab));
+                  .ForMember(model => model.Prefab, cnf => cnf.MapFrom(entity => entity.PipelineItemPrefab))
+                  .ForMember(model => model.ManufactoryId, cnf => cnf.MapFrom(entity => entity.manufactory_id));
 
             config.CreateMap<StorageCellModel, StorageCellEntity>()
                  .ForMember(entity => entity.storage_cell_prefab_id, cnf => cnf.MapFrom(model => model.Prefab.Id))
                  .ReverseMap()
-                 .ForMember(model => model.Prefab, cnf => cnf.MapFrom(entity => entity.StorageCellPrefab));
+                 .ForMember(model => model.Prefab, cnf => cnf.MapFrom(entity => entity.StorageCellPrefab))
+                 .ForMember(model => model.ManufactoryId, cnf => cnf.MapFrom(entity => entity.manufactory_id));
 
             config.CreateMap<DetectorSettingsValueModel, DetectorSettingsValueEntity>()
                   .ForMember(entity => entity.detector_settings_prefab_id, cnf => cnf.MapFrom(model => model.Prefab.Id))
@@ -180,6 +184,22 @@ namespace WorkAutomatorLogic
                   .ForMember(model => model.SettingsValues, cnf => cnf.MapFrom(entity => entity.DetectorSettingsValues))
                   .ForMember(model => model.Prefab, cnf => cnf.MapFrom(entity => entity.DetectorPrefab))
                   .ForMember(model => model.TrackedDetectorFaults, cnf => cnf.MapFrom(entity => entity.DetectorFaultPrefabs));
+
+            config.CreateMap<DetectorFaultEventModel, DetectorFaultEventEntity>()
+                  .ForMember(entity => entity.detector_id, cnf => cnf.MapFrom(model => model.Detector.Id))
+                  .ForMember(entity => entity.detector_fault_prefab_id, cnf => cnf.MapFrom(model => model.Fault.Id))
+                  .ForMember(entity => entity.is_fixed, cnf => cnf.MapFrom(model => model.IsFixed))
+                  .ReverseMap()
+                  .ForMember(model => model.Detector, cnf => cnf.MapFrom(entity => entity.detector))
+                  .ForMember(model => model.Fault, cnf => cnf.MapFrom(entity => entity.detector_fault_prefab))
+                  .ForMember(model => model.IsFixed, cnf => cnf.MapFrom(entity => entity.is_fixed));
+
+            config.CreateMap<DetectorDataItemModel, DetectorDataEntity>()
+                  .ForMember(entity => entity.detector_data_prefab, cnf => cnf.MapFrom(model => model.DataPrefab))
+                  .ForMember(entity => entity.field_data_value_base64, cnf => cnf.MapFrom(model => model.DataBase64))
+                  .ReverseMap()
+                  .ForMember(model => model.DataPrefab, cnf => cnf.MapFrom(entity => entity.detector_data_prefab))
+                  .ForMember(model => model.DataBase64, cnf => cnf.MapFrom(entity => entity.field_data_value_base64));
         }
 
         public static IReadOnlyDictionary<DbTable, string> TABLE_NAME_DICTIONARY = new Dictionary<DbTable, string>()
@@ -245,14 +265,14 @@ namespace WorkAutomatorLogic
             { DefaultRoles.SUPERADMIN, "SUPERADMIN" }
         };
 
-        public static IReadOnlyDictionary<DataType, (string, Type)> DATA_TYPES = new Dictionary<DataType, (string, Type)>()
+        public static IReadOnlyDictionary<DataType, string> DATA_TYPES = new Dictionary<DataType, string>()
         {
-            { DataType.INT, ("int", typeof(int)) },
-            { DataType.INT_ARR, ("int[]", typeof(int[])) },
-            { DataType.FLOAT, ("float", typeof(float)) },
-            { DataType.FLOAT_ARR, ("float[]", typeof(float[])) },
-            { DataType.BOOL, ("bool", typeof(bool)) },
-            { DataType.BOOL_ARR, ("bool[]", typeof(bool[])) }
+            { DataType.INT, "int" },
+            { DataType.INT_ARR, "int[]" },
+            { DataType.FLOAT, "float" },
+            { DataType.FLOAT_ARR, "float[]" },
+            { DataType.BOOL, "bool" },
+            { DataType.BOOL_ARR, "bool[]" }
         };
 
         public static IReadOnlyDictionary<VisualizerType, string> VISUALIZER_TYPES = new Dictionary<VisualizerType, string>()
@@ -278,12 +298,12 @@ namespace WorkAutomatorLogic
 
         public static string ToName(this DataType dataType)
         {
-            return DATA_TYPES[dataType].Item1;
+            return DATA_TYPES[dataType];
         }
 
-        public static Type ToSystemType(this DataType dataType)
+        public static DataType FromName(this string dataTypeName)
         {
-            return DATA_TYPES[dataType].Item2;
+            return DATA_TYPES.First(dt => dt.Value == dataTypeName).Key;
         }
 
         public static string ToName(this VisualizerType visualizerType)

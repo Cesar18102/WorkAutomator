@@ -1,12 +1,17 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+
 using Autofac;
+
 using Constants;
+
 using Dto;
 using Dto.Pipeline;
+
 using WorkAutomatorDataAccess;
 using WorkAutomatorDataAccess.Entities;
+
 using WorkAutomatorLogic.Aspects;
 using WorkAutomatorLogic.Exceptions;
 using WorkAutomatorLogic.Models.Pipeline;
@@ -292,6 +297,48 @@ namespace WorkAutomatorLogic.Services
                     await db.Save();
 
                     return ToPipelineModel(pipeline);
+                }
+            });
+        }
+
+        [DbPermissionAspect(Action = InteractionDbType.DELETE, Table = DbTable.Pipeline, CheckSameCompany = true)]
+        public async Task Scrap(AuthorizedDto<PipelineDto> dto)
+        {
+            await Execute(async () => {
+                using (UnitOfWork db = new UnitOfWork())
+                {
+                    PipelineEntity pipeline = await db.GetRepo<PipelineEntity>().FirstOrDefault(
+                        p => p.id == dto.Data.Id.Value
+                    );
+
+                    foreach (PipelineItemEntity pipelineItem in pipeline.PipelineItems)
+                    {
+                        pipelineItem.pipeline_id = null;
+
+                        pipelineItem.InputPipelineItems.Clear();
+                        pipelineItem.OutputPipelineItems.Clear();
+                        pipelineItem.InputStorageCells.Clear();
+                        pipelineItem.OutputStorageCells.Clear();
+                    }
+
+                    foreach (StorageCellEntity storageCell in pipeline.StorageCells)
+                        storageCell.pipeline_id = null;
+
+                    await db.Save();
+                }
+            });
+        }
+
+        public async Task<PipelineItemModel[]> Get(AuthorizedDto<CompanyDto> dto)
+        {
+            return await Execute(async () => {
+                using (UnitOfWork db = new UnitOfWork())
+                {
+                    IList<PipelineEntity> pipelines = await db.GetRepo<PipelineEntity>().Get(
+                        p => p.company_id == dto.Data.Id.Value
+                    );
+
+                    return ModelEntityMapper.Mapper.Map<IList<PipelineItemModel>>(pipelines).ToArray();
                 }
             });
         }

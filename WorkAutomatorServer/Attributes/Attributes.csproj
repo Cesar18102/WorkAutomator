@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AttributeExtensions.cs" />
+    <Compile Include="Base64Attribute.cs" />
     <Compile Include="CompanyIdAttribute.cs" />
     <Compile Include="HeaderAutoWiredAttribute.cs" />
     <Compile Include="InitiatorAccountIdAttribute.cs" />

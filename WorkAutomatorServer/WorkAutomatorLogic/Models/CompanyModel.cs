@@ -41,8 +41,10 @@ namespace WorkAutomatorLogic.Models
         [JsonProperty("storage_cell_prefabs")]
         public ICollection<StorageCellPrefabModel> StorageCellPrefabs { get; set; }
 
-        //public ICollection<DetectorPrefabEntity> DetectorPrefabs { get; set; }
-        //public virtual ICollection<PipelineEntity> Pipelines { get; set; }
+        [JsonProperty("detector_prefabs")]
+        public ICollection<DetectorPrefabModel> DetectorPrefabs { get; set; }
+
+
         //public virtual ICollection<ResourceEntity> Resources { get; set; }
         //public virtual ICollection<TaskEntity> Tasks { get; set; }
         //public virtual ICollection<UnitEntity> Units { get; set; }

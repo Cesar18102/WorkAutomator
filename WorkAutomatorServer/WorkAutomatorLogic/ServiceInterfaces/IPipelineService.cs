@@ -11,5 +11,7 @@ namespace WorkAutomatorLogic.ServiceInterfaces
     {
         Task<PipelineModel> Create(AuthorizedDto<PipelineDto> dto);
         Task<PipelineModel> Update(AuthorizedDto<PipelineDto> dto);
+        Task Scrap(AuthorizedDto<PipelineDto> dto);
+        Task<PipelineItemModel[]> Get(AuthorizedDto<CompanyDto> dto);
     }
 }

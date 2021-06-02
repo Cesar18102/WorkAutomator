@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+
+using Autofac;
 
 using Constants;
 
@@ -19,6 +21,8 @@ namespace WorkAutomatorLogic.Services
 {
     internal class PipelineItemService : ServiceBase, IPipelineItemService
     {
+        private static DataTypeService DataTypeService = LogicDependencyHolder.Dependencies.Resolve<DataTypeService>();
+
         [DbPermissionAspect(Action = InteractionDbType.CREATE, Table = DbTable.PipelineItem)]
         [DbPermissionAspect(Action = InteractionDbType.READ, Table = DbTable.PipelineItemPrefab, CheckSameCompany = true)]
         public async Task<PipelineItemModel> Create(AuthorizedDto<PipelineItemDto> dto)
@@ -53,18 +57,26 @@ namespace WorkAutomatorLogic.Services
                     {
                         if (settingsValueDto.Id.HasValue)
                         {
-                            pipelineItemEntity.PipelineItemSettingsValues.First(
+                            PipelineItemSettingsValueEntity settingsValueEntity = pipelineItemEntity.PipelineItemSettingsValues.First(
                                 setting => setting.id == settingsValueDto.Id.Value
-                            ).option_data_value_base64 = settingsValueDto.ValueBase64;
+                            );
+
+                            DataType dataType = settingsValueEntity.PipelineItemSettingsPrefab.DataType.name.FromName();
+                            DataTypeService.CheckIsDataOfType(settingsValueDto.ValueBase64, dataType);
+                            
+                            settingsValueEntity.option_data_value_base64 = settingsValueDto.ValueBase64;
                         }
                         else
                         {
-                            bool isValidSettingsPrefabId = pipelineItemEntity.PipelineItemPrefab.PipelineItemSettingsPrefabs.Any(
+                            PipelineItemSettingsPrefabEntity pipelineItemSettingsPrefab = pipelineItemEntity.PipelineItemPrefab.PipelineItemSettingsPrefabs.FirstOrDefault(
                                 settingsPrefab => settingsPrefab.id == settingsValueDto.PrefabId.Value
                             );
 
-                            if (!isValidSettingsPrefabId)
+                            if (pipelineItemSettingsPrefab == null)
                                 throw new NotFoundException("PipelineItemSettingsPrefab");
+
+                            DataType dataType = pipelineItemSettingsPrefab.DataType.name.FromName();
+                            DataTypeService.CheckIsDataOfType(settingsValueDto.ValueBase64, dataType);
 
                             PipelineItemSettingsValueEntity settingWithSameSettingPrefab = pipelineItemEntity.PipelineItemSettingsValues.FirstOrDefault(
                                 setting => setting.pipeline_item_settings_prefab_id == settingsValueDto.PrefabId.Value

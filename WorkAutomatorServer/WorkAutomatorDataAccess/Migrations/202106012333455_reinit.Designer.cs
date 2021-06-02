@@ -7,13 +7,13 @@ namespace WorkAutomatorDataAccess.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class nonlocatedpipelineitemsandstoragecells2 : IMigrationMetadata
+    public sealed partial class reinit : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(nonlocatedpipelineitemsandstoragecells2));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(reinit));
         
         string IMigrationMetadata.Id
         {
-            get { return "202105301448005_non-located-pipeline-items-and-storage-cells-2"; }
+            get { return "202106012333455_reinit"; }
         }
         
         string IMigrationMetadata.Source

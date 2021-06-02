@@ -40,6 +40,12 @@ namespace WorkAutomatorLogic.Services
                 for(int j = 0; j < points.Length; ++j)
                     for(int k = 0; k < points.Length; ++k)
                     {
+                        if (points[i].x == points[j].x && points[j].x == points[k].x)
+                            continue;
+
+                        if (points[i].y == points[j].y && points[j].y == points[k].y)
+                            continue;
+
                         if (CheckInside(point, points[i], points[j], points[k]))
                             return true;
                     }

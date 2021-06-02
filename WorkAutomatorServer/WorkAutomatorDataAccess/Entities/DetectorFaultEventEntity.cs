@@ -17,6 +17,8 @@ namespace WorkAutomatorDataAccess.Entities
         [Column(TypeName = "text")]
         public string log { get; set; }
 
+        public bool is_fixed { get; set; }
+
         public virtual DetectorEntity detector { get; set; }
         public virtual DetectorFaultPrefabEntity detector_fault_prefab { get; set; }
 

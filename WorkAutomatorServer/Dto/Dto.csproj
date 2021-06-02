@@ -49,6 +49,9 @@
     <Compile Include="CheckPointDto.cs" />
     <Compile Include="CompanyDto.cs" />
     <Compile Include="CompanyIdDto.cs" />
+    <Compile Include="DetectorData\DetectorDataDto.cs" />
+    <Compile Include="DetectorData\DetectorDataItemDto.cs" />
+    <Compile Include="DetectorData\GetDetectorDataDto.cs" />
     <Compile Include="DtoBase.cs" />
     <Compile Include="EnterLeavePointDto.cs" />
     <Compile Include="FireHireDto.cs" />

@@ -9,6 +9,8 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.ModelBinding;
 
+using Attributes;
+
 using WorkAutomatorLogic.Exceptions;
 
 using WorkAutomatorServer.Output;
@@ -24,6 +26,7 @@ namespace WorkAutomatorServer.Controllers
 
             { typeof(NotFoundException), HttpStatusCode.NotFound },
 
+            { typeof(DataValidationException), HttpStatusCode.BadRequest },
             { typeof(LoginDuplicationException), HttpStatusCode.Conflict },
             { typeof(InvalidKeyException), HttpStatusCode.Unauthorized },
             { typeof(PostValidationException), HttpStatusCode.BadRequest },
@@ -40,17 +43,8 @@ namespace WorkAutomatorServer.Controllers
 
             { typeof(PointsBusyException), HttpStatusCode.Conflict },
             { typeof(InvalidPointsException), HttpStatusCode.BadRequest },
-            { typeof(PlacementException), HttpStatusCode.BadRequest }
-
-
-            //{ typeof(NotFoundException), HttpStatusCode.NotFound },
-            //{ typeof(NotAppropriateRoleException), HttpStatusCode.Forbidden },
-            //{ typeof(MembershipDuplicationException), HttpStatusCode.Conflict },
-            //{ typeof(MembershipNotFoundException), HttpStatusCode.NotFound },
-            //{ typeof(AlreadyInsideException), HttpStatusCode.Conflict },
-            //{ typeof(NotInsideException), HttpStatusCode.NotFound },
-            //{ typeof(PointNotFoundException), HttpStatusCode.NotFound },
-            //{ typeof(ForbiddenActionException), HttpStatusCode.Forbidden },
+            { typeof(PlacementException), HttpStatusCode.BadRequest },
+            { typeof(DataTypeException), HttpStatusCode.BadRequest }
         };
 
         public async Task<HttpResponseMessage> Execute<Tin>(Action<Tin> executor, Tin parameter, bool createResponseOnSuccess = true)
@@ -126,6 +120,17 @@ namespace WorkAutomatorServer.Controllers
                 throw new ValidationException("no data passed");
 
             ICollection<string> errors = new List<string>();
+
+            object[] base64Objects = parameter.GetMarkedValues<Base64Attribute>();
+            foreach(object base64Object in base64Objects)
+            {
+                if (base64Object == null)
+                    continue;
+
+                try { Convert.FromBase64String(base64Object.ToString()); }
+                catch { errors.Add("Not base64 string"); }
+            }
+
             foreach (KeyValuePair<string, ModelState> fieldState in ModelState)
                 foreach (ModelError error in fieldState.Value.Errors)
                     errors.Add(error.ErrorMessage);

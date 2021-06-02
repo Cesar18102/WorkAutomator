@@ -105,5 +105,15 @@ namespace Attributes
             else
                 return GetValuesByPath(path.First().GetValue(source), path.Skip(1).ToList());
         }
+
+        public static object[] GetMarkedValues<TAttribute>(this object source) where TAttribute : Attribute
+        {
+            if (source == null)
+                return new object[] { };
+
+            return FindPropertyPaths<TAttribute>(source.GetType()).SelectMany(
+                p => source.GetValuesByPath(p.Item2)
+            ).ToArray();
+        }
     }
 }

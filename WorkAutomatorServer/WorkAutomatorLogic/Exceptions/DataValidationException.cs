@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace WorkAutomatorLogic.Exceptions
 {
-    public class DataValidationException : Exception
+    public class DataValidationException : LogicExceptionBase
     {
         public List<InvalidFieldInfo> InvalidFieldInfos { get; private set; } = 
             new List<InvalidFieldInfo>();

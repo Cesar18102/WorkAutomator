@@ -122,37 +122,9 @@
     <Compile Include="Exceptions\DatabaseActionValidationException.cs" />
     <Compile Include="Exceptions\EntityNotFoundException.cs" />
     <Compile Include="IRepo.cs" />
-    <Compile Include="Migrations\202105251952343_init.cs" />
-    <Compile Include="Migrations\202105251952343_init.designer.cs">
-      <DependentUpon>202105251952343_init.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202105281559350_cascades.cs" />
-    <Compile Include="Migrations\202105281559350_cascades.designer.cs">
-      <DependentUpon>202105281559350_cascades.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202105290937342_no_superadmin_field.cs" />
-    <Compile Include="Migrations\202105290937342_no_superadmin_field.designer.cs">
-      <DependentUpon>202105290937342_no_superadmin_field.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202105301328525_non-located-pipeline-items-and-storage-cells.cs" />
-    <Compile Include="Migrations\202105301328525_non-located-pipeline-items-and-storage-cells.designer.cs">
-      <DependentUpon>202105301328525_non-located-pipeline-items-and-storage-cells.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202105301448005_non-located-pipeline-items-and-storage-cells-2.cs" />
-    <Compile Include="Migrations\202105301448005_non-located-pipeline-items-and-storage-cells-2.designer.cs">
-      <DependentUpon>202105301448005_non-located-pipeline-items-and-storage-cells-2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202105301612490_detector_faults_fix.cs" />
-    <Compile Include="Migrations\202105301612490_detector_faults_fix.designer.cs">
-      <DependentUpon>202105301612490_detector_faults_fix.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202105310124168_pipeline-connections.cs" />
-    <Compile Include="Migrations\202105310124168_pipeline-connections.designer.cs">
-      <DependentUpon>202105310124168_pipeline-connections.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202106012005121_storage-cells-pipeline.cs" />
-    <Compile Include="Migrations\202106012005121_storage-cells-pipeline.designer.cs">
-      <DependentUpon>202106012005121_storage-cells-pipeline.cs</DependentUpon>
+    <Compile Include="Migrations\202106012333455_reinit.cs" />
+    <Compile Include="Migrations\202106012333455_reinit.designer.cs">
+      <DependentUpon>202106012333455_reinit.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Repos\AccountRepo.cs" />
@@ -167,29 +139,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202105251952343_init.resx">
-      <DependentUpon>202105251952343_init.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202105281559350_cascades.resx">
-      <DependentUpon>202105281559350_cascades.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202105290937342_no_superadmin_field.resx">
-      <DependentUpon>202105290937342_no_superadmin_field.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202105301328525_non-located-pipeline-items-and-storage-cells.resx">
-      <DependentUpon>202105301328525_non-located-pipeline-items-and-storage-cells.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202105301448005_non-located-pipeline-items-and-storage-cells-2.resx">
-      <DependentUpon>202105301448005_non-located-pipeline-items-and-storage-cells-2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202105301612490_detector_faults_fix.resx">
-      <DependentUpon>202105301612490_detector_faults_fix.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202105310124168_pipeline-connections.resx">
-      <DependentUpon>202105310124168_pipeline-connections.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202106012005121_storage-cells-pipeline.resx">
-      <DependentUpon>202106012005121_storage-cells-pipeline.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202106012333455_reinit.resx">
+      <DependentUpon>202106012333455_reinit.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

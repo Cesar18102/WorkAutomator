@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+
+using Autofac;
 
 using Constants;
 
 using Dto;
+using Dto.DetectorData;
 using Dto.Pipeline;
 
 using WorkAutomatorDataAccess;
@@ -12,6 +16,7 @@ using WorkAutomatorDataAccess.Entities;
 
 using WorkAutomatorLogic.Aspects;
 using WorkAutomatorLogic.Exceptions;
+using WorkAutomatorLogic.Models.DetectorData;
 using WorkAutomatorLogic.Models.Pipeline;
 using WorkAutomatorLogic.ServiceInterfaces;
 
@@ -19,6 +24,9 @@ namespace WorkAutomatorLogic.Services
 {
     internal class DetectorService : ServiceBase, IDetectorService
     {
+        private static DataTypeService DataTypeService = LogicDependencyHolder.Dependencies.Resolve<DataTypeService>();
+        private static FaultConditionParseService FaultConditionParseService = LogicDependencyHolder.Dependencies.Resolve<FaultConditionParseService>();
+
         [DbPermissionAspect(Action = InteractionDbType.CREATE, Table = DbTable.Detector)]
         [DbPermissionAspect(Action = InteractionDbType.READ, Table = DbTable.DetectorPrefab, CheckSameCompany = true)]
         [DbPermissionAspect(Action = InteractionDbType.READ, Table = DbTable.DetectorFaultPrefab, CheckSameCompany = true)]
@@ -60,18 +68,26 @@ namespace WorkAutomatorLogic.Services
                     {
                         if (settingsValueDto.Id.HasValue)
                         {
-                            detectorEntity.DetectorSettingsValues.First(
+                            DetectorSettingsValueEntity settingsValueEntity = detectorEntity.DetectorSettingsValues.First(
                                 setting => setting.id == settingsValueDto.Id.Value
-                            ).option_data_value_base64 = settingsValueDto.ValueBase64;
+                            );
+
+                            DataType dataType = settingsValueEntity.detector_settings_prefab.DataType.name.FromName();
+                            DataTypeService.CheckIsDataOfType(settingsValueDto.ValueBase64, dataType);
+                            
+                            settingsValueEntity.option_data_value_base64 = settingsValueDto.ValueBase64;
                         }
                         else
                         {
-                            bool isValidSettingsPrefabId = detectorEntity.DetectorPrefab.DetectorSettingsPrefabs.Any(
+                            DetectorSettingsPrefabEntity detectorSettingsPrefab = detectorEntity.DetectorPrefab.DetectorSettingsPrefabs.FirstOrDefault(
                                 settingsPrefab => settingsPrefab.id == settingsValueDto.PrefabId.Value
                             );
 
-                            if (!isValidSettingsPrefabId)
+                            if (detectorSettingsPrefab == null)
                                 throw new NotFoundException("DetectorSettingsPrefab");
+
+                            DataType dataType = detectorSettingsPrefab.DataType.name.FromName();
+                            DataTypeService.CheckIsDataOfType(settingsValueDto.ValueBase64, dataType);
 
                             DetectorSettingsValueEntity settingWithSameSettingPrefab = detectorEntity.DetectorSettingsValues.FirstOrDefault(
                                 setting => setting.detector_settings_prefab_id == settingsValueDto.PrefabId.Value
@@ -111,6 +127,144 @@ namespace WorkAutomatorLogic.Services
                     );
 
                     return ModelEntityMapper.Mapper.Map<IList<DetectorModel>>(detectors);
+                }
+            });
+        }
+
+        public async Task ProvideData(DetectorDataDto dto)
+        {
+            await Execute(async () =>
+            {
+                using (UnitOfWork db = new UnitOfWork())
+                {
+                    IRepo<DetectorDataEntity> detectorDataRepo = db.GetRepo<DetectorDataEntity>();
+                    IRepo<DetectorFaultEventEntity> detectorFaultEventRepo = db.GetRepo<DetectorFaultEventEntity>();
+
+                    DetectorEntity detector = await db.GetRepo<DetectorEntity>().FirstOrDefault(
+                        d => d.id == dto.DetectorId.Value
+                    );
+
+                    if (detector == null)
+                        throw new NotFoundException("Detector");
+
+                    if (detector.PipelineItem == null)
+                        throw new NotFoundException("Pipeline item");
+
+                    List<DetectorDataEntity> datas = new List<DetectorDataEntity>();
+
+                    foreach (DetectorDataItemDto dataItem in dto.Data)
+                    {
+                        DetectorDataPrefabEntity dataPrefab = detector.DetectorPrefab.DetectorDataPrefabs.FirstOrDefault(
+                            dp => dp.id == dataItem.DetectorDataPrefabId.Value
+                        );
+
+                        if (dataPrefab == null)
+                            throw new NotFoundException("Detector data prefab");
+
+                        DataType dataType = dataPrefab.DataType.name.FromName();
+                        DataTypeService.CheckIsDataOfType(dataItem.DataBase64, dataType);
+
+                        DetectorDataEntity dataEntity = new DetectorDataEntity()
+                        {
+                            detector_id = detector.id,
+                            detector_data_prefab_id = dataPrefab.id,
+                            field_data_value_base64 = dataItem.DataBase64,
+                            timespan = DateTime.Now
+                        };
+
+                        DetectorDataEntity created = await detectorDataRepo.Create(dataEntity);
+
+                        datas.Add(created);
+                    }
+
+                    foreach(DetectorFaultPrefabEntity faultPrefab in detector.DetectorFaultPrefabs)
+                    {
+                        bool isFaultOccured = await FaultConditionParseService.ParseCondition(
+                            faultPrefab, 
+                            datas.ToArray(), 
+                            detector.DetectorSettingsValues.ToArray(), 
+                            detector.PipelineItem.PipelineItemSettingsValues.ToArray()
+                        );
+
+                        if (isFaultOccured)
+                        {
+                            DetectorFaultEventEntity faultEvent = new DetectorFaultEventEntity()
+                            {
+                                detector_id = detector.id,
+                                detector_fault_prefab_id = faultPrefab.id,
+                                timespan = DateTime.Now,
+                                is_fixed = false
+                            };
+
+                            await detectorFaultEventRepo.Create(faultEvent);
+                        }
+                    }
+
+                    await db.Save();
+                }
+            });
+        }
+
+        [DbPermissionAspect(Action = InteractionDbType.READ, Table = DbTable.DetectorData, CheckSameCompany = true)]
+        public async Task<DetectorDataModel> GetData(AuthorizedDto<GetDetectorDataDto> dto)
+        {
+            return await Execute(async () =>
+            {
+                using (UnitOfWork db = new UnitOfWork())
+                {
+                    DetectorEntity detector = await db.GetRepo<DetectorEntity>().FirstOrDefault(
+                        d => d.id == dto.Data.DetectorId.Value
+                    );
+
+                    DetectorDataEntity[] datas = detector.DetectorDatas.Where(
+                        data => data.timespan >= dto.Data.DateSince && data.timespan <= dto.Data.DateUntil
+                    ).ToArray();
+
+                    return new DetectorDataModel()
+                    {
+                        Detector = detector.ToModel<DetectorModel>(),
+                        Data = ModelEntityMapper.Mapper.Map<ICollection<DetectorDataItemModel>>(detector.DetectorDatas)
+                    };
+                }
+            });
+        }
+
+        [DbPermissionAspect(Action = InteractionDbType.READ, Table = DbTable.DetectorFaultEvent, CheckSameCompany = true)]
+        public async Task<ICollection<DetectorFaultEventModel>> GetActualFaults(AuthorizedDto<DetectorDto> dto)
+        {
+            return await Execute(async () =>
+            {
+                using (UnitOfWork db = new UnitOfWork())
+                {
+                    DetectorEntity detector = await db.GetRepo<DetectorEntity>().FirstOrDefault(
+                        d => d.id == dto.Data.DetectorId.Value
+                    );
+
+                    DetectorFaultEventEntity[] actualFaults = detector.detector_fault_events.Where(
+                        faultEvent => !faultEvent.is_fixed
+                    ).ToArray();
+
+                    return ModelEntityMapper.Mapper.Map<ICollection<DetectorFaultEventModel>>(actualFaults);
+                }
+            });
+        }
+
+        [DbPermissionAspect(Action = InteractionDbType.READ, Table = DbTable.DetectorFaultEvent, CheckSameCompany = true)]
+        public async Task<ICollection<DetectorFaultEventModel>> GetAllFaults(AuthorizedDto<GetDetectorDataDto> dto)
+        {
+            return await Execute(async () =>
+            {
+                using (UnitOfWork db = new UnitOfWork())
+                {
+                    DetectorEntity detector = await db.GetRepo<DetectorEntity>().FirstOrDefault(
+                        d => d.id == dto.Data.DetectorId.Value
+                    );
+
+                    DetectorFaultEventEntity[] faults = detector.detector_fault_events.Where(
+                        faultEvent => faultEvent.timespan >= dto.Data.DateSince && faultEvent.timespan <= dto.Data.DateUntil
+                    ).ToArray();
+
+                    return ModelEntityMapper.Mapper.Map<ICollection<DetectorFaultEventModel>>(faults);
                 }
             });
         }

@@ -42,6 +42,8 @@ namespace WorkAutomatorLogic
             builder.RegisterType<DetectorService>().As<IDetectorService>().SingleInstance();
             builder.RegisterType<PipelineService>().As<IPipelineService>().SingleInstance();
             builder.RegisterType<IntersectionService>().AsSelf().SingleInstance();
+            builder.RegisterType<DataTypeService>().AsSelf().SingleInstance();
+            builder.RegisterType<FaultConditionParseService>().AsSelf().SingleInstance();
 
             return builder.Build();
         }
