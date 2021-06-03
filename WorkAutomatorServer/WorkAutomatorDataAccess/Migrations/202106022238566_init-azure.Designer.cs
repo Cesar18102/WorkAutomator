@@ -7,13 +7,13 @@ namespace WorkAutomatorDataAccess.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class faultassociatedtask : IMigrationMetadata
+    public sealed partial class initazure : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(faultassociatedtask));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(initazure));
         
         string IMigrationMetadata.Id
         {
-            get { return "202106021058138_fault-associated-task"; }
+            get { return "202106022238566_init-azure"; }
         }
         
         string IMigrationMetadata.Source

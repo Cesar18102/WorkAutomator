@@ -3,7 +3,7 @@
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class reinit : DbMigration
+    public partial class initazure : DbMigration
     {
         public override void Up()
         {
@@ -31,16 +31,144 @@
                         name = c.String(nullable: false, maxLength: 256, unicode: false),
                         description = c.String(unicode: false, storeType: "text"),
                         company_id = c.Int(nullable: false),
+                        creator_account_id = c.Int(),
                         assignee_account_id = c.Int(),
                         reviewer_account_id = c.Int(),
+                        is_done = c.Boolean(nullable: false),
+                        is_reviewed = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.id)
                 .ForeignKey("dbo.company", t => t.company_id)
                 .ForeignKey("dbo.account", t => t.assignee_account_id)
+                .ForeignKey("dbo.account", t => t.creator_account_id)
                 .ForeignKey("dbo.account", t => t.reviewer_account_id)
                 .Index(t => t.company_id)
+                .Index(t => t.creator_account_id)
                 .Index(t => t.assignee_account_id)
                 .Index(t => t.reviewer_account_id);
+            
+            CreateTable(
+                "dbo.detector_fault_event",
+                c => new
+                    {
+                        associated_task_id = c.Int(nullable: false),
+                        detector_id = c.Int(nullable: false),
+                        detector_fault_prefab_id = c.Int(nullable: false),
+                        timespan = c.DateTime(nullable: false),
+                        log = c.String(unicode: false, storeType: "text"),
+                        is_fixed = c.Boolean(nullable: false),
+                    })
+                .PrimaryKey(t => t.associated_task_id)
+                .ForeignKey("dbo.task", t => t.associated_task_id)
+                .ForeignKey("dbo.detector", t => t.detector_id, cascadeDelete: true)
+                .ForeignKey("dbo.detector_fault_prefab", t => t.detector_fault_prefab_id, cascadeDelete: true)
+                .Index(t => t.associated_task_id)
+                .Index(t => t.detector_id)
+                .Index(t => t.detector_fault_prefab_id);
+            
+            CreateTable(
+                "dbo.detector",
+                c => new
+                    {
+                        id = c.Int(nullable: false, identity: true),
+                        detector_prefab_id = c.Int(nullable: false),
+                        pipeline_item_id = c.Int(),
+                    })
+                .PrimaryKey(t => t.id)
+                .ForeignKey("dbo.pipeline_item", t => t.pipeline_item_id)
+                .ForeignKey("dbo.detector_prefab", t => t.detector_prefab_id)
+                .Index(t => t.detector_prefab_id)
+                .Index(t => t.pipeline_item_id);
+            
+            CreateTable(
+                "dbo.detector_interaction_event",
+                c => new
+                    {
+                        id = c.Int(nullable: false, identity: true),
+                        detector_id = c.Int(nullable: false),
+                        account_id = c.Int(nullable: false),
+                        timespan = c.DateTime(nullable: false),
+                        log = c.String(unicode: false, storeType: "text"),
+                    })
+                .PrimaryKey(t => t.id)
+                .ForeignKey("dbo.detector", t => t.detector_id)
+                .ForeignKey("dbo.account", t => t.account_id)
+                .Index(t => t.detector_id)
+                .Index(t => t.account_id);
+            
+            CreateTable(
+                "dbo.detector_data",
+                c => new
+                    {
+                        id = c.Int(nullable: false, identity: true),
+                        detector_id = c.Int(nullable: false),
+                        detector_data_prefab_id = c.Int(nullable: false),
+                        field_data_value_base64 = c.String(unicode: false, storeType: "text"),
+                        timespan = c.DateTime(nullable: false),
+                    })
+                .PrimaryKey(t => t.id)
+                .ForeignKey("dbo.detector_data_prefab", t => t.detector_data_prefab_id)
+                .ForeignKey("dbo.detector", t => t.detector_id)
+                .Index(t => t.detector_id)
+                .Index(t => t.detector_data_prefab_id);
+            
+            CreateTable(
+                "dbo.detector_data_prefab",
+                c => new
+                    {
+                        id = c.Int(nullable: false, identity: true),
+                        detector_prefab_id = c.Int(nullable: false),
+                        visualizer_type_id = c.Int(),
+                        field_data_type_id = c.Int(nullable: false),
+                        field_name = c.String(nullable: false, maxLength: 256, unicode: false),
+                        field_description = c.String(unicode: false, storeType: "text"),
+                        argument_name = c.String(maxLength: 256, unicode: false),
+                    })
+                .PrimaryKey(t => t.id)
+                .ForeignKey("dbo.data_type", t => t.field_data_type_id)
+                .ForeignKey("dbo.detector_prefab", t => t.detector_prefab_id)
+                .ForeignKey("dbo.visualizer_type", t => t.visualizer_type_id)
+                .Index(t => t.detector_prefab_id)
+                .Index(t => t.visualizer_type_id)
+                .Index(t => t.field_data_type_id);
+            
+            CreateTable(
+                "dbo.data_type",
+                c => new
+                    {
+                        id = c.Int(nullable: false, identity: true),
+                        name = c.String(nullable: false, maxLength: 256, unicode: false),
+                    })
+                .PrimaryKey(t => t.id);
+            
+            CreateTable(
+                "dbo.detector_settings_prefab",
+                c => new
+                    {
+                        id = c.Int(nullable: false, identity: true),
+                        detector_prefab_id = c.Int(nullable: false),
+                        option_data_type_id = c.Int(nullable: false),
+                        option_name = c.String(nullable: false, maxLength: 256, unicode: false),
+                        option_description = c.String(unicode: false, storeType: "text"),
+                    })
+                .PrimaryKey(t => t.id)
+                .ForeignKey("dbo.detector_prefab", t => t.detector_prefab_id)
+                .ForeignKey("dbo.data_type", t => t.option_data_type_id)
+                .Index(t => t.detector_prefab_id)
+                .Index(t => t.option_data_type_id);
+            
+            CreateTable(
+                "dbo.detector_prefab",
+                c => new
+                    {
+                        id = c.Int(nullable: false, identity: true),
+                        company_id = c.Int(nullable: false),
+                        name = c.String(nullable: false, maxLength: 256, unicode: false),
+                        image_url = c.String(nullable: false, maxLength: 1024, unicode: false),
+                    })
+                .PrimaryKey(t => t.id)
+                .ForeignKey("dbo.company", t => t.company_id)
+                .Index(t => t.company_id);
             
             CreateTable(
                 "dbo.company",
@@ -198,157 +326,6 @@
                 .PrimaryKey(t => t.id);
             
             CreateTable(
-                "dbo.detector",
-                c => new
-                    {
-                        id = c.Int(nullable: false, identity: true),
-                        detector_prefab_id = c.Int(nullable: false),
-                        pipeline_item_id = c.Int(),
-                    })
-                .PrimaryKey(t => t.id)
-                .ForeignKey("dbo.detector_prefab", t => t.detector_prefab_id)
-                .ForeignKey("dbo.pipeline_item", t => t.pipeline_item_id)
-                .Index(t => t.detector_prefab_id)
-                .Index(t => t.pipeline_item_id);
-            
-            CreateTable(
-                "dbo.detector_fault_event",
-                c => new
-                    {
-                        id = c.Int(nullable: false, identity: true),
-                        detector_id = c.Int(nullable: false),
-                        detector_fault_prefab_id = c.Int(nullable: false),
-                        timespan = c.DateTime(nullable: false),
-                        log = c.String(unicode: false, storeType: "text"),
-                        is_fixed = c.Boolean(nullable: false),
-                    })
-                .PrimaryKey(t => t.id)
-                .ForeignKey("dbo.detector_fault_prefab", t => t.detector_fault_prefab_id, cascadeDelete: true)
-                .ForeignKey("dbo.detector", t => t.detector_id, cascadeDelete: true)
-                .Index(t => t.detector_id)
-                .Index(t => t.detector_fault_prefab_id);
-            
-            CreateTable(
-                "dbo.detector_fault_prefab",
-                c => new
-                    {
-                        id = c.Int(nullable: false, identity: true),
-                        detector_prefab_id = c.Int(nullable: false),
-                        name = c.String(nullable: false, maxLength: 256, unicode: false),
-                        fault_condition = c.String(unicode: false, storeType: "text"),
-                    })
-                .PrimaryKey(t => t.id)
-                .ForeignKey("dbo.detector_prefab", t => t.detector_prefab_id)
-                .Index(t => t.detector_prefab_id);
-            
-            CreateTable(
-                "dbo.detector_prefab",
-                c => new
-                    {
-                        id = c.Int(nullable: false, identity: true),
-                        company_id = c.Int(nullable: false),
-                        name = c.String(nullable: false, maxLength: 256, unicode: false),
-                        image_url = c.String(nullable: false, maxLength: 1024, unicode: false),
-                    })
-                .PrimaryKey(t => t.id)
-                .ForeignKey("dbo.company", t => t.company_id)
-                .Index(t => t.company_id);
-            
-            CreateTable(
-                "dbo.detector_data_prefab",
-                c => new
-                    {
-                        id = c.Int(nullable: false, identity: true),
-                        detector_prefab_id = c.Int(nullable: false),
-                        visualizer_type_id = c.Int(),
-                        field_data_type_id = c.Int(nullable: false),
-                        field_name = c.String(nullable: false, maxLength: 256, unicode: false),
-                        field_description = c.String(unicode: false, storeType: "text"),
-                        argument_name = c.String(maxLength: 256, unicode: false),
-                    })
-                .PrimaryKey(t => t.id)
-                .ForeignKey("dbo.data_type", t => t.field_data_type_id)
-                .ForeignKey("dbo.visualizer_type", t => t.visualizer_type_id)
-                .ForeignKey("dbo.detector_prefab", t => t.detector_prefab_id)
-                .Index(t => t.detector_prefab_id)
-                .Index(t => t.visualizer_type_id)
-                .Index(t => t.field_data_type_id);
-            
-            CreateTable(
-                "dbo.data_type",
-                c => new
-                    {
-                        id = c.Int(nullable: false, identity: true),
-                        name = c.String(nullable: false, maxLength: 256, unicode: false),
-                    })
-                .PrimaryKey(t => t.id);
-            
-            CreateTable(
-                "dbo.detector_settings_prefab",
-                c => new
-                    {
-                        id = c.Int(nullable: false, identity: true),
-                        detector_prefab_id = c.Int(nullable: false),
-                        option_data_type_id = c.Int(nullable: false),
-                        option_name = c.String(nullable: false, maxLength: 256, unicode: false),
-                        option_description = c.String(unicode: false, storeType: "text"),
-                    })
-                .PrimaryKey(t => t.id)
-                .ForeignKey("dbo.data_type", t => t.option_data_type_id)
-                .ForeignKey("dbo.detector_prefab", t => t.detector_prefab_id)
-                .Index(t => t.detector_prefab_id)
-                .Index(t => t.option_data_type_id);
-            
-            CreateTable(
-                "dbo.detector_settings_value",
-                c => new
-                    {
-                        id = c.Int(nullable: false, identity: true),
-                        detector_id = c.Int(nullable: false),
-                        detector_settings_prefab_id = c.Int(nullable: false),
-                        option_data_value_base64 = c.String(unicode: false, storeType: "text"),
-                    })
-                .PrimaryKey(t => t.id)
-                .ForeignKey("dbo.detector_settings_prefab", t => t.detector_settings_prefab_id)
-                .ForeignKey("dbo.detector", t => t.detector_id)
-                .Index(t => t.detector_id)
-                .Index(t => t.detector_settings_prefab_id);
-            
-            CreateTable(
-                "dbo.pipeline_item_settings_prefab",
-                c => new
-                    {
-                        id = c.Int(nullable: false, identity: true),
-                        pipeline_item_prefab_id = c.Int(nullable: false),
-                        option_data_type_id = c.Int(nullable: false),
-                        option_name = c.String(nullable: false, maxLength: 256, unicode: false),
-                        option_description = c.String(unicode: false, storeType: "text"),
-                    })
-                .PrimaryKey(t => t.id)
-                .ForeignKey("dbo.pipeline_item_prefab", t => t.pipeline_item_prefab_id)
-                .ForeignKey("dbo.data_type", t => t.option_data_type_id)
-                .Index(t => t.pipeline_item_prefab_id)
-                .Index(t => t.option_data_type_id);
-            
-            CreateTable(
-                "dbo.pipeline_item_prefab",
-                c => new
-                    {
-                        id = c.Int(nullable: false, identity: true),
-                        company_id = c.Int(nullable: false),
-                        name = c.String(nullable: false, maxLength: 1024, unicode: false),
-                        description = c.String(unicode: false, storeType: "text"),
-                        image_url = c.String(nullable: false, maxLength: 1024, unicode: false),
-                        input_x = c.Double(nullable: false),
-                        input_y = c.Double(nullable: false),
-                        output_x = c.Double(nullable: false),
-                        output_y = c.Double(nullable: false),
-                    })
-                .PrimaryKey(t => t.id)
-                .ForeignKey("dbo.company", t => t.company_id)
-                .Index(t => t.company_id);
-            
-            CreateTable(
                 "dbo.pipeline_item",
                 c => new
                     {
@@ -492,6 +469,40 @@
                 .Index(t => t.account_id);
             
             CreateTable(
+                "dbo.pipeline_item_prefab",
+                c => new
+                    {
+                        id = c.Int(nullable: false, identity: true),
+                        company_id = c.Int(nullable: false),
+                        name = c.String(nullable: false, maxLength: 1024, unicode: false),
+                        description = c.String(unicode: false, storeType: "text"),
+                        image_url = c.String(nullable: false, maxLength: 1024, unicode: false),
+                        input_x = c.Double(nullable: false),
+                        input_y = c.Double(nullable: false),
+                        output_x = c.Double(nullable: false),
+                        output_y = c.Double(nullable: false),
+                    })
+                .PrimaryKey(t => t.id)
+                .ForeignKey("dbo.company", t => t.company_id)
+                .Index(t => t.company_id);
+            
+            CreateTable(
+                "dbo.pipeline_item_settings_prefab",
+                c => new
+                    {
+                        id = c.Int(nullable: false, identity: true),
+                        pipeline_item_prefab_id = c.Int(nullable: false),
+                        option_data_type_id = c.Int(nullable: false),
+                        option_name = c.String(nullable: false, maxLength: 256, unicode: false),
+                        option_description = c.String(unicode: false, storeType: "text"),
+                    })
+                .PrimaryKey(t => t.id)
+                .ForeignKey("dbo.pipeline_item_prefab", t => t.pipeline_item_prefab_id)
+                .ForeignKey("dbo.data_type", t => t.option_data_type_id)
+                .Index(t => t.pipeline_item_prefab_id)
+                .Index(t => t.option_data_type_id);
+            
+            CreateTable(
                 "dbo.pipeline_item_settings_value",
                 c => new
                     {
@@ -501,26 +512,38 @@
                         option_data_value_base64 = c.String(unicode: false, storeType: "text"),
                     })
                 .PrimaryKey(t => t.id)
-                .ForeignKey("dbo.pipeline_item", t => t.pipeline_item_id)
                 .ForeignKey("dbo.pipeline_item_settings_prefab", t => t.pipeline_item_settings_prefab_id)
+                .ForeignKey("dbo.pipeline_item", t => t.pipeline_item_id)
                 .Index(t => t.pipeline_item_id)
                 .Index(t => t.pipeline_item_settings_prefab_id);
             
             CreateTable(
-                "dbo.detector_data",
+                "dbo.detector_fault_prefab",
+                c => new
+                    {
+                        id = c.Int(nullable: false, identity: true),
+                        detector_prefab_id = c.Int(nullable: false),
+                        name = c.String(nullable: false, maxLength: 256, unicode: false),
+                        fault_condition = c.String(unicode: false, storeType: "text"),
+                    })
+                .PrimaryKey(t => t.id)
+                .ForeignKey("dbo.detector_prefab", t => t.detector_prefab_id)
+                .Index(t => t.detector_prefab_id);
+            
+            CreateTable(
+                "dbo.detector_settings_value",
                 c => new
                     {
                         id = c.Int(nullable: false, identity: true),
                         detector_id = c.Int(nullable: false),
-                        detector_data_prefab_id = c.Int(nullable: false),
-                        field_data_value_base64 = c.String(unicode: false, storeType: "text"),
-                        timespan = c.DateTime(nullable: false),
+                        detector_settings_prefab_id = c.Int(nullable: false),
+                        option_data_value_base64 = c.String(unicode: false, storeType: "text"),
                     })
                 .PrimaryKey(t => t.id)
-                .ForeignKey("dbo.detector_data_prefab", t => t.detector_data_prefab_id)
+                .ForeignKey("dbo.detector_settings_prefab", t => t.detector_settings_prefab_id)
                 .ForeignKey("dbo.detector", t => t.detector_id)
                 .Index(t => t.detector_id)
-                .Index(t => t.detector_data_prefab_id);
+                .Index(t => t.detector_settings_prefab_id);
             
             CreateTable(
                 "dbo.visualizer_type",
@@ -530,22 +553,6 @@
                         name = c.String(nullable: false, maxLength: 256, unicode: false),
                     })
                 .PrimaryKey(t => t.id);
-            
-            CreateTable(
-                "dbo.detector_interaction_event",
-                c => new
-                    {
-                        id = c.Int(nullable: false, identity: true),
-                        detector_id = c.Int(nullable: false),
-                        account_id = c.Int(nullable: false),
-                        timespan = c.DateTime(nullable: false),
-                        log = c.String(unicode: false, storeType: "text"),
-                    })
-                .PrimaryKey(t => t.id)
-                .ForeignKey("dbo.detector", t => t.detector_id)
-                .ForeignKey("dbo.account", t => t.account_id)
-                .Index(t => t.detector_id)
-                .Index(t => t.account_id);
             
             CreateTable(
                 "dbo.role_db_permission",
@@ -626,6 +633,19 @@
                 .Index(t => t.role_id);
             
             CreateTable(
+                "dbo.role_manufactory_permission",
+                c => new
+                    {
+                        manufactory_id = c.Int(nullable: false),
+                        role_id = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => new { t.manufactory_id, t.role_id })
+                .ForeignKey("dbo.manufactory", t => t.manufactory_id, cascadeDelete: true)
+                .ForeignKey("dbo.role", t => t.role_id, cascadeDelete: true)
+                .Index(t => t.manufactory_id)
+                .Index(t => t.role_id);
+            
+            CreateTable(
                 "dbo.detector_tracked_fault_prefab",
                 c => new
                     {
@@ -649,19 +669,6 @@
                 .ForeignKey("dbo.detector", t => t.detector_id, cascadeDelete: true)
                 .ForeignKey("dbo.role", t => t.role_id, cascadeDelete: true)
                 .Index(t => t.detector_id)
-                .Index(t => t.role_id);
-            
-            CreateTable(
-                "dbo.role_manufactory_permission",
-                c => new
-                    {
-                        manufactory_id = c.Int(nullable: false),
-                        role_id = c.Int(nullable: false),
-                    })
-                .PrimaryKey(t => new { t.manufactory_id, t.role_id })
-                .ForeignKey("dbo.manufactory", t => t.manufactory_id, cascadeDelete: true)
-                .ForeignKey("dbo.role", t => t.role_id, cascadeDelete: true)
-                .Index(t => t.manufactory_id)
                 .Index(t => t.role_id);
             
             CreateTable(
@@ -702,10 +709,27 @@
             DropForeignKey("dbo.company", "owner_id", "dbo.account");
             DropForeignKey("dbo.enter_leave_point_event", "account_id", "dbo.account");
             DropForeignKey("dbo.detector_interaction_event", "account_id", "dbo.account");
+            DropForeignKey("dbo.task", "creator_account_id", "dbo.account");
             DropForeignKey("dbo.check_point_event", "account_id", "dbo.account");
             DropForeignKey("dbo.account_bosses_subs", "boss_account_id", "dbo.account");
             DropForeignKey("dbo.account_bosses_subs", "sub_account_id", "dbo.account");
             DropForeignKey("dbo.task", "assignee_account_id", "dbo.account");
+            DropForeignKey("dbo.role_detector_permission", "role_id", "dbo.role");
+            DropForeignKey("dbo.role_detector_permission", "detector_id", "dbo.detector");
+            DropForeignKey("dbo.detector_settings_value", "detector_id", "dbo.detector");
+            DropForeignKey("dbo.detector_tracked_fault_prefab", "detector_fault_prefab_id", "dbo.detector_fault_prefab");
+            DropForeignKey("dbo.detector_tracked_fault_prefab", "detector_id", "dbo.detector");
+            DropForeignKey("dbo.detector_data", "detector_id", "dbo.detector");
+            DropForeignKey("dbo.detector_data_prefab", "visualizer_type_id", "dbo.visualizer_type");
+            DropForeignKey("dbo.detector_data", "detector_data_prefab_id", "dbo.detector_data_prefab");
+            DropForeignKey("dbo.pipeline_item_settings_prefab", "option_data_type_id", "dbo.data_type");
+            DropForeignKey("dbo.detector_settings_prefab", "option_data_type_id", "dbo.data_type");
+            DropForeignKey("dbo.detector_settings_value", "detector_settings_prefab_id", "dbo.detector_settings_prefab");
+            DropForeignKey("dbo.detector_settings_prefab", "detector_prefab_id", "dbo.detector_prefab");
+            DropForeignKey("dbo.detector_fault_prefab", "detector_prefab_id", "dbo.detector_prefab");
+            DropForeignKey("dbo.detector_fault_event", "detector_fault_prefab_id", "dbo.detector_fault_prefab");
+            DropForeignKey("dbo.detector_data_prefab", "detector_prefab_id", "dbo.detector_prefab");
+            DropForeignKey("dbo.detector", "detector_prefab_id", "dbo.detector_prefab");
             DropForeignKey("dbo.unit", "company_id", "dbo.company");
             DropForeignKey("dbo.task", "company_id", "dbo.company");
             DropForeignKey("dbo.storage_cell_prefab", "company_id", "dbo.company");
@@ -725,25 +749,10 @@
             DropForeignKey("dbo.pipeline_item", "manufactory_id", "dbo.manufactory");
             DropForeignKey("dbo.role_manufactory_permission", "role_id", "dbo.role");
             DropForeignKey("dbo.role_manufactory_permission", "manufactory_id", "dbo.manufactory");
-            DropForeignKey("dbo.role_detector_permission", "role_id", "dbo.role");
-            DropForeignKey("dbo.role_detector_permission", "detector_id", "dbo.detector");
-            DropForeignKey("dbo.detector_settings_value", "detector_id", "dbo.detector");
-            DropForeignKey("dbo.detector_tracked_fault_prefab", "detector_fault_prefab_id", "dbo.detector_fault_prefab");
-            DropForeignKey("dbo.detector_tracked_fault_prefab", "detector_id", "dbo.detector");
-            DropForeignKey("dbo.detector_data", "detector_id", "dbo.detector");
-            DropForeignKey("dbo.detector_interaction_event", "detector_id", "dbo.detector");
-            DropForeignKey("dbo.detector_fault_event", "detector_id", "dbo.detector");
-            DropForeignKey("dbo.detector_fault_event", "detector_fault_prefab_id", "dbo.detector_fault_prefab");
-            DropForeignKey("dbo.detector_settings_prefab", "detector_prefab_id", "dbo.detector_prefab");
-            DropForeignKey("dbo.detector_fault_prefab", "detector_prefab_id", "dbo.detector_prefab");
-            DropForeignKey("dbo.detector_data_prefab", "detector_prefab_id", "dbo.detector_prefab");
-            DropForeignKey("dbo.detector_data_prefab", "visualizer_type_id", "dbo.visualizer_type");
-            DropForeignKey("dbo.detector_data", "detector_data_prefab_id", "dbo.detector_data_prefab");
-            DropForeignKey("dbo.pipeline_item_settings_prefab", "option_data_type_id", "dbo.data_type");
-            DropForeignKey("dbo.pipeline_item_settings_value", "pipeline_item_settings_prefab_id", "dbo.pipeline_item_settings_prefab");
-            DropForeignKey("dbo.pipeline_item_settings_prefab", "pipeline_item_prefab_id", "dbo.pipeline_item_prefab");
-            DropForeignKey("dbo.pipeline_item", "pipeline_item_prefab_id", "dbo.pipeline_item_prefab");
             DropForeignKey("dbo.pipeline_item_settings_value", "pipeline_item_id", "dbo.pipeline_item");
+            DropForeignKey("dbo.pipeline_item_settings_prefab", "pipeline_item_prefab_id", "dbo.pipeline_item_prefab");
+            DropForeignKey("dbo.pipeline_item_settings_value", "pipeline_item_settings_prefab_id", "dbo.pipeline_item_settings_prefab");
+            DropForeignKey("dbo.pipeline_item", "pipeline_item_prefab_id", "dbo.pipeline_item_prefab");
             DropForeignKey("dbo.pipeline_item_interaction_event", "pipeline_item_id", "dbo.pipeline_item");
             DropForeignKey("dbo.role_pipeline_item_permission", "role_id", "dbo.role");
             DropForeignKey("dbo.role_pipeline_item_permission", "pipeline_item_id", "dbo.pipeline_item");
@@ -763,10 +772,6 @@
             DropForeignKey("dbo.pipeline_item_pipeline_item_connection", "input_pipeline_item_id", "dbo.pipeline_item");
             DropForeignKey("dbo.pipeline_item_pipeline_item_connection", "output_pipeline_item_id", "dbo.pipeline_item");
             DropForeignKey("dbo.detector", "pipeline_item_id", "dbo.pipeline_item");
-            DropForeignKey("dbo.detector_settings_prefab", "option_data_type_id", "dbo.data_type");
-            DropForeignKey("dbo.detector_settings_value", "detector_settings_prefab_id", "dbo.detector_settings_prefab");
-            DropForeignKey("dbo.detector_data_prefab", "field_data_type_id", "dbo.data_type");
-            DropForeignKey("dbo.detector", "detector_prefab_id", "dbo.detector_prefab");
             DropForeignKey("dbo.role_db_permission", "role_id", "dbo.role");
             DropForeignKey("dbo.role_db_permission", "db_permission_id", "dbo.db_permission");
             DropForeignKey("dbo.db_permission", "db_permission_type_id", "dbo.db_permission_type");
@@ -777,16 +782,20 @@
             DropForeignKey("dbo.check_point", "manufactory2_id", "dbo.manufactory");
             DropForeignKey("dbo.check_point", "company_plan_unique_point1_id", "dbo.company_plan_unique_point");
             DropForeignKey("dbo.check_point_event", "check_point_id", "dbo.check_point");
+            DropForeignKey("dbo.detector_data_prefab", "field_data_type_id", "dbo.data_type");
+            DropForeignKey("dbo.detector_interaction_event", "detector_id", "dbo.detector");
+            DropForeignKey("dbo.detector_fault_event", "detector_id", "dbo.detector");
+            DropForeignKey("dbo.detector_fault_event", "associated_task_id", "dbo.task");
             DropIndex("dbo.account_role", new[] { "role_id" });
             DropIndex("dbo.account_role", new[] { "account_id" });
             DropIndex("dbo.account_bosses_subs", new[] { "boss_account_id" });
             DropIndex("dbo.account_bosses_subs", new[] { "sub_account_id" });
-            DropIndex("dbo.role_manufactory_permission", new[] { "role_id" });
-            DropIndex("dbo.role_manufactory_permission", new[] { "manufactory_id" });
             DropIndex("dbo.role_detector_permission", new[] { "role_id" });
             DropIndex("dbo.role_detector_permission", new[] { "detector_id" });
             DropIndex("dbo.detector_tracked_fault_prefab", new[] { "detector_fault_prefab_id" });
             DropIndex("dbo.detector_tracked_fault_prefab", new[] { "detector_id" });
+            DropIndex("dbo.role_manufactory_permission", new[] { "role_id" });
+            DropIndex("dbo.role_manufactory_permission", new[] { "manufactory_id" });
             DropIndex("dbo.role_pipeline_item_permission", new[] { "role_id" });
             DropIndex("dbo.role_pipeline_item_permission", new[] { "pipeline_item_id" });
             DropIndex("dbo.output_storage_cell_connection", new[] { "output_storage_cell_id" });
@@ -799,12 +808,14 @@
             DropIndex("dbo.pipeline_item_pipeline_item_connection", new[] { "output_pipeline_item_id" });
             DropIndex("dbo.role_db_permission", new[] { "role_id" });
             DropIndex("dbo.role_db_permission", new[] { "db_permission_id" });
-            DropIndex("dbo.detector_interaction_event", new[] { "account_id" });
-            DropIndex("dbo.detector_interaction_event", new[] { "detector_id" });
-            DropIndex("dbo.detector_data", new[] { "detector_data_prefab_id" });
-            DropIndex("dbo.detector_data", new[] { "detector_id" });
+            DropIndex("dbo.detector_settings_value", new[] { "detector_settings_prefab_id" });
+            DropIndex("dbo.detector_settings_value", new[] { "detector_id" });
+            DropIndex("dbo.detector_fault_prefab", new[] { "detector_prefab_id" });
             DropIndex("dbo.pipeline_item_settings_value", new[] { "pipeline_item_settings_prefab_id" });
             DropIndex("dbo.pipeline_item_settings_value", new[] { "pipeline_item_id" });
+            DropIndex("dbo.pipeline_item_settings_prefab", new[] { "option_data_type_id" });
+            DropIndex("dbo.pipeline_item_settings_prefab", new[] { "pipeline_item_prefab_id" });
+            DropIndex("dbo.pipeline_item_prefab", new[] { "company_id" });
             DropIndex("dbo.pipeline_item_interaction_event", new[] { "account_id" });
             DropIndex("dbo.pipeline_item_interaction_event", new[] { "pipeline_item_id" });
             DropIndex("dbo.storage_cell_prefab", new[] { "company_id" });
@@ -822,22 +833,6 @@
             DropIndex("dbo.pipeline_item", new[] { "manufactory_id" });
             DropIndex("dbo.pipeline_item", new[] { "pipeline_item_prefab_id" });
             DropIndex("dbo.pipeline_item", new[] { "pipeline_id" });
-            DropIndex("dbo.pipeline_item_prefab", new[] { "company_id" });
-            DropIndex("dbo.pipeline_item_settings_prefab", new[] { "option_data_type_id" });
-            DropIndex("dbo.pipeline_item_settings_prefab", new[] { "pipeline_item_prefab_id" });
-            DropIndex("dbo.detector_settings_value", new[] { "detector_settings_prefab_id" });
-            DropIndex("dbo.detector_settings_value", new[] { "detector_id" });
-            DropIndex("dbo.detector_settings_prefab", new[] { "option_data_type_id" });
-            DropIndex("dbo.detector_settings_prefab", new[] { "detector_prefab_id" });
-            DropIndex("dbo.detector_data_prefab", new[] { "field_data_type_id" });
-            DropIndex("dbo.detector_data_prefab", new[] { "visualizer_type_id" });
-            DropIndex("dbo.detector_data_prefab", new[] { "detector_prefab_id" });
-            DropIndex("dbo.detector_prefab", new[] { "company_id" });
-            DropIndex("dbo.detector_fault_prefab", new[] { "detector_prefab_id" });
-            DropIndex("dbo.detector_fault_event", new[] { "detector_fault_prefab_id" });
-            DropIndex("dbo.detector_fault_event", new[] { "detector_id" });
-            DropIndex("dbo.detector", new[] { "pipeline_item_id" });
-            DropIndex("dbo.detector", new[] { "detector_prefab_id" });
             DropIndex("dbo.db_permission", new[] { "db_permission_type_id" });
             DropIndex("dbo.role", new[] { "company_id" });
             DropIndex("dbo.manufactory_plan_point", new[] { "company_plan_unique_point_id" });
@@ -856,26 +851,44 @@
             DropIndex("dbo.check_point", new[] { "company_plan_unique_point1_id" });
             DropIndex("dbo.company_plan_unique_point", new[] { "company_id" });
             DropIndex("dbo.company", new[] { "owner_id" });
+            DropIndex("dbo.detector_prefab", new[] { "company_id" });
+            DropIndex("dbo.detector_settings_prefab", new[] { "option_data_type_id" });
+            DropIndex("dbo.detector_settings_prefab", new[] { "detector_prefab_id" });
+            DropIndex("dbo.detector_data_prefab", new[] { "field_data_type_id" });
+            DropIndex("dbo.detector_data_prefab", new[] { "visualizer_type_id" });
+            DropIndex("dbo.detector_data_prefab", new[] { "detector_prefab_id" });
+            DropIndex("dbo.detector_data", new[] { "detector_data_prefab_id" });
+            DropIndex("dbo.detector_data", new[] { "detector_id" });
+            DropIndex("dbo.detector_interaction_event", new[] { "account_id" });
+            DropIndex("dbo.detector_interaction_event", new[] { "detector_id" });
+            DropIndex("dbo.detector", new[] { "pipeline_item_id" });
+            DropIndex("dbo.detector", new[] { "detector_prefab_id" });
+            DropIndex("dbo.detector_fault_event", new[] { "detector_fault_prefab_id" });
+            DropIndex("dbo.detector_fault_event", new[] { "detector_id" });
+            DropIndex("dbo.detector_fault_event", new[] { "associated_task_id" });
             DropIndex("dbo.task", new[] { "reviewer_account_id" });
             DropIndex("dbo.task", new[] { "assignee_account_id" });
+            DropIndex("dbo.task", new[] { "creator_account_id" });
             DropIndex("dbo.task", new[] { "company_id" });
             DropIndex("dbo.account", new[] { "login" });
             DropIndex("dbo.account", new[] { "company_id" });
             DropTable("dbo.account_role");
             DropTable("dbo.account_bosses_subs");
-            DropTable("dbo.role_manufactory_permission");
             DropTable("dbo.role_detector_permission");
             DropTable("dbo.detector_tracked_fault_prefab");
+            DropTable("dbo.role_manufactory_permission");
             DropTable("dbo.role_pipeline_item_permission");
             DropTable("dbo.output_storage_cell_connection");
             DropTable("dbo.input_storage_cell_connection");
             DropTable("dbo.role_storage_cell_permission");
             DropTable("dbo.pipeline_item_pipeline_item_connection");
             DropTable("dbo.role_db_permission");
-            DropTable("dbo.detector_interaction_event");
             DropTable("dbo.visualizer_type");
-            DropTable("dbo.detector_data");
+            DropTable("dbo.detector_settings_value");
+            DropTable("dbo.detector_fault_prefab");
             DropTable("dbo.pipeline_item_settings_value");
+            DropTable("dbo.pipeline_item_settings_prefab");
+            DropTable("dbo.pipeline_item_prefab");
             DropTable("dbo.pipeline_item_interaction_event");
             DropTable("dbo.storage_cell_prefab");
             DropTable("dbo.storage_cell_event");
@@ -885,16 +898,6 @@
             DropTable("dbo.pipeline");
             DropTable("dbo.storage_cell");
             DropTable("dbo.pipeline_item");
-            DropTable("dbo.pipeline_item_prefab");
-            DropTable("dbo.pipeline_item_settings_prefab");
-            DropTable("dbo.detector_settings_value");
-            DropTable("dbo.detector_settings_prefab");
-            DropTable("dbo.data_type");
-            DropTable("dbo.detector_data_prefab");
-            DropTable("dbo.detector_prefab");
-            DropTable("dbo.detector_fault_prefab");
-            DropTable("dbo.detector_fault_event");
-            DropTable("dbo.detector");
             DropTable("dbo.db_permission_type");
             DropTable("dbo.db_permission");
             DropTable("dbo.role");
@@ -906,6 +909,14 @@
             DropTable("dbo.check_point");
             DropTable("dbo.company_plan_unique_point");
             DropTable("dbo.company");
+            DropTable("dbo.detector_prefab");
+            DropTable("dbo.detector_settings_prefab");
+            DropTable("dbo.data_type");
+            DropTable("dbo.detector_data_prefab");
+            DropTable("dbo.detector_data");
+            DropTable("dbo.detector_interaction_event");
+            DropTable("dbo.detector");
+            DropTable("dbo.detector_fault_event");
             DropTable("dbo.task");
             DropTable("dbo.account");
         }

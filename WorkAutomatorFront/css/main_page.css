@@ -1,0 +1,154 @@
+body {
+	background-color: #F5F4F5;
+}
+
+.menu_nav {
+	color: white;
+	justify-content: space-around;
+	padding: 0 0px;
+	font-size: 16px;
+}
+
+
+.links {
+	display: inline;
+	padding: 0 0px;
+	width: 80vw;
+	justify-content: space-around;
+}
+
+.account {
+	margin-left: 0vw;
+	font-size: 18px;
+}
+
+ul {
+  list-style: none; 
+  margin: 0;
+  padding: 0;
+}
+
+li {
+	width: 10vw;
+}
+
+#logo {
+	font-size: 35px;
+	width: 20vw;
+	padding-left: 10px;
+}
+
+
+.topmenu > li {
+  display: inline-block;
+  margin-right: 20px;
+  position: relative;
+}
+.topmenu > li:last-child {
+  margin-right: 0;
+}
+a {
+  display: block;
+  padding: 10px 15px;
+  text-decoration: none;
+  outline: none;
+  transition: .5s linear;
+}
+.fa {
+  color: inherit;
+  padding-left: 10px;
+}
+.submenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+  -webkit-transition: 0.5s ease-in-out;
+  -moz-transition: 0.5s ease-in-out;
+  -o-transition: 0.5s ease-in-out;
+  transition: 0.5s ease-in-out;
+}
+.one ul {
+  background-color: #6C6874;
+}
+.one ul a {
+  color: white;
+  text-align:center;
+}
+
+.one ul a:hover {
+	color: rgba(87,184,70, 0.8);
+}
+
+.one .submenu {
+  display: none;
+}
+.one ul li:hover .submenu {
+  display: block;
+}  
+
+.list-item-container {
+	width: 95%;
+	margin: 2.5% 15px;
+	padding: 20px;
+	
+	background: white;
+	display: inline-block;
+	box-shadow: 0 14px 28px rgba(0,0,0,0.1), 0 10px 10px rgba(0,0,0,0.1);
+}
+
+.correctClass {
+	background-color: green;
+}
+
+.incorrectClass {
+	background-color: red;
+}
+
+.company_name {
+	font-size: 25px;
+}
+
+.company_description {
+	padding: 15px;
+	width: 20vw;
+}
+
+.comp_btn {
+	width: auto;
+	display: inline;
+	margin: 10px;
+}
+
+.comp_reg {
+	margin: 10vh auto;
+    position: relative;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    align-content: center; 
+    justify-content: center; 
+    overflow: auto;  
+}
+
+.room_reg {
+	margin: 6vh auto;
+}
+
+#pass_cond, #viol_cond, #second_room, #failure_cond, #extra_data {
+	display: none;
+}
+
+.but {
+	width: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding-top: 20px;
+}

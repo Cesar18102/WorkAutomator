@@ -122,17 +122,9 @@
     <Compile Include="Exceptions\DatabaseActionValidationException.cs" />
     <Compile Include="Exceptions\EntityNotFoundException.cs" />
     <Compile Include="IRepo.cs" />
-    <Compile Include="Migrations\202106012333455_reinit.cs" />
-    <Compile Include="Migrations\202106012333455_reinit.designer.cs">
-      <DependentUpon>202106012333455_reinit.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202106021058138_fault-associated-task.cs" />
-    <Compile Include="Migrations\202106021058138_fault-associated-task.designer.cs">
-      <DependentUpon>202106021058138_fault-associated-task.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202106021129417_is-reviewed-task.cs" />
-    <Compile Include="Migrations\202106021129417_is-reviewed-task.designer.cs">
-      <DependentUpon>202106021129417_is-reviewed-task.cs</DependentUpon>
+    <Compile Include="Migrations\202106022238566_init-azure.cs" />
+    <Compile Include="Migrations\202106022238566_init-azure.designer.cs">
+      <DependentUpon>202106022238566_init-azure.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Repos\AccountRepo.cs" />
@@ -147,14 +139,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202106012333455_reinit.resx">
-      <DependentUpon>202106012333455_reinit.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202106021058138_fault-associated-task.resx">
-      <DependentUpon>202106021058138_fault-associated-task.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202106021129417_is-reviewed-task.resx">
-      <DependentUpon>202106021129417_is-reviewed-task.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202106022238566_init-azure.resx">
+      <DependentUpon>202106022238566_init-azure.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

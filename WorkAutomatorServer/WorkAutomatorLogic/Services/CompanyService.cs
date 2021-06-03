@@ -93,7 +93,7 @@ namespace WorkAutomatorLogic.Services
 
                     await db.Save();
 
-                    await RoleService.CreateCompanyWorkerRole(company.owner_id, account.id);
+                    await RoleService.CreateCompanyWorkerRole(account.id);
 
                     return await GetCompany(account.company_id.Value);
                 }
