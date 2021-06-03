@@ -14,6 +14,7 @@ using WorkAutomatorServer.Aspects;
 
 namespace WorkAutomatorServer.Controllers
 {
+    [EnableCors("*", "*", "*")]
     public class PipelineItemController : ControllerBase
     {
         private static IPipelineItemService PipelineItemService = LogicDependencyHolder.Dependencies.Resolve<IPipelineItemService>();

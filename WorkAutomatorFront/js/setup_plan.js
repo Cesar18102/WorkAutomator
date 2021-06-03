@@ -210,8 +210,8 @@ function updateCanvas() {
 	}
 	
 	for(let manufactory of MODEL.manufactories) {
+		ctx.fillStyle = "#" + manufactory.color;
 		for(let manufactory_plan_point of manufactory.manufactory_plan_points) {
-			ctx.fillStyle = "#" + manufactory.color;
 			ctx.beginPath();
 			
 			ctx.arc(
@@ -223,6 +223,28 @@ function updateCanvas() {
 				
 			ctx.fill();
 		}
+		
+		ctx.strokeStyle = "#" + manufactory.color;
+		ctx.moveTo(
+			manufactory.manufactory_plan_points[0].company_plan_point.click_x,
+			manufactory.manufactory_plan_points[0].company_plan_point.click_y
+		);
+		
+		ctx.beginPath();
+		
+		for(let manufactory_plan_point of manufactory.manufactory_plan_points) {
+			ctx.lineTo(
+				manufactory_plan_point.company_plan_point.click_x, 
+				manufactory_plan_point.company_plan_point.click_y
+			);
+		}
+		
+		ctx.lineTo(
+			manufactory.manufactory_plan_points[0].company_plan_point.click_x,
+			manufactory.manufactory_plan_points[0].company_plan_point.click_y
+		);
+		
+		ctx.stroke();
 	}
 	
 	for(let check_point of MODEL.check_points) {
@@ -312,7 +334,7 @@ function addManufactory() {
 function addManufactoryPlanPoint(position) {
 	let company_plan_point = findCompanyPlanPointAtPosition(position);
 	
-	if(!company_plan_point) {
+	if(!company_plan_point || MODEL.current_manufactory.manufactory_plan_points.find(point => point.company_plan_point == company_plan_point)) {
 		return;
 	}
 	

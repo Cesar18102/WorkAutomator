@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-
+using System.Web.Http.Cors;
 using Autofac;
 
 using Dto;
@@ -14,6 +14,7 @@ using WorkAutomatorServer.Aspects;
 
 namespace WorkAutomatorServer.Controllers
 {
+    [EnableCors("*", "*", "*")]
     public class PipelineController : ControllerBase
     {
         private static IPipelineService PipelineService = LogicDependencyHolder.Dependencies.Resolve<IPipelineService>();

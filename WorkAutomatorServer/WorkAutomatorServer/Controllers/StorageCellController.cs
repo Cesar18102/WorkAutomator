@@ -11,9 +11,11 @@ using Dto.Interaction;
 using WorkAutomatorLogic;
 using WorkAutomatorLogic.ServiceInterfaces;
 using WorkAutomatorServer.Aspects;
+using System.Web.Http.Cors;
 
 namespace WorkAutomatorServer.Controllers
 {
+    [EnableCors("*", "*", "*")]
     public class StorageCellController : ControllerBase
     {
         private static IStorageCellService StorageCellService = LogicDependencyHolder.Dependencies.Resolve<IStorageCellService>();

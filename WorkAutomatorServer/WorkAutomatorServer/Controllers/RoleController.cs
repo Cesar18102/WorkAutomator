@@ -1,18 +1,17 @@
 ﻿using Autofac;
 using Dto;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using WorkAutomatorLogic;
 using WorkAutomatorLogic.ServiceInterfaces;
 using WorkAutomatorServer.Aspects;
 
 namespace WorkAutomatorServer.Controllers
 {
+    [EnableCors("*", "*", "*")]
     public class RoleController : ControllerBase
     {
         private static IRoleService RoleService = LogicDependencyHolder.Dependencies.Resolve<IRoleService>();

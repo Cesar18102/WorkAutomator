@@ -10,9 +10,11 @@ using WorkAutomatorLogic;
 using WorkAutomatorLogic.ServiceInterfaces;
 
 using WorkAutomatorServer.Aspects;
+using System.Web.Http.Cors;
 
 namespace WorkAutomatorServer.Controllers
 {
+    [EnableCors("*", "*", "*")]
     public class AccountController : ControllerBase
     {
         private static IAccountService AccountService = LogicDependencyHolder.Dependencies.Resolve<IAccountService>();

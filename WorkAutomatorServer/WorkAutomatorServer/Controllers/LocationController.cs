@@ -8,9 +8,11 @@ using Dto.Interaction;
 
 using WorkAutomatorLogic;
 using WorkAutomatorLogic.ServiceInterfaces;
+using System.Web.Http.Cors;
 
 namespace WorkAutomatorServer.Controllers
 {
+    [EnableCors("*", "*", "*")]
     public class LocationController : ControllerBase
     {
         private static ILocationService LocationService = LogicDependencyHolder.Dependencies.Resolve<ILocationService>();

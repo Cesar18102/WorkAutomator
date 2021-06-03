@@ -11,9 +11,11 @@ using WorkAutomatorLogic;
 using WorkAutomatorLogic.ServiceInterfaces;
 
 using WorkAutomatorServer.Aspects;
+using System.Web.Http.Cors;
 
 namespace WorkAutomatorServer.Controllers
 {
+    [EnableCors("*", "*", "*")]
     public class TaskController : ControllerBase
     {
         private static ITaskService TaskService = LogicDependencyHolder.Dependencies.Resolve<ITaskService>();

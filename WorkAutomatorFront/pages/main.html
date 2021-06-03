@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Work Manager</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" type="text/css" href="../css/main.css">
+	<link rel="stylesheet" type="text/css" href="../css/main_page.css">
+	
+</head>
+<body>
+	
+	<nav class="menu one">
+		<ul class="topmenu">
+			<li><a class="menu_nav logo" href="#" id="logo">WorkManager</a></li>
+			<li style="margin-left:10vw;"><a class="menu_nav" href="#">Company<i class="fa fa-angle-down"></i></a>
+				<ul class="submenu">
+					<li><a href="">Workers</a></li>
+					<li><a href="">Manage workers</a></li>
+					<li><a href="">Manage company</a></li>
+				</ul>
+			</li>
+			<li><a class="menu_nav" href="#">Statistics<i class="fa fa-angle-down"></i></a>
+				<ul class="submenu">
+					<li><a href="">Enter events</a></li>
+					<li><a href="">Leave events</a></li>
+					<li><a href="">Checkout events</a></li>
+					<li><a href="">Violation events</a></li>
+					<li><a href="">Task step events</a></li>
+				</ul>
+			</li>
+			<li><a class="menu_nav" href="#">Tasks</a>
+				<ul class="submenu">
+					<li><a href="">My tasks</a></li>
+					<li><a href="">New task</a></li>
+					<li><a href="">All tasks</a></li>
+				</ul>
+			</li>
+			<li class="account"><a class="menu_nav" href="#">Account</a>
+				<ul class="submenu">
+					<li><a href="">Settings</a></li>
+					<li><a href="">Leave</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+	</nav>
+	
+	<script src="../js/main.js">
+	
+	$(".five li ul").hide();
+	$(".five li:has('.submenu')").hover(
+	function(){
+		$(".five li ul").stop().fadeToggle(300);}
+	);
+	
+	</script>
+
+</body>
+</html>

@@ -10,9 +10,11 @@ using Dto;
 
 using WorkAutomatorLogic;
 using WorkAutomatorLogic.ServiceInterfaces;
+using System.Web.Http.Cors;
 
 namespace WorkAutomatorServer.Controllers
 {
+    [EnableCors("*", "*", "*")]
     public class CompanyController : ControllerBase
     {
         private static ICompanyService CompanyService = LogicDependencyHolder.Dependencies.Resolve<ICompanyService>();

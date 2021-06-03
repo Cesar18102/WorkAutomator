@@ -3,12 +3,14 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 using WorkAutomatorLogic;
 using WorkAutomatorLogic.ServiceInterfaces;
 
 namespace WorkAutomatorServer.Controllers
 {
+    [EnableCors("*", "*", "*")]
     public class AdminController : ControllerBase
     {
         IInitService InitService = LogicDependencyHolder.Dependencies.Resolve<IInitService>();

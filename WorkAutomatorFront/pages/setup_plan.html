@@ -45,60 +45,67 @@
 			
 			<br/>
 			
-			<table id="savedData">
-				<tr>
-					<td valign="top">
-						<h2>
-							<div class="company-plan-point-sample" onclick="resetAddPointFunction()" style="display: inline-block"></div>
-							<span>Company Plan Points</span>
-						</h2>
-						
-						<ul>
-							<li v-for="company_plan_point of company_plan_points">
-								<company_plan_point_list_item v-bind:company_plan_point="company_plan_point"></company_plan_point_list_item>
-							</li>
-						</ul>
-					</td>
-					<td valign="top">
-						
-						<h2>
-							<div class="manufactory-plan-point-sample" style="display: inline-block"></div>
-							<span>Manufactories</span>
-							<button onclick="addManufactory()">Add manufactory</button>
-						</h2>
-						
-						<div v-for="manufactory of manufactories">
-							<manufactory_list_item v-bind:manufactory="manufactory"></manufactory_list_item>
-						</div>
-					</td>
-					<td valign="top">
-						<h2>
-							<div class="check-point-sample" style="display: inline-block"></div>
-							<span>Check Points</span>
-							<button onclick="addCheckPoint()">Add check point</button>
-						</h2>
-						
-						<ul>
-							<li v-for="check_point of check_points">
-								<check_point_list_item v-bind:check_point="check_point"></check_point_list_item>
-							</li>
-						</ul>
-					</td>
-					<td valign="top">
-						<h2>
-							<div class="enter-leave-point-sample" style="display: inline-block"></div>
-							<span>Enter/Leave Points</span>
-							<button onclick="addEnterLeavePoint()">Add enter/leave point</button>
-						</h2>
-						
-						<ul>
-							<li v-for="enter_leave_point of enter_leave_points">
-								<enter_leave_point_list_item v-bind:enter_leave_point="enter_leave_point"></enter_leave_point_list_item>
-							</li>
-						</ul>
-					</td>
-				</tr>
-			</table>
+			<div style="float: right">
+				<div><button onclick="resetAddPointFunction()">Company Plan Points Mode</button></div>
+				<div><button onclick="addManufactory()">Add manufactory</button></div>
+				<div><button onclick="addCheckPoint()">Add check point</button></div>
+				<div><button onclick="addEnterLeavePoint()">Add enter/leave point</button></div>
+			</div>
+			
+			<center>
+				<table id="savedData">
+					<tr>
+						<td valign="top">
+							<h2>
+								<div class="company-plan-point-sample" onclick="resetAddPointFunction()" style="display: inline-block"></div>
+								<span>Company Plan Points</span>
+							</h2>
+							
+							<ul>
+								<li v-for="company_plan_point of company_plan_points">
+									<company_plan_point_list_item v-bind:company_plan_point="company_plan_point"></company_plan_point_list_item>
+								</li>
+							</ul>
+						</td>
+						<td valign="top">
+							
+							<h2>
+								<div class="manufactory-plan-point-sample" style="display: inline-block"></div>
+								<span>Manufactories</span>
+							</h2>
+							
+							<div v-for="manufactory of manufactories">
+								<manufactory_list_item v-bind:manufactory="manufactory"></manufactory_list_item>
+							</div>
+						</td>
+						<td valign="top">
+							<h2>
+								<div class="check-point-sample" style="display: inline-block"></div>
+								<span>Check Points</span>
+							</h2>
+							
+							<ul>
+								<li v-for="check_point of check_points">
+									<check_point_list_item v-bind:check_point="check_point"></check_point_list_item>
+								</li>
+							</ul>
+						</td>
+						<td valign="top">
+							<h2>
+								<div class="enter-leave-point-sample" style="display: inline-block"></div>
+								<span>Enter/Leave Points</span>
+							</h2>
+							
+							<ul>
+								<li v-for="enter_leave_point of enter_leave_points">
+									<enter_leave_point_list_item v-bind:enter_leave_point="enter_leave_point"></enter_leave_point_list_item>
+								</li>
+							</ul>
+						</td>
+					</tr>
+				</table>
+			</center>
+			
 		</div>
 		
 		<script src="../js/libs/vue.js"></script>
