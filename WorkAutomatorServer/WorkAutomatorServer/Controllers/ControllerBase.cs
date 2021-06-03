@@ -170,6 +170,13 @@ namespace WorkAutomatorServer.Controllers
             }
             catch (ServerExceptionBase ex) { return CreateErrorResponse(ex); }
             catch (LogicExceptionBase ex) { return CreateErrorResponse(ex); }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(
+                    HttpStatusCode.InternalServerError,
+                    new Response() { Error = new ErrorPart(500, ex)}
+                );
+            }
         }
     }
 }

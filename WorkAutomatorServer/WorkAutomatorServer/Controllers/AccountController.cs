@@ -31,7 +31,7 @@ namespace WorkAutomatorServer.Controllers
         [HttpPost]
         [WireHeadersAspect]
         [AuthorizedAspect]
-        [RequiredMaskAspect("dto.Data.Id")]
+        [RequiredMaskAspect("dto.Data.Id", "dto.Data.FirstName", "dto.Data.LastName")]
         public async Task<HttpResponseMessage> Update([FromBody] AuthorizedDto<AccountDto> dto)
         {
             return await Execute(acc => AccountService.UpdateProfile(acc), dto);

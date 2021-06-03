@@ -10,7 +10,7 @@ using System.Web.Http.Cors;
 
 namespace WorkAutomatorServer.Controllers
 {
-    [EnableCors("*", "*", "*")]
+    //[EnableCors("*", "*", "*")]
     public class KeyController : ControllerBase
     {
         private static IKeyService KeyService = LogicDependencyHolder.Dependencies.Resolve<IKeyService>();

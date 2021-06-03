@@ -12,7 +12,7 @@ using System.Web.Http.Cors;
 
 namespace WorkAutomatorServer.Controllers
 {
-    [EnableCors("*", "*", "*")]
+    //[EnableCors("*", "*", "*")]
     public class AuthController : ControllerBase
     {
         private static IAuthService AuthService = LogicDependencyHolder.Dependencies.Resolve<IAuthService>();
