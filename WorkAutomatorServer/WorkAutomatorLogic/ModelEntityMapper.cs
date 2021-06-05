@@ -63,9 +63,13 @@ namespace WorkAutomatorLogic
                   .ForMember(model => model.LastName, cnf => cnf.MapFrom(entity => entity.last_name));
 
             config.CreateMap<WorkerModel, AccountEntity>()
+                  .ForMember(entity => entity.first_name, cnf => cnf.MapFrom(model => model.FirstName))
+                  .ForMember(entity => entity.last_name, cnf => cnf.MapFrom(model => model.LastName))
                   .ForMember(entity => entity.company_id, cnf => cnf.MapFrom(model => model.CompanyId))
                   .ReverseMap()
-                  .ForMember(model => model.CompanyId, cnf => cnf.MapFrom(entity => entity.company_id));
+                  .ForMember(model => model.CompanyId, cnf => cnf.MapFrom(entity => entity.company_id))
+                  .ForMember(model => model.FirstName, cnf => cnf.MapFrom(entity => entity.first_name))
+                  .ForMember(model => model.LastName, cnf => cnf.MapFrom(entity => entity.last_name));
 
             config.CreateMap<CompanyPlanPointModel, CompanyPlanUniquePointEntity>().ReverseMap();
 

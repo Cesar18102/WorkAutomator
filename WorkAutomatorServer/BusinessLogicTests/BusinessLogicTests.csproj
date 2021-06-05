@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Dto\Dto.csproj" />
     <ProjectReference Include="..\WorkAutomatorDataAccess\WorkAutomatorDataAccess.csproj" />
     <ProjectReference Include="..\WorkAutomatorLogic\WorkAutomatorLogic.csproj" />
   </ItemGroup>

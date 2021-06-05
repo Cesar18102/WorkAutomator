@@ -53,7 +53,7 @@ namespace WorkAutomatorLogic.Services
                     ownerRole.DetectorPermissions.Add(detectorEntity);
 
                     RoleEntity creatorRole = await RoleService.GetCompanyWorkerRole(dto.Session.UserId);
-                    creatorRole.DetectorPermissions.Add(detectorEntity);
+                    creatorRole?.DetectorPermissions.Add(detectorEntity);
 
                     await db.Save();
 

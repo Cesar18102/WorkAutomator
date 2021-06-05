@@ -13,26 +13,23 @@ namespace DataAccessTests
 {
     public abstract class RepoTestsBase<TEntity> where TEntity : IdEntity
     {
-        protected static IRepo<TEntity> Repo = RepoDependencyHolder.Dependencies.ResolveKeyed<IRepo<TEntity>>(
-            RepoDependencyHolder.ContextType.TEST
-        );
-
         protected static List<TEntity> Inserted = new List<TEntity>();
+        protected static UnitOfWork DB = new UnitOfWork();
 
         protected abstract Dictionary<TEntity, bool> GetDataForInsertTest();
 
-        [Test]
-        [Order(0)]
-        public async Task ClearTest()
+        [OneTimeTearDown]
+        public void End()
         {
-            await Repo.Clear();
+            DB.Dispose();
+            Inserted.Clear();
         }
 
         [Test]
         [Order(1)]
         public async Task GetFailTest()
         {
-            Assert.IsNull(await Repo.Get(1));
+            Assert.IsNull(await DB.GetRepo<TEntity>().Get(-1));
         }
 
         [Test]
@@ -45,14 +42,17 @@ namespace DataAccessTests
             {
                 try
                 {
-                    TEntity inserted = await Repo.Create(entityToInsert.Key);
+                    TEntity inserted = await DB.GetRepo<TEntity>().Create(entityToInsert.Key);
 
                     if (entityToInsert.Value)
+                    {
                         Inserted.Add(inserted);
+                        await DB.Save();
+                    }
                     else
                         Assert.Fail("Succeed to insert, but should be not");
                 }
-                catch(DatabaseActionValidationException)
+                catch (DatabaseActionValidationException)
                 {
                     if (entityToInsert.Value)
                         Assert.Fail("Failed to insert, but should be successful");
@@ -65,7 +65,7 @@ namespace DataAccessTests
         public async Task CheckInsertedTest()
         {
             foreach (TEntity entity in Inserted)
-                Assert.IsNotNull(await Repo.Get(entity.id));
+                Assert.IsNotNull(await DB.GetRepo<TEntity>().Get(entity.id));
         }
 
         [Test]
@@ -73,7 +73,7 @@ namespace DataAccessTests
         public async Task CleanupTest()
         {
             foreach (TEntity entity in Inserted)
-                await Repo.Delete(entity.id);
+                await DB.GetRepo<TEntity>().Delete(entity.id);
         }
     }
 }

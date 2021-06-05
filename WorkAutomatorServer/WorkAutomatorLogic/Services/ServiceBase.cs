@@ -90,7 +90,7 @@ namespace WorkAutomatorLogic.Services
             {
                 DataValidationException dataValidationException = new DataValidationException();
 
-                PropertyInfo[] properties = ex.EntityType.GetProperties();
+                PropertyInfo[] properties = ex.EntityType?.GetProperties();
                 foreach (ValidationResult validationResult in ex.Errors)
                 {
                     TypeMap modelToEntityMap = ModelEntityMapper.Mapper.ConfigurationProvider.GetAllTypeMaps().First(
@@ -105,7 +105,7 @@ namespace WorkAutomatorLogic.Services
 
                     foreach (string invalidFieldName in validationResult.MemberNames)
                     {
-                        string realPropertyName = properties.FirstOrDefault(
+                        string realPropertyName = properties?.FirstOrDefault(
                             property => property.GetCustomAttribute<ColumnAttribute>()?.Name == invalidFieldName
                         )?.Name ?? invalidFieldName;
 

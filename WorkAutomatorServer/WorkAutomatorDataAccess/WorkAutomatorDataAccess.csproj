@@ -126,6 +126,10 @@
     <Compile Include="Migrations\202106022238566_init-azure.designer.cs">
       <DependentUpon>202106022238566_init-azure.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202106041433054_test.cs" />
+    <Compile Include="Migrations\202106041433054_test.designer.cs">
+      <DependentUpon>202106041433054_test.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Repos\AccountRepo.cs" />
     <Compile Include="RepoBase.cs" />
@@ -141,6 +145,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202106022238566_init-azure.resx">
       <DependentUpon>202106022238566_init-azure.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202106041433054_test.resx">
+      <DependentUpon>202106041433054_test.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

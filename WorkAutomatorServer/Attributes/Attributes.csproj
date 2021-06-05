@@ -47,7 +47,6 @@
     <Compile Include="HeaderAutoWiredAttribute.cs" />
     <Compile Include="InitiatorAccountIdAttribute.cs" />
     <Compile Include="ObjectIdAttribute.cs" />
-    <Compile Include="TableNameParameterAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

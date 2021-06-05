@@ -43,7 +43,7 @@ namespace WorkAutomatorLogic.Services
                     ownerRole.PipelineItemPermissions.Add(pipelineItemEntity);
 
                     RoleEntity creatorRole = await RoleService.GetCompanyWorkerRole(dto.Session.UserId);
-                    creatorRole.PipelineItemPermissions.Add(pipelineItemEntity);
+                    creatorRole?.PipelineItemPermissions.Add(pipelineItemEntity);
 
                     await db.Save();
 

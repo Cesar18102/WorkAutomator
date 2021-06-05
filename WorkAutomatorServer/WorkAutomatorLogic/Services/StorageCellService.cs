@@ -41,7 +41,7 @@ namespace WorkAutomatorLogic.Services
                     ownerRole.StorageCellPermissions.Add(storageCellEntity);
 
                     RoleEntity creatorRole = await RoleService.GetCompanyWorkerRole(dto.Session.UserId);
-                    creatorRole.StorageCellPermissions.Add(storageCellEntity);
+                    creatorRole?.StorageCellPermissions.Add(storageCellEntity);
 
                     await db.Save();
 

@@ -35,7 +35,7 @@ namespace WorkAutomatorServer.Aspects
             }
 
             HttpResponseMessage response = Task.Run(() => (args.Instance as ControllerBase).Execute(
-                (model) => SessionService.CheckSession(model), session, false
+                model => SessionService.CheckSession(model), session, false
             )).GetAwaiter().GetResult();
             
             if(response != null)

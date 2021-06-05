@@ -23,7 +23,6 @@ namespace WorkAutomatorLogic.Aspects
 
         public DbTable Table { get; set; } = DbTable.None;
         public InteractionDbType Action { get; set; }
-        public Type DbTableConverterType { get; set; }
         public bool CheckSameCompany { get; set; }
 
         public override void OnEntry(MethodExecutionArgs arg)
@@ -31,20 +30,6 @@ namespace WorkAutomatorLogic.Aspects
             ParameterInfo[] methodParameters = arg.Method.GetParameters();
 
             int initiatorAccountId = (int)arg.Arguments.GetMarkedValueFromArgumentList<InitiatorAccountIdAttribute>(methodParameters).First();
-
-            if (Table == DbTable.None)
-            {
-                object tableNameParameterValue = arg.Arguments.GetMarkedValueFromArgumentList<TableNameParameterAttribute>(methodParameters).FirstOrDefault();
-
-                if (DbTableConverterType != null)
-                {
-                    IValueConverter converter = (IValueConverter)Activator.CreateInstance(DbTableConverterType);
-                    Table = (DbTable)converter.Convert(tableNameParameterValue);
-                }
-                else if (tableNameParameterValue != null)
-                    Table = (DbTable)tableNameParameterValue;
-            }
-
             int? companyId = (int?)arg.Arguments.GetMarkedValueFromArgumentList<CompanyIdAttribute>(methodParameters).FirstOrDefault();
 
             Dictionary<(Guid, ObjectIdAttribute), object[]> objectsByTables = arg.Arguments.GetMarkedMapFromArgumentList<ObjectIdAttribute>(

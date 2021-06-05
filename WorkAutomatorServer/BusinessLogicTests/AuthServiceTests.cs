@@ -13,8 +13,8 @@ using WorkAutomatorLogic.Exceptions;
 using WorkAutomatorLogic.ServiceInterfaces;
 
 using WorkAutomatorDataAccess;
-using WorkAutomatorDataAccess.RepoInterfaces;
 using WorkAutomatorDataAccess.Entities;
+using Dto;
 
 namespace BusinessLogicTests
 {
@@ -22,8 +22,6 @@ namespace BusinessLogicTests
     {
         protected static IKeyService KeyService = LogicDependencyHolder.Dependencies.Resolve<IKeyService>();
         protected static IAuthService AuthService = LogicDependencyHolder.Dependencies.Resolve<IAuthService>();
-
-        protected static IRepo<AccountEntity> AccountRepo = RepoDependencyHolder.Dependencies.Resolve<IRepo<AccountEntity>>();
 
         [Test]
         public async Task InsertInvalidTest()
@@ -38,7 +36,7 @@ namespace BusinessLogicTests
                 }
             );
 
-            SignUpFormModel signUpForm = new SignUpFormModel()
+            SignUpDto signUpForm = new SignUpDto()
             {
                 FirstName = "testFirstName",
                 LastName = "testLastName",
@@ -46,14 +44,20 @@ namespace BusinessLogicTests
                          "testLongLogintestLongLogintestLongLogintestLongLogintestLongLogintestLongLogin" +
                          "testLongLogintestLongLogintestLongLogintestLongLogintestLongLogintestLongLogintestLongLogintestLongLogin" + new Guid().ToString(), //260
                 PasswordEncrypted = Convert.ToBase64String(rsa.Encrypt(Encoding.UTF8.GetBytes("123456789"), RSAEncryptionPadding.Pkcs1)),
-                PublicKey = key
+                PublicKey = new PublicKeyDto()
+                {
+                     Exponent = key.Exponent,
+                     Modulus = key.Modulus
+                }
             };
-
 
             try
             {
                 AccountModel account = await AuthService.SignUp(signUpForm);
-                await AccountRepo.Delete(account.Id);
+
+                using(UnitOfWork db = new UnitOfWork())
+                    await db.GetRepo<AccountEntity>().Delete(account.Id);
+
                 Assert.Fail();
             }
             catch(DataValidationException ex)
