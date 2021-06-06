@@ -329,7 +329,7 @@ namespace WorkAutomatorLogic.Services
             });
         }
 
-        public async Task<PipelineItemModel[]> Get(AuthorizedDto<CompanyDto> dto)
+        public async Task<PipelineModel[]> Get(AuthorizedDto<CompanyDto> dto)
         {
             return await Execute(async () => {
                 using (UnitOfWork db = new UnitOfWork())
@@ -338,7 +338,7 @@ namespace WorkAutomatorLogic.Services
                         p => p.company_id == dto.Data.Id.Value
                     );
 
-                    return ModelEntityMapper.Mapper.Map<IList<PipelineItemModel>>(pipelines).ToArray();
+                    return ModelEntityMapper.Mapper.Map<IList<PipelineModel>>(pipelines).ToArray();
                 }
             });
         }
