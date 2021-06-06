@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Detector Prefabs List</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" type="text/css" href="../css/main.css">
+	<link rel="stylesheet" type="text/css" href="../css/main_page.css">
+</head>
+<body>
+	
+	<nav id="header" class="menu one">
+		<custom-header></custom-header>
+	</nav>
+	
+	<div id="detector_prefabs">
+		<div v-for="detector_prefab of detector_prefabs">
+			<detector_prefab_list_item v-bind:detector_prefab="detector_prefab"></detector_prefab_list_item>
+		</div>
+	</div>
+	
+	<script src="../js/libs/jquery.js"></script>
+	<script src="../js/libs/vue.js"></script>
+	<script src="../js/vue_filters.js"></script>
+	<script src="../js/libs/sha256.js"></script>
+	<script src="../js/cookie.js"></script>
+	<script src="../js/localize.js"></script>
+	<script src="../js/session.js"></script>
+	<script src="../js/role.js"></script>
+	<script src="../js/header.js"></script>
+	<script src="../js/detector_prefabs.js"></script>
+	
+	<div id="err"><err></err></div>
+	<script src="../js/error.js"></script>
+
+</body>
+</html>

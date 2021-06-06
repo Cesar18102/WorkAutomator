@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Storage Cell Prefabs List</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" type="text/css" href="../css/main.css">
+	<link rel="stylesheet" type="text/css" href="../css/main_page.css">
+</head>
+<body>
+	
+	<nav id="header" class="menu one">
+		<custom-header></custom-header>
+	</nav>
+	
+	<div id="storage_cell_prefabs">
+		<center>
+			<table>
+				<tr v-for="storage_cell_prefab_chunk of $options.filters.chunk(storage_cell_prefabs, 5)">
+					<td v-for="storage_cell_prefab of storage_cell_prefab_chunk">
+						<storage_cell_prefab_list_item v-bind:storage_cell_prefab="storage_cell_prefab"></storage_cell_prefab_list_item>
+					</td>
+				</tr>
+			</table>
+		</center>
+	</div>
+	
+	<script src="../js/libs/jquery.js"></script>
+	<script src="../js/libs/vue.js"></script>
+	<script src="../js/vue_filters.js"></script>
+	<script src="../js/libs/sha256.js"></script>
+	<script src="../js/cookie.js"></script>
+	<script src="../js/localize.js"></script>
+	<script src="../js/session.js"></script>
+	<script src="../js/role.js"></script>
+	<script src="../js/header.js"></script>
+	<script src="../js/storage_cell_prefabs.js"></script>
+	
+	<div id="err"><err></err></div>
+	<script src="../js/error.js"></script>
+
+</body>
+</html>

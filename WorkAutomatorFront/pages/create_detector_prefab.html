@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>New Detector Prefab</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" type="text/css" href="../css/main.css">
+	<link rel="stylesheet" type="text/css" href="../css/main_page.css">
+</head>
+<body>
+	
+	<nav id="header" class="menu one">
+		<custom-header></custom-header>
+	</nav>
+	
+	<div class="comp_reg" id="detector_prefab_reg_form">
+		<div class="wrap-login100 reg_form">
+
+			<form id="detector_prefab_registration_form" class="login100-form validate-form reg_form_form">
+				<span class="login100-form-title">
+					Detector Prefab Registration
+				</span>
+
+				<div class="wrap-input100 validate-input">
+					<input class="input100" type="text" name="name" v-model="name" placeholder="Name">
+					<span class="focus-input100"></span>
+				</div>
+				
+				<div class="wrap-input100 validate-input">
+					<input class="input100" type="text" name="image_url" v-model="image_url" placeholder="Image URL">
+					<span class="focus-input100"></span>
+				</div>
+				
+				<center v-if="image_url != undefined">
+					<img v-bind:src="image_url" width="70" height="70" style="border-radius: 35px;"></img>
+				</center>
+				
+				<span class="common-label" style="text-align: center;">
+					Setting Prefabs
+				</span>
+				<div v-for="setting_prefab of setting_prefabs">
+					<detector_setting_prefab v-bind:setting_prefab="setting_prefab"></detector_setting_prefab>
+				</div>
+				<br/>
+				<div class="common-button-container">
+					<button type="button" class="common-button" onclick="addSettingPrefab()">
+						New setting prefab
+					</button>
+				</div>
+				
+				<br/>
+				
+				<span class="common-label" style="text-align: center;">
+					Data Format Prefabs
+				</span>
+				<div v-for="data_prefab of data_prefabs">
+					<detector_data_prefab v-bind:data_prefab="data_prefab"></detector_data_prefab>
+				</div>
+				<br/>
+				<div class="common-button-container">
+					<button type="button" class="common-button" onclick="addDataPrefab()">
+						New data prefab
+					</button>
+				</div>
+				
+				<br/>
+				
+				<span class="common-label" style="text-align: center;">
+					Fault Prefabs
+				</span>
+				<div v-for="fault_prefab of fault_prefabs">
+					<detector_fault_prefab v-bind:fault_prefab="fault_prefab"></detector_fault_prefab>
+				</div>
+				<br/>
+				<div class="common-button-container">
+					<button type="button" class="common-button" onclick="addFaultPrefab()">
+						New fault prefab
+					</button>
+				</div>
+				
+				<br/>
+				
+				<div class="common-button-container">
+					<button type="submit" class="common-button">
+						Create
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	
+	<script src="../js/libs/jquery.js"></script>
+	<script src="../js/libs/vue.js"></script>
+	<script src="../js/vue_filters.js"></script>
+	<script src="../js/libs/sha256.js"></script>
+	<script src="../js/cookie.js"></script>
+	<script src="../js/localize.js"></script>
+	<script src="../js/session.js"></script>
+	<script src="../js/role.js"></script>
+	<script src="../js/header.js"></script>
+	<script src="../js/create_detector_prefab.js"></script>
+	
+	<div id="err"><err></err></div>
+	<script src="../js/error.js"></script>
+	
+	<script src="../js/main.js">
+	
+		$(".five li ul").hide();
+		$(".five li:has('.submenu')").hover(
+		function(){
+			$(".five li ul").stop().fadeToggle(300);}
+		);
+	
+	</script>
+
+</body>
+</html>

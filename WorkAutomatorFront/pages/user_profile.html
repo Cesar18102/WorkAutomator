@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>User's Profile</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" type="text/css" href="../css/main.css">
+	<link rel="stylesheet" type="text/css" href="../css/main_page.css">
+</head>
+<body>
+	
+	<nav id="header" class="menu one">
+		<custom-header></custom-header>
+	</nav>
+	
+	<div id="user-info" class="comp_reg room_reg">
+		<div class="wrap-login100 reg_form">
+
+			<form id="user_profile_form" class="login100-form validate-form reg_form_form">
+				<span class="login100-form-title">
+					{{ 'user_profile' | localize }}
+				</span>
+
+				<div class="wrap-input100 validate-input">
+					<label>{{ 'login' | localize }}</label>
+					<input class="input100" style="padding-left:30px; border-radius:20px;" type="text" name="login" placeholder="Login" v-bind:value="user.login" readonly>
+					<span class="focus-input100"></span>
+				</div>
+				
+				<div class="wrap-input100 validate-input">
+					<label>{{ 'first_name' | localize }}</label>
+					<input class="input100" style="padding-left:30px; border-radius:20px;" type="text" name="first_name" placeholder="First name" v-bind:value="user.first_name">
+					<span class="focus-input100"></span>
+				</div>
+				
+				<div class="wrap-input100 validate-input">
+					<label>{{ 'last_name' | localize }}</label>
+					<input class="input100" style="padding-left:30px; border-radius:20px;" type="text" name="last_name" placeholder="Last name" v-bind:value="user.last_name">
+					<span class="focus-input100"></span>
+				</div>
+				
+				<div class="common-button-container">
+					<button class="common-button">
+						{{ 'save' | localize }}
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	
+	<script src="../js/libs/jquery.js"></script>
+	<script src="../js/libs/vue.js"></script>
+	<script src="../js/vue_filters.js"></script>
+	<script src="../js/libs/sha256.js"></script>
+	<script src="../js/cookie.js"></script>
+	<script src="../js/localize.js"></script>
+	<script src="../js/session.js"></script>
+	<script src="../js/role.js"></script>
+	<script src="../js/header.js"></script>
+	<script src="../js/user_profile.js"></script>
+	
+	<div id="err"><err></err></div>
+	<script src="../js/error.js"></script>
+
+</body>
+</html>

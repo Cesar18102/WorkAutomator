@@ -36,8 +36,15 @@
 				background-color: yellow;
 			}
 		</style>
+		
+		<link rel="stylesheet" type="text/css" href="../css/main.css">
+		<link rel="stylesheet" type="text/css" href="../css/main_page.css">
 	</head>
 	<body>
+		<nav id="header" class="menu one">
+			<custom-header></custom-header>
+		</nav>
+	
 		<div>
 			<div>
 				<center><canvas id="plan"></canvas></center>
@@ -45,15 +52,30 @@
 			
 			<br/>
 			
-			<div style="float: right">
-				<div><button onclick="resetAddPointFunction()">Company Plan Points Mode</button></div>
-				<div><button onclick="addManufactory()">Add manufactory</button></div>
-				<div><button onclick="addCheckPoint()">Add check point</button></div>
-				<div><button onclick="addEnterLeavePoint()">Add enter/leave point</button></div>
+			<div style="float: right; margin-right: 1vw;">
+				<div class="common-button-container">
+					<button class="common-button" onclick="resetAddPointFunction()">Company Plan Points Mode</button>
+				</div>
+				<br/>
+				<div class="common-button-container">
+					<button class="common-button" onclick="addManufactory()">Add manufactory</button>
+				</div>
+				<br/>
+				<div class="common-button-container">
+					<button class="common-button" onclick="addCheckPoint()">Add check point</button>
+				</div>
+				<br/>
+				<div class="common-button-container">
+					<button class="common-button" onclick="addEnterLeavePoint()">Add enter/leave point</button>
+				</div>
+				<br/>
+				<div class="common-button-container">
+					<button class="common-button" onclick="save()">Save</button>
+				</div>
 			</div>
 			
 			<center>
-				<table id="savedData">
+				<table id="savedData" cellspacing="50">
 					<tr>
 						<td valign="top">
 							<h2>
@@ -108,7 +130,20 @@
 			
 		</div>
 		
+		<script src="../js/libs/jquery.js"></script>
+		<script src="../js/libs/vue.js"></script>
+		<script src="../js/vue_filters.js"></script>
+		<script src="../js/libs/sha256.js"></script>
+		<script src="../js/cookie.js"></script>
+		<script src="../js/localize.js"></script>
+		<script src="../js/session.js"></script>
+		<script src="../js/role.js"></script>
+		<script src="../js/header.js"></script>
 		<script src="../js/libs/vue.js"></script>
 		<script src="../js/setup_plan.js"></script>
+		
+		<div id="err"><err></err></div>
+		<script src="../js/error.js"></script>
+		
 	</body>
 <html>

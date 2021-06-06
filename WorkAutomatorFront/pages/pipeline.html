@@ -1,0 +1,94 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/main.css">
+		<link rel="stylesheet" type="text/css" href="../css/main_page.css">
+	</head>
+	<body>
+		<nav id="header" class="menu one">
+			<custom-header></custom-header>
+		</nav>
+	
+		<div id="pipeline">
+			<div>
+				<center><canvas id="plan"></canvas></center>
+			<div>
+			
+			<br/>
+			
+			<center>
+				<table cellspacing="50">
+					<tr><td colspan="3"><span class="login100-form-title">Prefabs</span></td></tr>
+					<tr>
+						<td>
+							<span class="login100-form-title">Pipeline item prefabs</span>
+							<ul>
+								<li v-for="pipeline_item_prefab of pipeline_item_prefabs">
+									<pipeline_item_prefab_list_item v-bind:pipeline_item_prefab="pipeline_item_prefab"></pipeline_item_prefab_list_item>
+								</li>
+							</ul>
+						</td>
+						<td>
+							<span class="login100-form-title">Storage cell prefabs</span>
+							<ul>
+								<li v-for="storage_cell_prefab of storage_cell_prefabs">
+									<storage_cell_prefab_list_item v-bind:storage_cell_prefab="storage_cell_prefab"></storage_cell_prefab_list_item>
+								</li>
+							</ul>
+						</td>
+						<td>
+							<span class="login100-form-title">Detector prefabs</span>
+							<ul>
+								<li v-for="detector_prefab of detector_prefabs">
+									<detector_prefab_list_item v-bind:detector_prefab="detector_prefab"></detector_prefab_list_item>
+								</li>
+							</ul>
+						</td>
+					</tr>
+					<tr>
+						<tr><td colspan="3"><span class="login100-form-title">Items</span></td></tr>
+						<td>
+							<span class="login100-form-title">Pipeline items</span>
+							<ul>
+								<li v-for="pipeline_item of pipeline_items">
+									<pipeline_item_list_item v-bind:pipeline_item="pipeline_item"></pipeline_item_list_item>
+								</li>
+							</ul>
+						</td>
+						<td>
+							<span class="login100-form-title">Storage cells</span>
+							<ul>
+								<li v-for="storage_cell of storage_cells">
+									<storage_cell_list_item v-bind:storage_cell="storage_cell"></storage_cell_list_item>
+								</li>
+							</ul>
+						</td>
+						<td>
+							<span class="login100-form-title">Detectors</span>
+							<ul>
+								<li v-for="detector of detectors">
+									<detector_list_item v-bind:detector="detector"></detector_list_item>
+								</li>
+							</ul>
+						</td>
+					</tr>
+				</table>
+			</center>
+			
+		</div>
+		
+		<script src="../js/libs/jquery.js"></script>
+		<script src="../js/libs/vue.js"></script>
+		<script src="../js/vue_filters.js"></script>
+		<script src="../js/libs/sha256.js"></script>
+		<script src="../js/cookie.js"></script>
+		<script src="../js/localize.js"></script>
+		<script src="../js/session.js"></script>
+		<script src="../js/role.js"></script>
+		<script src="../js/header.js"></script>
+		<script src="../js/libs/vue.js"></script>
+		<script src="../js/pipeline.js"></script>
+		
+		<div id="err"><err></err></div>
+		<script src="../js/error.js"></script>
+	</body>
+<html>

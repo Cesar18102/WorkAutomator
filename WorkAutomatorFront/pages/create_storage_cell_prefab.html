@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>New Storage Cell Prefab</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" type="text/css" href="../css/main.css">
+	<link rel="stylesheet" type="text/css" href="../css/main_page.css">
+</head>
+<body>
+	
+	<nav id="header" class="menu one">
+		<custom-header></custom-header>
+	</nav>
+	
+	<div class="comp_reg" id="storage_cell_prefab_reg_form">
+		<div class="wrap-login100 reg_form">
+
+			<form id="storage_cell_prefab_registration_form" class="login100-form validate-form reg_form_form">
+				<span class="login100-form-title">
+					Storage Cell Prefab Registration
+				</span>
+
+				<div class="wrap-input100 validate-input">
+					<input class="input100" type="text" name="name" v-model="name" placeholder="Name">
+					<span class="focus-input100"></span>
+				</div>
+				
+				<div class="wrap-input100 validate-input">
+					<input class="input100" type="text" name="image_url" v-model="image_url" onchange="updateCanvas()" placeholder="Image URL">
+					<span class="focus-input100"></span>
+				</div>
+				
+				<br/>
+					<center>
+						<canvas id="storage_cell_prefab_canvas" width="100" height="100"></canvas>
+						<br/>
+						<div class="common-button-container">
+							<button type="button" class="common-button" onclick="setInputMode()">
+								Set input
+							</button>
+						</div>
+						<br/>
+						<div class="common-button-container">
+							<button type="button" class="common-button" onclick="setOutputMode()">
+								Set output
+							</button>
+						</div>
+					</center>
+				<br/>
+				
+				<div class="common-button-container">
+					<button type="submit" class="common-button">
+						Create
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	
+	<script src="../js/libs/jquery.js"></script>
+	<script src="../js/libs/vue.js"></script>
+	<script src="../js/vue_filters.js"></script>
+	<script src="../js/libs/sha256.js"></script>
+	<script src="../js/cookie.js"></script>
+	<script src="../js/localize.js"></script>
+	<script src="../js/session.js"></script>
+	<script src="../js/role.js"></script>
+	<script src="../js/header.js"></script>
+	<script src="../js/create_storage_cell_prefab.js"></script>
+	
+	<div id="err"><err></err></div>
+	<script src="../js/error.js"></script>
+	
+	<script src="../js/main.js">
+	
+		$(".five li ul").hide();
+		$(".five li:has('.submenu')").hover(
+		function(){
+			$(".five li ul").stop().fadeToggle(300);}
+		);
+	
+	</script>
+
+</body>
+</html>

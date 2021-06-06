@@ -1,61 +1,91 @@
 var LOCALIZE = {
 	eng : [{
-		key : "members",
-		value : "Members"
+		key : "companyProfile",
+		value : "Company Profile"
 	}, {
-		key : "project",
-		value : "Project"
+		key : "company",
+		value : "Company"
 	}, {
-		key : "myProjectList",
-		value : "My Projects"
+		key : "manageCompany",
+		value : "Manage company"
 	}, {
-		key : "allProjectList",
-		value : "All Projects"
+		key : "newCompany",
+		value : "New company"
 	}, {
-		key : "newProject",
-		value : "New Project"
+		key : "name",
+		value : "Name"
 	}, {
-		key : "gamification",
-		value : "Gamification"
+		key : "plan",
+		value : "Plan"
 	}, {
-		key : "quiz",
-		value : "Quiz"
+		key : "workers",
+		value : "Workers"
 	}, {
-		key : "presents",
-		value : "Presents"
+		key : "prefabs",
+		value : "Prefabs"
 	}, {
-		key : "newQuiz",
-		value : "New quiz"
+		key : "createPipelineItemPrefab",
+		value : "Create Pipeline Item Prefab"
 	}, {
-		key : "newPresent",
-		value : "New present"
+		key : "viewPipelineItemPrefabs",
+		value : "Pipeline Item Prefabs List"
 	}, {
-		key : "myTasks",
-		value : "My Tasks"
+		key : "createStorageCellPrefab",
+		value : "Create Storage Cell Prefab"
 	}, {
+		key : "viewStorageCellPrefabs",
+		value : "Storage Cell Prefabs List"
+	}, {
+		key : "createDetectorPrefab",
+		value : "Create Detector Prefab"
+	}, {
+		key : "viewDetectorPrefabs",
+		value : "Detector Prefabs List"
+	}, {
+		key : "items",
+		value : "Items"
+	}, {
+		key : "createPipelineItem",
+		value : "Create Pipeline Item"
+	}, {
+		key : "viewPipelineItems",
+		value : "Pipeline Items List"
+	}, {
+		key : "createStorageCell",
+		value : "Create Storage Cell"
+	}, {
+		key : "viewStorageCells",
+		value : "Storage Cells List"
+	}, {
+		key : "createDetector",
+		value : "Create Detector"
+	}, {
+		key : "viewDetectors",
+		value : "Detectors List"
+	}, {
+		key : "pipeline",
+		value : "Pipeline"
+	}, {
+		key : "pipelinesList",
+		value : "Pipelines List"
+	}, {
+		key : "newPipeline",
+		value : "New Pipeline"
+	}, {
+		key : "task",
+		value : "Task"
+	}, {
+		key : "taskList",
+		value : "Task List"
+	}, {
+		key : "newTask",
+		value : "New Task"
+	},  {
 		key : "delete",
 		value : "Delete"
 	}, {
 		key : "edit",
 		value : "Edit"
-	}, {
-		key : "company",
-		value : "Company"
-	}, {
-		key : "workersList",
-		value : "Workers list"
-	}, {
-		key : "manageCompany",
-		value : "Manage company"
-	}, {
-		key : "manageWorkers",
-		value : "Manage workers"
-	}, {
-		key : "newCompany",
-		value : "New company"
-	}, {
-		key : "allTasks",
-		value : "All Tasks"
 	}, {
 		key : "lang",
 		value : "Lang"
@@ -69,35 +99,123 @@ var LOCALIZE = {
 		key : "leave",
 		value : "Leave"
 	}, {
-		key : "fire",
-		value : "Fire"
-	}, {
-		key : "bind",
-		value : "Bind"
-	}, {
 		key : "save",
 		value : "Save"
 	}, {
-		key : "buy",
-		value : "Buy"
+		key : "user_profile",
+		value : "My profile"
 	}, {
-		key : "start",
-		value : "Start"
+		key : "login",
+		value : "Login"
 	}, {
-		key : "stop",
-		value : "Stop"
+		key : "first_name",
+		value : "First name"
 	}, {
-		key : "play",
-		value : "Play"
+		key : "last_name",
+		value : "Last name"
 	}, {
-		key : "answer",
-		value : "Submit"
+		key : "email",
+		value : "Email"
+	}],
+	ukr : [{
+		key : "company",
+		value : "Company"
 	}, {
-		key : "results",
-		value : "Results"
+		key : "manageCompany",
+		value : "Manage company"
 	}, {
-		key : "all_results",
-		value : "All results"
+		key : "newCompany",
+		value : "New company"
+	}, {
+		key : "plan",
+		value : "Plan"
+	}, {
+		key : "viewPlan",
+		value : "View plan"
+	}, {
+		key : "managePlan",
+		value : "Manage plan"
+	}, {
+		key : "prefabs",
+		value : "Prefabs"
+	}, {
+		key : "createPipelineItemPrefab",
+		value : "Create Pipeline Item Prefab"
+	}, {
+		key : "viewPipelineItemPrefabs",
+		value : "Pipeline Item Prefabs List"
+	}, {
+		key : "createStorageCellPrefab",
+		value : "Create Storage Cell Prefab"
+	}, {
+		key : "viewStorageCellPrefabs",
+		value : "Storage Cell Prefabs List"
+	}, {
+		key : "createDetectorPrefab",
+		value : "Create Detector Prefab"
+	}, {
+		key : "viewDetectorPrefabs",
+		value : "Detector Prefabs List"
+	}, {
+		key : "items",
+		value : "Items"
+	}, {
+		key : "createPipelineItem",
+		value : "Create Pipeline Item"
+	}, {
+		key : "viewPipelineItems",
+		value : "Pipeline Items List"
+	}, {
+		key : "createStorageCell",
+		value : "Create Storage Cell"
+	}, {
+		key : "viewStorageCells",
+		value : "Storage Cells List"
+	}, {
+		key : "createDetector",
+		value : "Create Detector"
+	}, {
+		key : "viewDetectors",
+		value : "Detectors List"
+	}, {
+		key : "pipeline",
+		value : "Pipeline"
+	}, {
+		key : "pipelinesList",
+		value : "Pipelines List"
+	}, {
+		key : "newPipeline",
+		value : "New Pipeline"
+	}, {
+		key : "task",
+		value : "Task"
+	}, {
+		key : "taskList",
+		value : "Task List"
+	}, {
+		key : "newTask",
+		value : "New Task"
+	},  {
+		key : "delete",
+		value : "Delete"
+	}, {
+		key : "edit",
+		value : "Edit"
+	}, {
+		key : "lang",
+		value : "Lang"
+	}, {
+		key : "account",
+		value : "Account"
+	}, {
+		key : "settings",
+		value : "Settings"
+	}, {
+		key : "leave",
+		value : "Leave"
+	}, {
+		key : "save",
+		value : "Save"
 	}, {
 		key : "user_profile",
 		value : "User's profile"
@@ -113,154 +231,7 @@ var LOCALIZE = {
 	}, {
 		key : "email",
 		value : "Email"
-	}, {
-		key : "points",
-		value : "Points"
-	}, {
-		key : "trello_username",
-		value : "Trello username"
-	}, {
-		key : "trello_api_key",
-		value : "Trello API-key"
-	}, {
-		key : "save",
-		value : "Save"
-	}, {
-		key : "presents",
-		value : "Presents"
-	}
-	],
-	ukr : [ {
-		key : "members",
-		value : "Робітники"
-	}, {
-		key : "project",
-		value : "Проєкт"
-	}, {
-		key : "myProjectList",
-		value : "Мої проєкти"
-	}, {
-		key : "allProjectList",
-		value : "Усі проєкти"
-	}, {
-		key : "newProject",
-		value : "Новий проєкт"
-	}, {
-		key : "gamification",
-		value : "Гейміфікація"
-	}, {
-		key : "quiz",
-		value : "Вікторина"
-	}, {
-		key : "presents",
-		value : "Подарунки"
-	}, {
-		key : "newQuiz",
-		value : "Створити вікторину"
-	}, {
-		key : "newPresent",
-		value : "Створити подарунок"
-	}, {
-		key : "myTasks",
-		value : "Мої завдання"
-	},{
-		key : "delete",
-		value : "Видалити"
-	}, {
-		key : "edit",
-		value : "Редагувати"
-	}, {
-		key : "company",
-		value : "Компанія"
-	}, {
-		key : "workersList",
-		value : "Список робітників"
-	}, {
-		key : "manageCompany",
-		value : "Управління компанією"
-	}, {
-		key : "manageWorkers",
-		value : "Управління робітниками"
-	}, {
-		key : "allTasks",
-		value : "Усі Завдання"
-	}, {
-		key : "newCompany",
-		value : "Створити компанію"
-	}, {
-		key : "lang",
-		value : "Мова"
-	}, {
-		key : "account",
-		value : "Акаунт"
-	}, {
-		key : "settings",
-		value : "Налаштування"
-	}, {
-		key : "leave",
-		value : "Вийти"
-	}, {
-		key : "fire",
-		value : "Звільнити"
-	}, {
-		key : "bind",
-		value : "Прив'язати"
-	}, {
-		key : "save",
-		value : "Зберегти"
-	}, {
-		key : "buy",
-		value : "Придбати"
-	}, {
-		key : "start",
-		value : "Розпочати"
-	}, {
-		key : "stop",
-		value : "Закінчити"
-	}, {
-		key : "play",
-		value : "Грати"
-	}, {
-		key : "answer",
-		value : "Завершити"
-	}, {
-		key : "results",
-		value : "Результати"
-	}, {
-		key : "all_results",
-		value : "Усі результати"
-	}, {
-		key : "user_profile",
-		value : "Профіль користувача"
-	}, {
-		key : "login",
-		value : "Логін"
-	}, {
-		key : "first_name",
-		value : "Ім'я"
-	}, {
-		key : "last_name",
-		value : "Прізвище"
-	}, {
-		key : "email",
-		value : "Електронна пошта"
-	}, {
-		key : "points",
-		value : "Бали"
-	}, {
-		key : "trello_username",
-		value : "Логін Trello"
-	}, {
-		key : "trello_api_key",
-		value : "Trello API-ключ"
-	}, {
-		key : "save",
-		value : "Зберегти"
-	}, {
-		key : "presents",
-		value : "Подарунки"
-	}
-	],
+	}],
 	getString: function(id) {
 		let lang = COOKIE.getCookie("LANG");
 		let data = this.eng;

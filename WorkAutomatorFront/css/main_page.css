@@ -1,9 +1,9 @@
 body {
-	background-color: #F5F4F5;
+	background-color: white;
 }
 
 .menu_nav {
-	color: white;
+	color: red;
 	justify-content: space-around;
 	padding: 0 0px;
 	font-size: 16px;
@@ -70,7 +70,7 @@ a {
   transition: 0.5s ease-in-out;
 }
 .one ul {
-  background-color: #6C6874;
+  background-color: #658856;
 }
 .one ul a {
   color: white;
@@ -78,7 +78,8 @@ a {
 }
 
 .one ul a:hover {
-	color: rgba(87,184,70, 0.8);
+	color:  #AAAAAA;
+	cursor: pointer;
 }
 
 .one .submenu {
@@ -88,9 +89,9 @@ a {
   display: block;
 }  
 
-.list-item-container {
-	width: 95%;
-	margin: 2.5% 15px;
+.list-item-container, .listItemContainer {
+	width: 99%;
+	margin: 0.5% 15px;
 	padding: 20px;
 	
 	background: white;

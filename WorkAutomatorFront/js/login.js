@@ -15,15 +15,18 @@ function login(ev) {
 	$.ajax({
 		type : "POST",
 		contentType : "application/json",
-		url : "http://worknplay.somee.com/api/Auth/LogIn",
+		url : "https://workautomatorback.azurewebsites.net/api/Auth/LogIn",
 		data : JSON.stringify(dto),
 		dataType : "json",
 		success : function(log_response) {
 			SESSION.createSession(log_response.data.user_id, log_response.data.session_token);
-			document.location = "./pages/user_profile.html";
+			ACCOUNT.get(account => {
+				SESSION.putCompany(account.company_id);
+				document.location = "./pages/user_profile.html";
+			});	
 		},
 		error : function(log_response) {
-			alert("login fail: " + JSON.stringify(log_response));
+			throw JSON.stringify({ ex: log_response.responseJSON.error.exception, source: "Login"});
 		}
 	});
 	

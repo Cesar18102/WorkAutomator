@@ -2,6 +2,9 @@ var SESSION = {
 	getUserId : function() {
 		return COOKIE.getCookie("USER_ID");
 	},
+	getCompanyId : function() {
+		return COOKIE.getCookie("COMPANY_ID");
+	},
 	
 	getSessionDto: function() {
 		let user_id = COOKIE.getCookie("USER_ID");
@@ -36,8 +39,13 @@ var SESSION = {
 		COOKIE.setCookie("SESSION_TOKEN", token, { 'max-age': 8640000000000 } ); 
 	},
 	
+	putCompany : function(company_id) {
+		COOKIE.setCookie("COMPANY_ID", company_id, { 'max-age': 8640000000000 } ); 
+	},
+	
 	kill: function() {
 		COOKIE.eraseCookie("USER_ID"); 
 		COOKIE.eraseCookie("SESSION_TOKEN"); 
+		COOKIE.eraseCookie("COMPANY_ID"); 
 	}
 }

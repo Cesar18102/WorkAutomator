@@ -37,7 +37,7 @@ a {
 	font-family: Poppins-Regular;
 	font-size: 14px;
 	line-height: 1.7;
-	color: #666666;
+	color: #333333;
 	margin: 0px;
 	transition: all 0.4s;
 }
@@ -48,7 +48,7 @@ a:focus {
 
 a:hover {
 	text-decoration: none;
-  color: #57b846;
+	color: #999999;
 }
 
 /*---------------------------------------------*/
@@ -116,18 +116,14 @@ iframe {
   justify-content: center;
   align-items: center;
   padding: 15px;
-  background: #6C6874/*#726E96#9053c7*/;
-  /*background: -webkit-linear-gradient(-135deg, #c850c0, #4158d0);
-  background: -o-linear-gradient(-135deg, #c850c0, #4158d0);
-  background: -moz-linear-gradient(-135deg, #c850c0, #4158d0);
-  background: linear-gradient(-135deg, #c850c0, #4158d0);*/
+  background: #666666;
 }
 
 .wrap-login100 {
-  width: 25vw;
   background: #fff;
-  border-radius: 10px;
+  border-radius: 3px;
   overflow: hidden;
+  border: #666666 5px solid;
 
   display: -webkit-box;
   display: -webkit-flex;
@@ -142,7 +138,8 @@ iframe {
 /*------------------------------------------------------------------
 [  ]*/
 .login100-form {
-  width: 290px;
+	min-width: 300px;
+    width: auto;
 }
 
 .login100-form-title {
@@ -155,6 +152,12 @@ iframe {
   width: 100%;
   display: block;
   padding-bottom: 54px;
+}
+
+.common-label {
+  font-family: Poppins-Bold;
+  font-size: 24px;
+  color: #333333;
 }
 
 
@@ -170,16 +173,22 @@ iframe {
   font-family: Poppins-Medium;
   font-size: 15px;
   line-height: 1.5;
-  color: #666666;
+  color: #333333;
 
   display: block;
   width: 100%;
-  background: #e6e6e6;
+  background: #ccc;
   height: 50px;
-  border-radius: 25px;
-  padding: 0 30px 0 68px;
+  border-radius: 10px;
+  padding: 0 15px 0 15px;
 }
 
+.input100::placeholder {
+  font-family: Poppins-Medium;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #666666;
+}
 
 /*------------------------------------------------------------------
 [ Focus ]*/
@@ -202,7 +211,7 @@ iframe {
 
 /*------------------------------------------------------------------
 [ Button ]*/
-.container-login100-form-btn {
+.common-button-containter, .commonButtonContainter {
   width: 100%;
   display: -webkit-box;
   display: -webkit-flex;
@@ -214,17 +223,17 @@ iframe {
   padding-top: 20px;
 }
 
-.login100-form-btn {
+.common-button, .commonButton {
   font-family: Montserrat-Bold;
   font-size: 15px;
   line-height: 1.5;
-  color: #fff;
+  color: gray;
   text-transform: uppercase;
 
   width: 100%;
   height: 50px;
-  border-radius: 25px;
-  background: #57b846;
+  border-radius: 10px;
+  background: white;
   display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;
@@ -233,6 +242,7 @@ iframe {
   justify-content: center;
   align-items: center;
   padding: 0 25px;
+  border: 3px solid gray;
 
   -webkit-transition: all 0.4s;
   -o-transition: all 0.4s;
@@ -240,8 +250,8 @@ iframe {
   transition: all 0.4s;
 }
 
-.login100-form-btn:hover {
-  background: #333333;
+.common-button:hover, .commonButton:hover {
+  background: #ddd;
 }
 
 
@@ -312,3 +322,37 @@ iframe {
   }
 }
 
+/* The Modal (background) */
+.modal {
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  border-radius: 5px;
+  background-color: #fefefe;
+  padding: 20px;
+  border: 1px solid #888;
+  
+  width: 30%; /* Could be more or less, depending on screen size */
+  margin-left: 35%;
+  
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}

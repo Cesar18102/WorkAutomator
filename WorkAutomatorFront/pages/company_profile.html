@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Company Profile</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" type="text/css" href="../css/main.css">
+	<link rel="stylesheet" type="text/css" href="../css/main_page.css">
+</head>
+<body>
+	
+	<nav id="header" class="menu one">
+		<custom-header></custom-header>
+	</nav>
+	
+	<div id="company-info" class="comp_reg room_reg">
+		<div class="wrap-login100 reg_form">
+
+			<form id="company_profile_form" class="login100-form validate-form reg_form_form">
+				<span class="login100-form-title">
+					{{ 'companyProfile' | localize }}
+				</span>
+
+				<div class="wrap-input100 validate-input">
+					<label>{{ 'name' | localize }}</label>
+					<input class="input100" type="text" name="name" placeholder="Name" v-model="company.name">
+				</div>
+				
+				<div class="wrap-input100 validate-input">
+					<label>{{ 'plan' | localize }}</label>
+					<input class="input100" type="text" name="image_url" placeholder="Plan Image Url" v-model="company.plan_image_url">
+				</div>
+				
+				<div class="common-button-container">
+					<button class="common-button">
+						{{ 'save' | localize }}
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	
+	<script src="../js/libs/jquery.js"></script>
+	<script src="../js/libs/vue.js"></script>
+	<script src="../js/vue_filters.js"></script>
+	<script src="../js/libs/sha256.js"></script>
+	<script src="../js/cookie.js"></script>
+	<script src="../js/localize.js"></script>
+	<script src="../js/session.js"></script>
+	<script src="../js/role.js"></script>
+	<script src="../js/header.js"></script>
+	<script src="../js/company_profile.js"></script>
+	
+	<div id="err"><err></err></div>
+	<script src="../js/error.js"></script>
+
+</body>
+</html>
