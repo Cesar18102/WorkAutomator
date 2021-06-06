@@ -153,8 +153,9 @@ namespace WorkAutomatorLogic
 
             config.CreateMap<DetectorFaultPrefabModel, DetectorFaultPrefabEntity>()
                   .ForMember(entity => entity.fault_condition, cnf => cnf.MapFrom(model => model.FaultCondition))
+                  .ForMember(entity => entity.image_url, cnf => cnf.MapFrom(model => model.ImageUrl))
                   .ReverseMap()
-                  .ForMember(model => model.FaultCondition, cnf => cnf.MapFrom(entity => entity.fault_condition));
+                  .ForMember(model => model.ImageUrl, cnf => cnf.MapFrom(entity => entity.image_url));
 
             config.CreateMap<DetectorSettingsPrefabModel, DetectorSettingsPrefabEntity>()
                   .ForMember(entity => entity.option_name, cnf => cnf.MapFrom(model => model.OptionName))

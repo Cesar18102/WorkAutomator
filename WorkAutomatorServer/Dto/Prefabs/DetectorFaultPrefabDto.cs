@@ -16,5 +16,8 @@ namespace Dto.Prefabs
 
         [JsonProperty("fault_condition")]
         public string FaultCondition { get; set; }
+
+        [JsonProperty("image_url")]
+        public string ImageUrl { get; set; }
     }
 }

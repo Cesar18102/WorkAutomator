@@ -126,9 +126,13 @@
     <Compile Include="Migrations\202106022238566_init-azure.designer.cs">
       <DependentUpon>202106022238566_init-azure.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202106041433054_test.cs" />
-    <Compile Include="Migrations\202106041433054_test.designer.cs">
-      <DependentUpon>202106041433054_test.cs</DependentUpon>
+    <Compile Include="Migrations\202106052342494_name-description-for-storage-cell-prefab.cs" />
+    <Compile Include="Migrations\202106052342494_name-description-for-storage-cell-prefab.designer.cs">
+      <DependentUpon>202106052342494_name-description-for-storage-cell-prefab.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202106060047286_image-for-fault-prefab.cs" />
+    <Compile Include="Migrations\202106060047286_image-for-fault-prefab.designer.cs">
+      <DependentUpon>202106060047286_image-for-fault-prefab.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Repos\AccountRepo.cs" />
@@ -146,8 +150,11 @@
     <EmbeddedResource Include="Migrations\202106022238566_init-azure.resx">
       <DependentUpon>202106022238566_init-azure.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202106041433054_test.resx">
-      <DependentUpon>202106041433054_test.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202106052342494_name-description-for-storage-cell-prefab.resx">
+      <DependentUpon>202106052342494_name-description-for-storage-cell-prefab.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202106060047286_image-for-fault-prefab.resx">
+      <DependentUpon>202106060047286_image-for-fault-prefab.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

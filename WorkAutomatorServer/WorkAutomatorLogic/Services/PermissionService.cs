@@ -51,9 +51,16 @@ namespace WorkAutomatorLogic.Services
 
                     bool isLegal = requiredInteractionTypes.Intersect(havingInteractionTypes).Count() == requiredInteractionTypes.Length;
 
-                    if (interaction.CompanyId.HasValue && await db.GetRepo<CompanyEntity>().FirstOrDefault(company => company.owner_id == interaction.CompanyId.Value) == null)
-                        throw new NotFoundException("Company");
+                    if (interaction.CompanyId.HasValue)
+                    {
+                        CompanyEntity company = await db.GetRepo<CompanyEntity>().FirstOrDefault(
+                            c => c.owner_id == interaction.CompanyId.Value
+                        );
 
+                        if(company == null)
+                            throw new NotFoundException("Company");
+                    }
+                            
                     if (isLegal)
                     {
                         if (interaction.CompanyId.HasValue)
@@ -101,7 +108,11 @@ namespace WorkAutomatorLogic.Services
                                 .Invoke(awaiter, new object[] { });
 
                             if (entity == null)
-                                throw new NotFoundException(entityType.Name.Replace("Entity", ""));
+                            {
+                                throw new NotFoundException(
+                                    entityType.Name.Replace("Entity", "")
+                                );
+                            }
 
                             return entity;
                         }).ToArray();
@@ -110,8 +121,14 @@ namespace WorkAutomatorLogic.Services
                         {
                             foreach (object entity in entities)
                             {
-                                isLegal &= (bool)entity.GetType().GetMethod(nameof(EntityBase.IsOwnedByCompany))
-                                                       .Invoke(entity, new object[] { interaction.CompanyId.Value });
+                                isLegal &= (bool)entity.GetType().GetMethod(
+                                    nameof(EntityBase.IsOwnedByCompany)
+                                ).Invoke(
+                                    entity, 
+                                    new object[] {
+                                        interaction.CompanyId.Value
+                                    }
+                                );
 
                                 if (!isLegal)
                                     break;
@@ -121,17 +138,20 @@ namespace WorkAutomatorLogic.Services
 
                     if (!isLegal)
                     {
-                        if (interaction.CompanyId.HasValue && interaction.CheckSameCompany && interaction.ObjectIds != null && interaction.ObjectIds.Length != 0)
+                        if (interaction.CompanyId.HasValue && interaction.CheckSameCompany)
                         {
-                            notEnoughPermissions = requiredInteractionTypes.Select(
-                                t => $"{t} {interaction.Table} {string.Join(", ", interaction.ObjectIds.Select(id => "#" + id))}"
-                            ).ToArray();
-                        }
-                        else if(interaction.CompanyId.HasValue && interaction.CheckSameCompany)
-                        {
-                            notEnoughPermissions = requiredInteractionTypes.Select(
-                                t => $"{t} {interaction.Table} for company #{interaction.CompanyId.Value}"
-                            ).ToArray();
+                            if (interaction.ObjectIds != null && interaction.ObjectIds.Length != 0)
+                            {
+                                notEnoughPermissions = requiredInteractionTypes.Select(
+                                    t => $"{t} {interaction.Table} {string.Join(", ", interaction.ObjectIds.Select(id => "#" + id))}"
+                                ).ToArray();
+                            }
+                            else
+                            {
+                                notEnoughPermissions = requiredInteractionTypes.Select(
+                                    t => $"{t} {interaction.Table} for company #{interaction.CompanyId.Value}"
+                                ).ToArray();
+                            }
                         }
                         else
                         {

@@ -218,16 +218,10 @@ namespace WorkAutomatorLogic.Services
             });
         }
 
-        public async Task<RoleEntity> GetCompanyOwnerRole(int companyId)
+        public async Task<RoleEntity> GetCompanyOwnerRole(int companyId, UnitOfWork db)
         {
-            return await Execute(async () =>
-            {
-                using (UnitOfWork db = new UnitOfWork())
-                {
-                    CompanyEntity company = await db.GetRepo<CompanyEntity>().Get(companyId);
-                    return company.Owner.Roles.First(role => role.is_default && role.name == $"COMPANY #{companyId} OWNER");
-                }
-            });
+            CompanyEntity company = await db.GetRepo<CompanyEntity>().Get(companyId);
+            return company.Owner.Roles.FirstOrDefault(role => role.is_default && role.name == $"COMPANY #{companyId} OWNER");
         }
 
         public async Task UpdateCompanyOwnerRole(int companyId)
@@ -237,7 +231,7 @@ namespace WorkAutomatorLogic.Services
                 using (UnitOfWork db = new UnitOfWork())
                 {
                     CompanyEntity company = await db.GetRepo<CompanyEntity>().Get(companyId);
-                    RoleEntity ownerRole = await GetCompanyOwnerRole(companyId);
+                    RoleEntity ownerRole = await GetCompanyOwnerRole(companyId, db);
 
                     foreach (ManufactoryEntity manufactoryToRemove in ownerRole.ManufactoryPermissions.Except(company.Manufactories).ToArray())
                         ownerRole.ManufactoryPermissions.Remove(manufactoryToRemove);
@@ -281,7 +275,7 @@ namespace WorkAutomatorLogic.Services
                     RoleEntity workerRole = new RoleEntity()
                     {
                         company_id = account.company_id,
-                        name = $"COMPANY #{account.company_id} MEMBER",
+                        name = $"COMPANY #{account.company_id} MEMBER #{accountId}",
                         is_default = true
                     };
 
@@ -294,16 +288,10 @@ namespace WorkAutomatorLogic.Services
             });
         }
 
-        public async Task<RoleEntity> GetCompanyWorkerRole(int accountId)
+        public async Task<RoleEntity> GetCompanyWorkerRole(int accountId, UnitOfWork db)
         {
-            return await Execute(async () =>
-            {
-                using (UnitOfWork db = new UnitOfWork())
-                {
-                    AccountEntity account = await db.GetRepo<AccountEntity>().Get(accountId);
-                    return account.Roles.First(role => role.is_default && role.name == $"COMPANY #{account.company_id} MEMBER");
-                }
-            });
+            AccountEntity account = await db.GetRepo<AccountEntity>().Get(accountId);
+            return account.Roles.FirstOrDefault(role => role.is_default && role.name == $"COMPANY #{account.company_id} MEMBER #{accountId}");
         }
 
         private bool IsRolesPermissionsIncludeRolePermissions(RoleEntity[] roles, RoleEntity testedRole)

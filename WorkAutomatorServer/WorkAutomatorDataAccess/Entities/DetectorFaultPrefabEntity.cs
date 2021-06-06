@@ -26,6 +26,9 @@ namespace WorkAutomatorDataAccess.Entities
         [Column(TypeName = "text")]
         public string fault_condition { get; set; }
 
+        [Required]
+        [StringLength(1024)]
+        public string image_url { get; set; }
         public virtual DetectorPrefabEntity detector_prefab { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

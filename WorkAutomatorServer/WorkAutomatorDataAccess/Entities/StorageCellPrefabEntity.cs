@@ -20,6 +20,13 @@ namespace WorkAutomatorDataAccess.Entities
 
         [Required]
         [StringLength(1024)]
+        public string name { get; set; }
+
+        [Column(TypeName = "text")]
+        public string description { get; set; }
+
+        [Required]
+        [StringLength(1024)]
         public string image_url { get; set; }
 
         public double input_x { get; set; }

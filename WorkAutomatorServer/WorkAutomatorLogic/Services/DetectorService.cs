@@ -49,10 +49,10 @@ namespace WorkAutomatorLogic.Services
                     await db.GetRepo<DetectorEntity>().Create(detectorEntity);
                     await db.Save();
 
-                    RoleEntity ownerRole = await RoleService.GetCompanyOwnerRole(detectorPrefabEntity.company_id);
+                    RoleEntity ownerRole = await RoleService.GetCompanyOwnerRole(detectorPrefabEntity.company_id, db);
                     ownerRole.DetectorPermissions.Add(detectorEntity);
 
-                    RoleEntity creatorRole = await RoleService.GetCompanyWorkerRole(dto.Session.UserId);
+                    RoleEntity creatorRole = await RoleService.GetCompanyWorkerRole(dto.Session.UserId, db);
                     creatorRole?.DetectorPermissions.Add(detectorEntity);
 
                     await db.Save();

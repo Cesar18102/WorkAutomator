@@ -10,5 +10,11 @@ namespace Dto.Prefabs
         [ObjectId(DbTable.StorageCellPrefab)]
         [JsonIgnore]
         public int? StorageCellPrefabId => Id;
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("description")]
+        public string Description { get; set; }
     }
 }

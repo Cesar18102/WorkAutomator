@@ -828,6 +828,14 @@ namespace WorkAutomatorDataAccess
                 .HasForeignKey(e => e.storage_cell_prefab_id)
                 .WillCascadeOnDelete(false);
 
+            modelBuilder.Entity<StorageCellPrefabEntity>()
+                .Property(e => e.name)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<StorageCellPrefabEntity>()
+                .Property(e => e.description)
+                .IsUnicode(false);
+
             modelBuilder.Entity<TaskEntity>()
                 .Property(e => e.name)
                 .IsUnicode(false);

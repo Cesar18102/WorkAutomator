@@ -37,10 +37,12 @@ namespace WorkAutomatorLogic.Services
                     await db.GetRepo<StorageCellEntity>().Create(storageCellEntity);
                     await db.Save();
 
-                    RoleEntity ownerRole = await RoleService.GetCompanyOwnerRole(storageCellEntity.StorageCellPrefab.company_id);
+                    StorageCellPrefabEntity prefab = await db.GetRepo<StorageCellPrefabEntity>().Get(storageCellEntity.storage_cell_prefab_id);
+
+                    RoleEntity ownerRole = await RoleService.GetCompanyOwnerRole(prefab.company_id, db);
                     ownerRole.StorageCellPermissions.Add(storageCellEntity);
 
-                    RoleEntity creatorRole = await RoleService.GetCompanyWorkerRole(dto.Session.UserId);
+                    RoleEntity creatorRole = await RoleService.GetCompanyWorkerRole(dto.Session.UserId, db);
                     creatorRole?.StorageCellPermissions.Add(storageCellEntity);
 
                     await db.Save();

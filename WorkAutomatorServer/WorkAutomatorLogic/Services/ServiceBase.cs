@@ -93,13 +93,13 @@ namespace WorkAutomatorLogic.Services
                 PropertyInfo[] properties = ex.EntityType?.GetProperties();
                 foreach (ValidationResult validationResult in ex.Errors)
                 {
-                    TypeMap modelToEntityMap = ModelEntityMapper.Mapper.ConfigurationProvider.GetAllTypeMaps().First(
+                    TypeMap modelToEntityMap = ModelEntityMapper.Mapper.ConfigurationProvider.GetAllTypeMaps().FirstOrDefault(
                         map => typeof(ModelBase).IsAssignableFrom(map.SourceType) && map.DestinationType.Equals(ex.EntityType)
                     );
 
                     if (validationResult.MemberNames.Count() == 0)
                     {
-                        InvalidFieldInfo info = new InvalidFieldInfo(modelToEntityMap.SourceType, null, validationResult.ErrorMessage);
+                        InvalidFieldInfo info = new InvalidFieldInfo(modelToEntityMap?.SourceType, null, validationResult.ErrorMessage);
                         dataValidationException.InvalidFieldInfos.Add(info);
                     }
 
@@ -109,12 +109,12 @@ namespace WorkAutomatorLogic.Services
                             property => property.GetCustomAttribute<ColumnAttribute>()?.Name == invalidFieldName
                         )?.Name ?? invalidFieldName;
 
-                        PropertyMap foundPropertyMap = modelToEntityMap.PropertyMaps.First(
+                        PropertyMap foundPropertyMap = modelToEntityMap?.PropertyMaps.FirstOrDefault(
                             map => map.DestinationMember.Name == realPropertyName
                         );
 
                         InvalidFieldInfo info = new InvalidFieldInfo(
-                            modelToEntityMap.SourceType, 
+                            modelToEntityMap?.SourceType, 
                             foundPropertyMap.SourceMember.Name,
                             validationResult.ErrorMessage
                         );

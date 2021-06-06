@@ -39,10 +39,12 @@ namespace WorkAutomatorLogic.Services
                     await db.GetRepo<PipelineItemEntity>().Create(pipelineItemEntity);
                     await db.Save();
 
-                    RoleEntity ownerRole = await RoleService.GetCompanyOwnerRole(pipelineItemEntity.PipelineItemPrefab.company_id);
+                    PipelineItemPrefabEntity prefab = await db.GetRepo<PipelineItemPrefabEntity>().Get(pipelineItemEntity.pipeline_item_prefab_id);
+
+                    RoleEntity ownerRole = await RoleService.GetCompanyOwnerRole(prefab.company_id, db);
                     ownerRole.PipelineItemPermissions.Add(pipelineItemEntity);
 
-                    RoleEntity creatorRole = await RoleService.GetCompanyWorkerRole(dto.Session.UserId);
+                    RoleEntity creatorRole = await RoleService.GetCompanyWorkerRole(dto.Session.UserId, db);
                     creatorRole?.PipelineItemPermissions.Add(pipelineItemEntity);
 
                     await db.Save();

@@ -7,13 +7,13 @@ namespace WorkAutomatorDataAccess.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class test : IMigrationMetadata
+    public sealed partial class imageforfaultprefab : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(test));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(imageforfaultprefab));
         
         string IMigrationMetadata.Id
         {
-            get { return "202106041433054_test"; }
+            get { return "202106060047286_image-for-fault-prefab"; }
         }
         
         string IMigrationMetadata.Source
