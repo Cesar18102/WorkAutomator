@@ -62,5 +62,14 @@ namespace WorkAutomatorServer.Controllers
         {
             return await Execute(company => PipelineService.Get(company), dto);
         }
+
+        [HttpPost]
+        [WireHeadersAspect]
+        [AuthorizedAspect]
+        [RequiredMaskAspect("dto.Data.Id")]
+        public async Task<HttpResponseMessage> Get([FromBody] AuthorizedDto<PipelineDto> dto)
+        {
+            return await Execute(pipeline => PipelineService.Get(pipeline), dto);
+        }
     }
 }

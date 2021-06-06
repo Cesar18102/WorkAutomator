@@ -329,6 +329,7 @@ namespace WorkAutomatorLogic.Services
             });
         }
 
+        [DbPermissionAspect(Action = InteractionDbType.READ, Table = DbTable.Pipeline, CheckSameCompany = true)]
         public async Task<PipelineModel[]> Get(AuthorizedDto<CompanyDto> dto)
         {
             return await Execute(async () => {
@@ -339,6 +340,18 @@ namespace WorkAutomatorLogic.Services
                     );
 
                     return ModelEntityMapper.Mapper.Map<IList<PipelineModel>>(pipelines).ToArray();
+                }
+            });
+        }
+
+        [DbPermissionAspect(Action = InteractionDbType.READ, Table = DbTable.Pipeline, CheckSameCompany = true)]
+        public async Task<PipelineModel> Get(AuthorizedDto<PipelineDto> dto)
+        {
+            return await Execute(async () => {
+                using (UnitOfWork db = new UnitOfWork())
+                {
+                    PipelineEntity pipeline = await db.GetRepo<PipelineEntity>().Get(dto.Data.Id.Value);
+                    return ModelEntityMapper.Mapper.Map<PipelineModel>(pipeline);
                 }
             });
         }
