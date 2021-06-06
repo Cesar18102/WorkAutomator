@@ -8,6 +8,9 @@ namespace WorkAutomatorLogic.Models.Pipeline
 {
     public class DetectorModel : IdModel
     {
+        [JsonProperty("pipeline_item_id")]
+        public int? PipelineItemId { get; set; }
+
         [JsonProperty("prefab")]
         public DetectorPrefabModel Prefab { get; set; }
 

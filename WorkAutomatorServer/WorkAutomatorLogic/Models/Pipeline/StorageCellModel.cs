@@ -9,6 +9,9 @@ namespace WorkAutomatorLogic.Models.Pipeline
         [JsonProperty("prefab")]
         public StorageCellPrefabModel Prefab { get; set; }
 
+        [JsonProperty("pipeline_id")]
+        public int? PipelineId { get; set; }
+
         [JsonProperty("manufactory_id")]
         public int? ManufactoryId { get; set; }
 

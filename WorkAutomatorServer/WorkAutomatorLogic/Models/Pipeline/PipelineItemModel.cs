@@ -17,6 +17,9 @@ namespace WorkAutomatorLogic.Models.Pipeline
         [JsonProperty("detectors")]
         public ICollection<DetectorModel> Detectors { get; set; }
 
+        [JsonProperty("pipeline_id")]
+        public int? PipelineId { get; set; }
+
         [JsonProperty("manufactory_id")]
         public int? ManufactoryId { get; set; }
 

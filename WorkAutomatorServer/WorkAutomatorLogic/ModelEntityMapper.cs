@@ -98,6 +98,11 @@ namespace WorkAutomatorLogic
             config.CreateMap<DataTypeModel, DataTypeEntity>().ReverseMap();
             config.CreateMap<VisualizerTypeModel, VisualizerTypeEntity>().ReverseMap();
 
+            config.CreateMap<PipelineModel, PipelineEntity>()
+                  .ForMember(entity => entity.company_id, cnf => cnf.MapFrom(model => model.CompanyId))
+                  .ReverseMap()
+                  .ForMember(model => model.CompanyId, cnf => cnf.MapFrom(entity => entity.company_id));
+
             config.CreateMap<PipelineItemSettingsPrefabModel, PipelineItemSettingsPrefabEntity>()
                   .ForMember(entity => entity.option_name, cnf => cnf.MapFrom(model => model.OptionName))
                   .ForMember(entity => entity.option_data_type_id, cnf => cnf.MapFrom(model => model.OptionDataType.Id))
@@ -186,13 +191,15 @@ namespace WorkAutomatorLogic
                   .ReverseMap()
                   .ForMember(model => model.SettingsValues, cnf => cnf.MapFrom(entity => entity.PipelineItemSettingsValues))
                   .ForMember(model => model.Prefab, cnf => cnf.MapFrom(entity => entity.PipelineItemPrefab))
-                  .ForMember(model => model.ManufactoryId, cnf => cnf.MapFrom(entity => entity.manufactory_id));
+                  .ForMember(model => model.ManufactoryId, cnf => cnf.MapFrom(entity => entity.manufactory_id))
+                  .ForMember(model => model.PipelineId, cnf => cnf.MapFrom(entity => entity.pipeline_id));
 
             config.CreateMap<StorageCellModel, StorageCellEntity>()
                  .ForMember(entity => entity.storage_cell_prefab_id, cnf => cnf.MapFrom(model => model.Prefab.Id))
                  .ReverseMap()
                  .ForMember(model => model.Prefab, cnf => cnf.MapFrom(entity => entity.StorageCellPrefab))
-                 .ForMember(model => model.ManufactoryId, cnf => cnf.MapFrom(entity => entity.manufactory_id));
+                 .ForMember(model => model.ManufactoryId, cnf => cnf.MapFrom(entity => entity.manufactory_id))
+                 .ForMember(model => model.PipelineId, cnf => cnf.MapFrom(entity => entity.pipeline_id));
 
             config.CreateMap<DetectorSettingsValueModel, DetectorSettingsValueEntity>()
                   .ForMember(entity => entity.detector_settings_prefab_id, cnf => cnf.MapFrom(model => model.Prefab.Id))
@@ -208,7 +215,8 @@ namespace WorkAutomatorLogic
                   .ReverseMap()
                   .ForMember(model => model.SettingsValues, cnf => cnf.MapFrom(entity => entity.DetectorSettingsValues))
                   .ForMember(model => model.Prefab, cnf => cnf.MapFrom(entity => entity.DetectorPrefab))
-                  .ForMember(model => model.TrackedDetectorFaults, cnf => cnf.MapFrom(entity => entity.DetectorFaultPrefabs));
+                  .ForMember(model => model.TrackedDetectorFaults, cnf => cnf.MapFrom(entity => entity.DetectorFaultPrefabs))
+                  .ForMember(model => model.PipelineItemId, cnf => cnf.MapFrom(entity => entity.pipeline_item_id));
 
             config.CreateMap<DetectorFaultEventModel, DetectorFaultEventEntity>()
                   .ForMember(entity => entity.detector_id, cnf => cnf.MapFrom(model => model.Detector.Id))
