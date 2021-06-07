@@ -8,72 +8,89 @@
 			<custom-header></custom-header>
 		</nav>
 	
-		<div id="pipeline">
+		<div id="pipeline" style="user-select: none;">
 			<div>
-				<center><canvas id="plan"></canvas></center>
-			<div>
+				<center>
+					<img v-bind:src="image_url" id="plan" draggable="false" onload="planLoad()"></img>
+					
+					<div v-for="pipeline_item of pipeline_items" style="position: absolute;">
+						<pipeline_item_visualizer v-bind:pipeline_item="pipeline_item" v-if="pipeline_item.x"></pipeline_item_visualizer>
+					</div>
+					
+					<div v-for="storage_cell of storage_cells" style="position: absolute;">
+						<storage_cell_visualizer v-bind:storage_cell="storage_cell" v-if="storage_cell.x"></storage_cell_visualizer>
+					</div>
+					
+					<div v-for="connection of pipeline_item_pipeline_item_connections.concat(pipeline_item_storage_cell_connections)" style="position: absolute; z-index: 2;">
+						<connection_visualizer v-bind:connection="connection"></connection_visualizer>
+					</div>
+				</center>
+			</div>
 			
-			<br/>
-			
-			<center>
-				<table cellspacing="50">
-					<tr><td colspan="3"><span class="login100-form-title">Prefabs</span></td></tr>
-					<tr>
-						<td>
-							<span class="login100-form-title">Pipeline item prefabs</span>
-							<ul>
-								<li v-for="pipeline_item_prefab of pipeline_item_prefabs">
-									<pipeline_item_prefab_list_item v-bind:pipeline_item_prefab="pipeline_item_prefab"></pipeline_item_prefab_list_item>
-								</li>
-							</ul>
-						</td>
-						<td>
-							<span class="login100-form-title">Storage cell prefabs</span>
-							<ul>
-								<li v-for="storage_cell_prefab of storage_cell_prefabs">
-									<storage_cell_prefab_list_item v-bind:storage_cell_prefab="storage_cell_prefab"></storage_cell_prefab_list_item>
-								</li>
-							</ul>
-						</td>
-						<td>
-							<span class="login100-form-title">Detector prefabs</span>
-							<ul>
-								<li v-for="detector_prefab of detector_prefabs">
-									<detector_prefab_list_item v-bind:detector_prefab="detector_prefab"></detector_prefab_list_item>
-								</li>
-							</ul>
-						</td>
-					</tr>
-					<tr>
-						<tr><td colspan="3"><span class="login100-form-title">Items</span></td></tr>
-						<td>
-							<span class="login100-form-title">Pipeline items</span>
-							<ul>
-								<li v-for="pipeline_item of pipeline_items">
-									<pipeline_item_list_item v-bind:pipeline_item="pipeline_item"></pipeline_item_list_item>
-								</li>
-							</ul>
-						</td>
-						<td>
-							<span class="login100-form-title">Storage cells</span>
-							<ul>
-								<li v-for="storage_cell of storage_cells">
-									<storage_cell_list_item v-bind:storage_cell="storage_cell"></storage_cell_list_item>
-								</li>
-							</ul>
-						</td>
-						<td>
-							<span class="login100-form-title">Detectors</span>
-							<ul>
-								<li v-for="detector of detectors">
-									<detector_list_item v-bind:detector="detector"></detector_list_item>
-								</li>
-							</ul>
-						</td>
-					</tr>
-				</table>
-			</center>
-			
+			<div class="modal" v-if="setting_pipeline_item">
+			  <div class="modal-content">
+				<center><span>Edit {{ setting_pipeline_item.prefab.name }} #{{ setting_pipeline_item.id }} settings</span></center>
+				
+				<div v-for="setting_prefab of setting_pipeline_item.prefab.settings_prefabs" style="margin-bottom: 1em;">
+					<label>
+						<b>{{ setting_prefab.option_name }}</b>
+						<span v-if="setting_prefab.description"><i>({{ setting_prefab.description }})</i></span>
+					</label>
+					<div class="wrap-input100 validate-input">
+						<input class="input100" type="checkbox" v-if="setting_prefab.data_type.name == 'bool'" v-model="setting_prefab.value" v-bind:placeholder="setting_prefab.option_name"></input>
+						<input class="input100" type="number" v-if="setting_prefab.data_type.name == 'int'" v-model="setting_prefab.value" v-bind:placeholder="setting_prefab.option_name"></input>
+						<input class="input100" type="number" step="0.001" v-if="setting_prefab.data_type.name == 'float'" v-model="setting_prefab.value" v-bind:placeholder="setting_prefab.option_name"></input>
+					</div>
+				</div>
+				
+				<center>
+					<div class="common-button-container" style="display: inline-block; width: 40%;">
+						<button v-on:click="savePipelineItemSettings" class="common-button">
+							Save
+						</button>
+					</div>
+					
+					<div class="common-button-container" style="display: inline-block; width: 40%;">
+						<button v-on:click="cancelPipelineItemSettings" class="common-button">
+							Cancel
+						</button>
+					</div>
+				</center>
+				</div>
+			</div>
+			  
+			<div class="modal" v-if="setting_detector">
+				  <div class="modal-content">
+					<center><span>Edit {{ setting_detector.prefab.name }} #{{ setting_detector.id }} settings</span></center>
+					
+					<div v-for="setting_prefab of setting_detector.prefab.detector_settings_prefabs" style="margin-bottom: 1em;">
+						<label>
+							<b>{{ setting_prefab.option_name }}</b>
+							<span v-if="setting_prefab.description"><i>({{ setting_prefab.description }})</i></span>
+						</label>
+						<div class="wrap-input100 validate-input">
+							<input class="input100" type="checkbox" v-if="setting_prefab.option_data_type_id.name == 'bool'" v-model="setting_prefab.value" v-bind:placeholder="setting_prefab.option_name"></input>
+							<input class="input100" type="number" v-if="setting_prefab.option_data_type_id.name == 'int'" v-model="setting_prefab.value" v-bind:placeholder="setting_prefab.option_name"></input>
+							<input class="input100" type="number" step="0.001" v-if="setting_prefab.option_data_type_id.name == 'float'" v-model="setting_prefab.value" v-bind:placeholder="setting_prefab.option_name"></input>
+						</div>
+					</div>
+					
+					<center>
+						<div class="common-button-container" style="display: inline-block; width: 40%;">
+							<button v-on:click="saveDetectorSettings" class="common-button">
+								Save
+							</button>
+						</div>
+						
+						<div class="common-button-container" style="display: inline-block; width: 40%;">
+							<button v-on:click="cancelDetectorSettings" class="common-button">
+								Cancel
+							</button>
+						</div>
+					</center>
+				</div>
+			</div>
+			  
 		</div>
 		
 		<script src="../js/libs/jquery.js"></script>

@@ -1,0 +1,173 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="../css/main.css">
+		<link rel="stylesheet" type="text/css" href="../css/main_page.css">
+		
+		<style>
+			.selectedItem {
+				border: 3px solid black;
+			}
+			.settingOutgoingConnection {
+				border: 3px solid green;
+			}
+			.settingIncomingConnection {
+				border: 3px solid red;
+			}
+			.removeConnection {
+				border: 3px solid gray;
+			}
+		</style>
+	</head>
+	<body>
+		<nav id="header" class="menu one">
+			<custom-header></custom-header>
+		</nav>
+	
+		<div id="pipeline" style="user-select: none;">
+			<div>
+				<center>
+					<img v-bind:src="image_url" id="plan" onload="planLoaded()"></img>
+					
+					<div>
+						<div class="common-button-container" style="display: inline-block">
+							<button class="common-button" v-on:click="resetSelection">Reset selection</button>
+						</div>
+						<div class="common-button-container" style="display: inline-block">
+							<button class="common-button" v-on:click="remove">Remove selected</button>
+						</div>
+						<div class="common-button-container" style="display: inline-block">
+							<button class="common-button" v-on:click="save">Save</button>
+						</div>
+					</div>
+					<div>
+						<div class="common-button-container" style="display: inline-block">
+							<button class="common-button" v-on:click="setOutgoingConnection">Set outgoing connection</button>
+						</div>
+						<div class="common-button-container" style="display: inline-block">
+							<button class="common-button" v-on:click="setIncomingConnection">Set incoming connection</button>
+						</div>
+						<div class="common-button-container" style="display: inline-block">
+							<button class="common-button" v-on:click="startRemoveConnection">Start remove connection</button>
+						</div>
+					</div>
+					
+					<div v-for="pipeline_item of pipeline_items" style="position: absolute;">
+						<pipeline_item_visualizer v-bind:pipeline_item="pipeline_item" v-if="pipeline_item.x"></pipeline_item_visualizer>
+					</div>
+					
+					<div v-for="storage_cell of storage_cells" style="position: absolute;">
+						<storage_cell_visualizer v-bind:storage_cell="storage_cell" v-if="storage_cell.x"></storage_cell_visualizer>
+					</div>
+					
+					<div v-for="connection of pipeline_item_pipeline_item_connections.concat(pipeline_item_storage_cell_connections)" style="position: absolute; z-index: 2;">
+						<connection_visualizer v-bind:connection="connection"></connection_visualizer>
+					</div>
+				</center>
+			</div>
+			
+			<br/>
+			
+			<center>
+				<table cellspacing="50" style="width: 100%;">
+					<tr><td colspan="3"><span class="login100-form-title">Items</span></td></tr>
+					<tr>
+						<td>
+							<span class="login100-form-title">Pipeline items</span>
+							<ul>
+								<li v-for="pipeline_item of pipeline_items" style="width: 100%;">
+									<pipeline_item_list_item v-bind:pipeline_item="pipeline_item"></pipeline_item_list_item>
+								</li>
+							</ul>
+						</td>
+						<td>
+							<span class="login100-form-title">Storage cells</span>
+							<ul>
+								<li v-for="storage_cell of storage_cells" style="width: 100%;">
+									<storage_cell_list_item v-bind:storage_cell="storage_cell"></storage_cell_list_item>
+								</li>
+							</ul>
+						</td>
+						<td>
+							<span class="login100-form-title">Detectors</span>
+							<ul>
+								<li v-for="detector of detectors" style="width: 100%;">
+									<detector_list_item v-bind:detector="detector"></detector_list_item>
+								</li>
+							</ul>
+						</td>
+					</tr>
+					<tr><td colspan="3"><span class="login100-form-title">Prefabs</span></td></tr>
+					<tr>
+						<td>
+							<span class="login100-form-title">Pipeline item prefabs</span>
+							<ul>
+								<li v-for="pipeline_item_prefab of pipeline_item_prefabs" style="width: 100%;">
+									<pipeline_item_prefab_list_item v-bind:pipeline_item_prefab="pipeline_item_prefab"></pipeline_item_prefab_list_item>
+								</li>
+							</ul>
+						</td>
+						<td>
+							<span class="login100-form-title">Storage cell prefabs</span>
+							<ul>
+								<li v-for="storage_cell_prefab of storage_cell_prefabs" style="width: 100%;">
+									<storage_cell_prefab_list_item v-bind:storage_cell_prefab="storage_cell_prefab"></storage_cell_prefab_list_item>
+								</li>
+							</ul>
+						</td>
+						<td>
+							<span class="login100-form-title">Detector prefabs</span>
+							<ul>
+								<li v-for="detector_prefab of detector_prefabs" style="width: 100%;">
+									<detector_prefab_list_item v-bind:detector_prefab="detector_prefab"></detector_prefab_list_item>
+								</li>
+							</ul>
+						</td>
+					</tr>
+				</table>
+			</center>
+			
+			<div class="modal" v-if="is_tracked_detector_fault_prefabs_window_shown">
+			  <div class="modal-content">
+				<span>Select Fault Prefabs to be tracked by the created detector</span>
+				
+				<div v-for="fault_prefab of creating_detector_prefab.detector_fault_prefabs"/>
+					<input type="checkbox" v-model="fault_prefab.is_tracked"></input>
+					<img v-if="fault_prefab.image_url" v-bind:src="fault_prefab.image_url" width="30px" height="30px"></img>
+					<span><b>{{ fault_prefab.name }}</b>: </span>
+					<span><i>{{ fault_prefab.fault_condition }}</i></span>
+				</div>
+				
+				<center>
+					<div class="common-button-container" style="display: inline-block; width: 40%">
+						<button v-on:click="createDetectorPrefabConfirm" class="common-button">
+							Create
+						</button>
+					</div>
+					
+					<div class="common-button-container" style="display: inline-block; width: 40%">
+						<button v-on:click="closeTrackedFaultPrefabsWindow" class="common-button">
+							Cancel
+						</button>
+					</div>
+				</center>
+			  </div>
+			</div>
+			
+		</div>
+		
+		<script src="../js/libs/jquery.js"></script>
+		<script src="../js/libs/vue.js"></script>
+		<script src="../js/vue_filters.js"></script>
+		<script src="../js/libs/sha256.js"></script>
+		<script src="../js/cookie.js"></script>
+		<script src="../js/localize.js"></script>
+		<script src="../js/session.js"></script>
+		<script src="../js/role.js"></script>
+		<script src="../js/header.js"></script>
+		<script src="../js/libs/vue.js"></script>
+		<script src="../js/create_pipeline.js"></script>
+		
+		<div id="err"><err></err></div>
+		<script src="../js/error.js"></script>
+	</body>
+<html>

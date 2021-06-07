@@ -62,7 +62,7 @@ Vue.component('detector_prefab_list_item', {
 							<tr v-for="fault_prefab_chunk of $options.filters.chunk(detector_prefab.detector_fault_prefabs, 5)">
 								<td v-for="fault_prefab of fault_prefab_chunk">
 									<img v-if="fault_prefab.image_url" v-bind:src="fault_prefab.image_url" width="30px" height="30px"></img>
-									<span><b>{{ fault_prefab.name }}<b/>: </span>
+									<span><b>{{ fault_prefab.name }}</b>: </span>
 									<span><i>{{ fault_prefab.fault_condition }}</i></span>
 								</td>
 							</tr>

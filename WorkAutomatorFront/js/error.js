@@ -36,3 +36,17 @@ window.onerror = e => {
 	
 	vue.$children[0].is_shown = true;
 };
+
+Vue.config.errorHandler = e => {
+	err = JSON.parse(e.replace("Uncaught ", ""));
+	
+	if(err.nofail)
+		vue.$children[0].message = err.source + ": " + err.message;
+	else
+	{
+		vue.$children[0].message = err.source + " Failed: " + err.ex.message + 
+			(err.ex.invalid_messages ? ": " + err.ex.invalid_messages.join(", ") : "");
+	}
+	
+	vue.$children[0].is_shown = true;
+}

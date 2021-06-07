@@ -61,7 +61,7 @@ Vue.component('custom-header', {
 		<li><a class="menu_nav" href="#">{{ 'pipeline' | localize }}<i class="fa fa-angle-down"></i></a>
 			<ul class="submenu">
 				<li v-if="viewPipelines"><a href="../pages/pipelines.html">{{ 'pipelinesList' | localize }}</a></li>
-				<li v-if="createPipeline"><a href="../pages/pipeline.html">{{ 'newPipeline' | localize }}</a></li>
+				<li v-if="createPipeline"><a href="../pages/create_pipeline.html">{{ 'newPipeline' | localize }}</a></li>
 			</ul>
 		</li>
 		<li><a class="menu_nav" href="#">{{ 'task' | localize }}<i class="fa fa-angle-down"></i></a>
