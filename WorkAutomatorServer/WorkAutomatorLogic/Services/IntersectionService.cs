@@ -4,7 +4,7 @@ namespace WorkAutomatorLogic.Services
 {
     internal class IntersectionService
     {
-        private const double TRESHHOLD = 0.01f;
+        private const double TRESHHOLD = 0.0001;
 
         private double GetLength((double x, double y) point1, (double x, double y) point2)
         {
@@ -44,6 +44,9 @@ namespace WorkAutomatorLogic.Services
                             continue;
 
                         if (points[i].y == points[j].y && points[j].y == points[k].y)
+                            continue;
+
+                        if (i == j || j == k || i == k)
                             continue;
 
                         if (CheckInside(point, points[i], points[j], points[k]))

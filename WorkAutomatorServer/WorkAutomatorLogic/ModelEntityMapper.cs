@@ -98,11 +98,6 @@ namespace WorkAutomatorLogic
             config.CreateMap<DataTypeModel, DataTypeEntity>().ReverseMap();
             config.CreateMap<VisualizerTypeModel, VisualizerTypeEntity>().ReverseMap();
 
-            config.CreateMap<PipelineModel, PipelineEntity>()
-                  .ForMember(entity => entity.company_id, cnf => cnf.MapFrom(model => model.CompanyId))
-                  .ReverseMap()
-                  .ForMember(model => model.CompanyId, cnf => cnf.MapFrom(entity => entity.company_id));
-
             config.CreateMap<PipelineItemSettingsPrefabModel, PipelineItemSettingsPrefabEntity>()
                   .ForMember(entity => entity.option_name, cnf => cnf.MapFrom(model => model.OptionName))
                   .ForMember(entity => entity.option_data_type_id, cnf => cnf.MapFrom(model => model.OptionDataType.Id))

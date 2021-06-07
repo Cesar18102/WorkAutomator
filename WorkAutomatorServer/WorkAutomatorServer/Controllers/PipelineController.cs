@@ -58,7 +58,7 @@ namespace WorkAutomatorServer.Controllers
         [WireHeadersAspect]
         [AuthorizedAspect]
         [RequiredMaskAspect("dto.Data.Id")]
-        public async Task<HttpResponseMessage> Get([FromBody] AuthorizedDto<CompanyDto> dto)
+        public async Task<HttpResponseMessage> GetAll([FromBody] AuthorizedDto<CompanyDto> dto)
         {
             return await Execute(company => PipelineService.Get(company), dto);
         }

@@ -339,7 +339,7 @@ namespace WorkAutomatorLogic.Services
                         p => p.company_id == dto.Data.Id.Value
                     );
 
-                    return ModelEntityMapper.Mapper.Map<IList<PipelineModel>>(pipelines).ToArray();
+                    return pipelines.Select(pipeline => ToPipelineModel(pipeline)).ToArray();
                 }
             });
         }
@@ -351,7 +351,7 @@ namespace WorkAutomatorLogic.Services
                 using (UnitOfWork db = new UnitOfWork())
                 {
                     PipelineEntity pipeline = await db.GetRepo<PipelineEntity>().Get(dto.Data.Id.Value);
-                    return ModelEntityMapper.Mapper.Map<PipelineModel>(pipeline);
+                    return ToPipelineModel(pipeline);
                 }
             });
         }
