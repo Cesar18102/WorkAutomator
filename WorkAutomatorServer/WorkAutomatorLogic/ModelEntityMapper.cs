@@ -214,13 +214,15 @@ namespace WorkAutomatorLogic
                   .ForMember(model => model.PipelineItemId, cnf => cnf.MapFrom(entity => entity.pipeline_item_id));
 
             config.CreateMap<DetectorFaultEventModel, DetectorFaultEventEntity>()
+                  .ForMember(entity => entity.associated_task_id, cnf => cnf.MapFrom(model => model.Id))
                   .ForMember(entity => entity.detector_id, cnf => cnf.MapFrom(model => model.Detector.Id))
                   .ForMember(entity => entity.detector_fault_prefab_id, cnf => cnf.MapFrom(model => model.Fault.Id))
                   .ForMember(entity => entity.is_fixed, cnf => cnf.MapFrom(model => model.IsFixed))
                   .ReverseMap()
                   .ForMember(model => model.Detector, cnf => cnf.MapFrom(entity => entity.detector))
                   .ForMember(model => model.Fault, cnf => cnf.MapFrom(entity => entity.detector_fault_prefab))
-                  .ForMember(model => model.IsFixed, cnf => cnf.MapFrom(entity => entity.is_fixed));
+                  .ForMember(model => model.IsFixed, cnf => cnf.MapFrom(entity => entity.is_fixed))
+                  .ForMember(model => model.Id, cnf => cnf.MapFrom(entity => entity.associated_task_id));
 
             config.CreateMap<DetectorDataItemModel, DetectorDataEntity>()
                   .ForMember(entity => entity.detector_data_prefab, cnf => cnf.MapFrom(model => model.DataPrefab))
