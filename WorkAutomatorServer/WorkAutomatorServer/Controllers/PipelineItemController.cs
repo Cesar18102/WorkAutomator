@@ -48,6 +48,14 @@ namespace WorkAutomatorServer.Controllers
         [HttpPost]
         [WireHeadersAspect]
         [AuthorizedAspect]
+        public async Task<HttpResponseMessage> UnsetDetector([FromBody] AuthorizedDto<DetectorDto> dto)
+        {
+            return await Execute(detectorDto => PipelineItemService.UnsetDetector(detectorDto), dto);
+        }
+
+        [HttpPost]
+        [WireHeadersAspect]
+        [AuthorizedAspect]
         public async Task<HttpResponseMessage> Get([FromBody] AuthorizedDto<CompanyDto> dto)
         {
             return await Execute(d => PipelineItemService.Get(d), dto);

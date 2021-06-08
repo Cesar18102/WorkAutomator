@@ -149,6 +149,19 @@ namespace WorkAutomatorLogic.Services
             });
         }
 
+        [DbPermissionAspect(Action = InteractionDbType.READ | InteractionDbType.UPDATE, Table = DbTable.Detector, CheckSameCompany = true)]
+        public async Task UnsetDetector(AuthorizedDto<DetectorDto> dto)
+        {
+            await Execute(async () => {
+                using (UnitOfWork db = new UnitOfWork())
+                {
+                    DetectorEntity detector = await db.GetRepo<DetectorEntity>().FirstOrDefault(d => d.id == dto.Data.DetectorId.Value);
+                    detector.pipeline_item_id = null;
+                    await db.Save();
+                }
+            });
+        }
+
         [DbPermissionAspect(Action = InteractionDbType.READ, Table = DbTable.PipelineItem, CheckSameCompany = true)]
         public async Task<ICollection<PipelineItemModel>> Get(AuthorizedDto<CompanyDto> dto)
         {

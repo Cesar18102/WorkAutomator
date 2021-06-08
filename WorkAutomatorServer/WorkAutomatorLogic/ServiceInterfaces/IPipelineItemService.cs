@@ -15,6 +15,7 @@ namespace WorkAutomatorLogic.ServiceInterfaces
         Task<ICollection<PipelineItemModel>> Get(AuthorizedDto<CompanyDto> dto);
         Task<PipelineItemModel> SetupSettings(AuthorizedDto<PipelineItemDto> dto);
         Task<PipelineItemModel> SetupDetector(AuthorizedDto<SetupDetectorDto> dto);
+        Task UnsetDetector(AuthorizedDto<DetectorDto> dto);
         Task TryInteract(PipelineItemInteractionDto dto);
     }
 }

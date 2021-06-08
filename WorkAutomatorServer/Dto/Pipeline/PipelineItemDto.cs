@@ -15,7 +15,7 @@ namespace Dto.Pipeline
         [JsonProperty("prefab_id")]
         public int? PrefabId { get; set; }
 
-        [JsonProperty("seetings_values")]
+        [JsonProperty("settings_values")]
         public PipelineItemSettingsValueDto[] SettingsValues { get; set; }
     }
 }
