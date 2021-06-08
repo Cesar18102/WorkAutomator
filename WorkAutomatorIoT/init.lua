@@ -2,10 +2,10 @@ AP_CONFIG = { ssid = "esp8266_2", pwd = "11111111", auth = wifi.WPA2_PSK, max = 
 IP_CONFIG = { ip = "192.168.1.1", netmask = "255.255.255.252", gateway = "192.168.1.1" }
 PORT_LISTENING = 80
 
-DETECTOR_ID = 3
+DETECTOR_ID = 5
 DATA_PREFAB_ID = 3
 
-SERVER_URL = "https://workautomatorback.azurewebsites.net/api/Detector/ProvideData"
+SERVER_URL = "http://workautomatorback.azurewebsites.net/api/Detector/ProvideData"
 APP_JSON_CONTENT_TYPE = 'Content-Type: application/json\r\n'
 
 REQUEST_ERROR_DELAY = 1000
@@ -195,7 +195,7 @@ function send_data()
   data_sending = sjson.encode(dto)
   print(data_sending)
   
-  send_post(SERVER_URL, nil, data_sending, nil, true)
+  send_post(SERVER_URL, nil, data_sending, function() print("send success") end, true)
 end
 
 ------------------------------------

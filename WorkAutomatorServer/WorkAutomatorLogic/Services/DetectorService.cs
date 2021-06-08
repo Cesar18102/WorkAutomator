@@ -263,7 +263,7 @@ namespace WorkAutomatorLogic.Services
                     return new DetectorDataModel()
                     {
                         Detector = detector.ToModel<DetectorModel>(),
-                        Data = ModelEntityMapper.Mapper.Map<ICollection<DetectorDataItemModel>>(detector.DetectorDatas)
+                        Data = ModelEntityMapper.Mapper.Map<ICollection<DetectorDataItemModel>>(datas)
                     };
                 }
             });
