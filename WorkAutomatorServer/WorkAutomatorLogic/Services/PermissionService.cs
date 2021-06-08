@@ -20,6 +20,8 @@ namespace WorkAutomatorLogic.Services
 {
     internal class PermissionService : IPermissionService
     {
+
+
         public async Task<bool> IsLegal(Interaction interaction)
         {
             try { await CheckLegal(interaction); return true; }
@@ -199,6 +201,15 @@ namespace WorkAutomatorLogic.Services
 
                 if (notEnoughPermissions != null)
                     throw new NotPermittedException(notEnoughPermissions);
+            }
+        }
+
+        public async Task<PermissionDbModel[]> GetDbPermissions()
+        {
+            using (UnitOfWork db = new UnitOfWork())
+            {
+                IList<DbPermissionEntity> dbPermissions = await db.GetRepo<DbPermissionEntity>().Get();
+                return ModelEntityMapper.Mapper.Map<IList<PermissionDbModel>>(dbPermissions).ToArray();
             }
         }
     }

@@ -12,6 +12,7 @@ using WorkAutomatorLogic.Models.Prefabs;
 using WorkAutomatorLogic.Models.Pipeline;
 using WorkAutomatorLogic.Models.DetectorData;
 using WorkAutomatorLogic.Models.Roles;
+using WorkAutomatorLogic.Models.Event;
 using WorkAutomatorLogic.Models.Permission;
 
 namespace WorkAutomatorLogic
@@ -238,7 +239,35 @@ namespace WorkAutomatorLogic
                   .ReverseMap()
                   .ForMember(model => model.CompanyId, cnf => cnf.MapFrom(entity => entity.company_id))
                   .ForMember(model => model.IsDone, cnf => cnf.MapFrom(entity => entity.is_done))
-                  .ForMember(model => model.IsReviewed, cnf => cnf.MapFrom(entity => entity.is_reviewed));
+                  .ForMember(model => model.IsReviewed, cnf => cnf.MapFrom(entity => entity.is_reviewed))
+                  .ForMember(model => model.AssociatedFaultId, cnf => cnf.MapFrom(entity => entity.AssociatedFault.associated_task_id))
+                  .ForMember(model => model.AssociatedFaultPrefab, cnf => cnf.MapFrom(entity => entity.AssociatedFault.detector_fault_prefab));
+
+            config.CreateMap<CheckPointEventModel, CheckPointEventEntity>()
+                  .ForMember(entity => entity.check_point, cnf => cnf.MapFrom(model => model.CheckPoint))
+                  .ForMember(entity => entity.is_direct, cnf => cnf.MapFrom(model => model.IsDirect))
+                  .ReverseMap()
+                  .ForMember(model => model.CheckPoint, cnf => cnf.MapFrom(entity => entity.check_point))
+                  .ForMember(model => model.IsDirect, cnf => cnf.MapFrom(entity => entity.is_direct));
+
+            config.CreateMap<EnterLeavePointEventModel, EnterLeavePointEventEntity>()
+                  .ForMember(entity => entity.enter_leave_point, cnf => cnf.MapFrom(model => model.EnterLeavePoint))
+                  .ForMember(entity => entity.is_enter, cnf => cnf.MapFrom(model => model.IsEnter))
+                  .ReverseMap()
+                  .ForMember(model => model.EnterLeavePoint, cnf => cnf.MapFrom(entity => entity.enter_leave_point))
+                  .ForMember(model => model.IsEnter, cnf => cnf.MapFrom(entity => entity.is_enter));
+
+            config.CreateMap<PipelineItemInteractionEventModel, PipelineItemInteractionEventEntity>()
+                  .ForMember(entity => entity.pipeline_item, cnf => cnf.MapFrom(model => model.PipelineItem))
+                  .ReverseMap()
+                  .ForMember(model => model.PipelineItem, cnf => cnf.MapFrom(entity => entity.pipeline_item));
+
+            config.CreateMap<StorageCellEventModel, StorageCellEventEntity>()
+                  .ForMember(entity => entity.storage_cell, cnf => cnf.MapFrom(model => model.StorageCell))
+                  .ReverseMap()
+                  .ForMember(model => model.StorageCell, cnf => cnf.MapFrom(entity => entity.storage_cell));
+
+            config.CreateMap<DetectorInteractionEventModel, DetectorInteractionEventEntity>().ReverseMap();
         }
 
         public static IReadOnlyDictionary<DbTable, string> TABLE_NAME_DICTIONARY = new Dictionary<DbTable, string>()

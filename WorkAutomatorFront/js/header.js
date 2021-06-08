@@ -43,9 +43,8 @@ Vue.component('custom-header', {
 		<li><a class="menu_nav" href="#">{{ 'company' | localize }}<i class="fa fa-angle-down"></i></a>
 			<ul class="submenu">
 				<li v-if="manage_company"><a href="../pages/company_profile.html">{{ 'manageCompany' | localize }}</a></li>
-				<li v-if="create_company"><a href="../pages/company_registration.html">{{ 'newCompany' | localize }}</a></li>
+				<li v-if="create_company"><a href="../pages/create_company.html">{{ 'newCompany' | localize }}</a></li>
 				<li v-if="plan"><a href="../pages/setup_plan.html">{{ 'plan' | localize }}</a></li>
-				<li v-if="workers"><a href="../pages/workers.html">{{ 'workers' | localize }}</a></li>
 			</ul>
 		</li>
 		<li><a class="menu_nav" href="#">{{ 'prefabs' | localize }}<i class="fa fa-angle-down"></i></a>
@@ -66,7 +65,7 @@ Vue.component('custom-header', {
 		</li>
 		<li><a class="menu_nav" href="#">{{ 'task' | localize }}<i class="fa fa-angle-down"></i></a>
 			<ul class="submenu">
-				<li v-if="viewTasks"><a href="../pages/my_tasks.html">{{ 'taskList' | localize }}</a></li>
+				<li v-if="viewTasks"><a href="../pages/tasks.html">{{ 'taskList' | localize }}</a></li>
 				<li v-if="createTask"><a href="../pages/create_task.html">{{ 'newTask' | localize }}</a></li>
 			</ul>
 		</li>

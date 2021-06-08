@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using WorkAutomatorLogic.Models.Prefabs;
 
 namespace WorkAutomatorLogic.Models
 {
@@ -21,6 +22,9 @@ namespace WorkAutomatorLogic.Models
 
         [JsonProperty("associated_fault_id")]
         public int? AssociatedFaultId { get; set; }
+
+        [JsonProperty("associated_fault_prefab")]
+        public DetectorFaultPrefabModel AssociatedFaultPrefab { get; set; }
 
         [JsonProperty("creator")]
         public AccountModel Creator { get; set; }

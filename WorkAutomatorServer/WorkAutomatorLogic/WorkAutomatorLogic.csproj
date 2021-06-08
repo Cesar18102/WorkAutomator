@@ -141,6 +141,11 @@
     <Compile Include="Models\DetectorData\DetectorDataModel.cs" />
     <Compile Include="Models\DetectorData\DetectorFaultEventModel.cs" />
     <Compile Include="Models\EnterLeavePointModel.cs" />
+    <Compile Include="Models\Event\CheckPointEventModel.cs" />
+    <Compile Include="Models\Event\DetectorInteractionEventModel.cs" />
+    <Compile Include="Models\Event\EnterLeavePointEventModel.cs" />
+    <Compile Include="Models\Event\PipelineItemInteractionEventModel.cs" />
+    <Compile Include="Models\Event\StorageCellEventModel.cs" />
     <Compile Include="Models\IdModel.cs" />
     <Compile Include="Models\ManufactoryPlanPointModel.cs" />
     <Compile Include="Models\Permission\Converters.cs" />

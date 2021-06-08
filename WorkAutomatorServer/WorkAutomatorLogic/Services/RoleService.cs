@@ -77,9 +77,10 @@ namespace WorkAutomatorLogic.Services
                 using (UnitOfWork db = new UnitOfWork())
                 {
                     AccountEntity account = await db.GetRepo<AccountEntity>().Get(role.Session.UserId);
+                    RoleEntity roleEntity = account.Roles.FirstOrDefault(r => r.id == role.Data.Id);
 
-                    RoleEntity roleEntity = new RoleEntity();
-                    roleEntity.name = role.Data.Name;
+                    if (account.Roles.Contains(roleEntity))
+                        throw new NotPermittedException($"Not an owner of a role {roleEntity.name}");
 
                     ManufactoryEntity[] manufactoryPermissions = account.Roles.SelectMany(r => r.ManufactoryPermissions).Where(
                         manufactory => role.Data.ManufactoryIds.Contains(manufactory.id)

@@ -2,6 +2,12 @@
 	<head>
 		<link rel="stylesheet" type="text/css" href="../css/main.css">
 		<link rel="stylesheet" type="text/css" href="../css/main_page.css">
+		
+		<style>
+			.selectedItem:hover {
+				outline:3px solid black;
+			}
+		</style>
 	</head>
 	<body>
 		<nav id="header" class="menu one">
@@ -27,75 +33,17 @@
 				</center>
 			</div>
 			
-			<div class="modal" v-if="setting_pipeline_item">
-			  <div class="modal-content">
-				<center><span>Edit {{ setting_pipeline_item.prefab.name }} #{{ setting_pipeline_item.id }} settings</span></center>
-				
-				<div v-for="setting_prefab of setting_pipeline_item.prefab.settings_prefabs" style="margin-bottom: 1em;">
-					<label>
-						<b>{{ setting_prefab.option_name }}</b>
-						<span v-if="setting_prefab.description"><i>({{ setting_prefab.description }})</i></span>
-					</label>
-					<div class="wrap-input100 validate-input">
-						<input class="input100" type="checkbox" v-if="setting_prefab.data_type.name == 'bool'" v-model="setting_prefab.value" v-bind:placeholder="setting_prefab.option_name"></input>
-						<input class="input100" type="number" v-if="setting_prefab.data_type.name == 'int'" v-model="setting_prefab.value" v-bind:placeholder="setting_prefab.option_name"></input>
-						<input class="input100" type="number" step="0.001" v-if="setting_prefab.data_type.name == 'float'" v-model="setting_prefab.value" v-bind:placeholder="setting_prefab.option_name"></input>
-					</div>
-				</div>
-				
-				<center>
-					<div class="common-button-container" style="display: inline-block; width: 40%;">
-						<button v-on:click="savePipelineItemSettings" class="common-button">
-							Save
-						</button>
-					</div>
-					
-					<div class="common-button-container" style="display: inline-block; width: 40%;">
-						<button v-on:click="cancelPipelineItemSettings" class="common-button">
-							Cancel
-						</button>
-					</div>
-				</center>
-				</div>
-			</div>
-			  
-			<div class="modal" v-if="setting_detector">
-				  <div class="modal-content">
-					<center><span>Edit {{ setting_detector.prefab.name }} #{{ setting_detector.id }} settings</span></center>
-					
-					<div v-for="setting_prefab of setting_detector.prefab.detector_settings_prefabs" style="margin-bottom: 1em;">
-						<label>
-							<b>{{ setting_prefab.option_name }}</b>
-							<span v-if="setting_prefab.description"><i>({{ setting_prefab.description }})</i></span>
-						</label>
-						<div class="wrap-input100 validate-input">
-							<input class="input100" type="checkbox" v-if="setting_prefab.option_data_type_id.name == 'bool'" v-model="setting_prefab.value" v-bind:placeholder="setting_prefab.option_name"></input>
-							<input class="input100" type="number" v-if="setting_prefab.option_data_type_id.name == 'int'" v-model="setting_prefab.value" v-bind:placeholder="setting_prefab.option_name"></input>
-							<input class="input100" type="number" step="0.001" v-if="setting_prefab.option_data_type_id.name == 'float'" v-model="setting_prefab.value" v-bind:placeholder="setting_prefab.option_name"></input>
-						</div>
-					</div>
-					
-					<center>
-						<div class="common-button-container" style="display: inline-block; width: 40%;">
-							<button v-on:click="saveDetectorSettings" class="common-button">
-								Save
-							</button>
-						</div>
-						
-						<div class="common-button-container" style="display: inline-block; width: 40%;">
-							<button v-on:click="cancelDetectorSettings" class="common-button">
-								Cancel
-							</button>
-						</div>
-					</center>
-				</div>
-			</div>
+			<pipeline_item_settings_window v-bind:pipeline_item="setting_pipeline_item" style="z-index: 3;"></pipeline_item_settings_window>
+			<detector_window v-bind:detector="setting_detector" style="z-index: 3;"></detector_window>
+			<fault_window v-bind:faults="faults" style="z-index: 4;"></fault_window>
 			  
 		</div>
+		
 		
 		<script src="../js/libs/jquery.js"></script>
 		<script src="../js/libs/vue.js"></script>
 		<script src="../js/vue_filters.js"></script>
+		<script src="../js/libs/chart.js"></script>
 		<script src="../js/libs/sha256.js"></script>
 		<script src="../js/cookie.js"></script>
 		<script src="../js/localize.js"></script>

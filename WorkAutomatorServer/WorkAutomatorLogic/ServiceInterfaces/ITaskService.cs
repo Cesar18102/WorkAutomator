@@ -13,5 +13,6 @@ namespace WorkAutomatorLogic.ServiceInterfaces
         Task<TaskModel> Assign(AuthorizedDto<AssignTaskDto> dto);
         Task<TaskModel> NotifyDone(AuthorizedDto<TaskDto> dto);
         Task<TaskModel> NotifyReviewed(AuthorizedDto<ReviewTaskDto> dto);
+        Task<TaskModel[]> GetMyTasks(AuthorizedDto<IdDto> dto);
     }
 }

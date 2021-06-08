@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
+
 using System.Collections.Generic;
 
+using WorkAutomatorLogic.Models.Event;
 using WorkAutomatorLogic.Models.Roles;
 
 namespace WorkAutomatorLogic.Models
@@ -24,5 +26,20 @@ namespace WorkAutomatorLogic.Models
 
         [JsonProperty("tasks_to_review")]
         public ICollection<TaskModel> TasksToReview { get; set; }
+
+        [JsonProperty("check_point_events")]
+        public ICollection<CheckPointEventModel> CheckPointEvents { get; set; }
+
+        [JsonProperty("detector_interaction_events")]
+        public ICollection<DetectorInteractionEventModel> DetectorInteractionEvents { get; set; }
+
+        [JsonProperty("enter_leave_point_events")]
+        public ICollection<EnterLeavePointEventModel> EnterLeavePointEvents { get; set; }
+
+        [JsonProperty("pipeline_item_interaction_events")]
+        public ICollection<PipelineItemInteractionEventModel> PipelineItemInteractionEvents { get; set; }
+
+        [JsonProperty("storage_cell_events")]
+        public ICollection<StorageCellEventModel> StorageCellEvents { get; set; }
     }
 }

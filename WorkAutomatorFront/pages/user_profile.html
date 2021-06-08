@@ -14,39 +14,51 @@
 		<custom-header></custom-header>
 	</nav>
 	
-	<div id="user-info" class="comp_reg room_reg">
-		<div class="wrap-login100 reg_form">
+	<div id="user-info">
+		<div class="comp_reg room_reg">
+			<div class="wrap-login100 reg_form">
 
-			<form id="user_profile_form" class="login100-form validate-form reg_form_form">
-				<span class="login100-form-title">
-					{{ 'user_profile' | localize }}
-				</span>
+				<form id="user_profile_form" class="login100-form validate-form reg_form_form">
+					<span class="login100-form-title">
+						{{ 'user_profile' | localize }}
+					</span>
 
-				<div class="wrap-input100 validate-input">
-					<label>{{ 'login' | localize }}</label>
-					<input class="input100" style="padding-left:30px; border-radius:20px;" type="text" name="login" placeholder="Login" v-bind:value="user.login" readonly>
-					<span class="focus-input100"></span>
-				</div>
-				
-				<div class="wrap-input100 validate-input">
-					<label>{{ 'first_name' | localize }}</label>
-					<input class="input100" style="padding-left:30px; border-radius:20px;" type="text" name="first_name" placeholder="First name" v-bind:value="user.first_name">
-					<span class="focus-input100"></span>
-				</div>
-				
-				<div class="wrap-input100 validate-input">
-					<label>{{ 'last_name' | localize }}</label>
-					<input class="input100" style="padding-left:30px; border-radius:20px;" type="text" name="last_name" placeholder="Last name" v-bind:value="user.last_name">
-					<span class="focus-input100"></span>
-				</div>
-				
-				<div class="common-button-container">
-					<button class="common-button">
-						{{ 'save' | localize }}
-					</button>
-				</div>
-			</form>
+					<div class="wrap-input100 validate-input">
+						<label>{{ 'login' | localize }}</label>
+						<input class="input100" style="padding-left:30px; border-radius:20px;" type="text" name="login" placeholder="Login" v-bind:value="user.login" readonly>
+						<span class="focus-input100"></span>
+					</div>
+					
+					<div class="wrap-input100 validate-input">
+						<label>{{ 'first_name' | localize }}</label>
+						<input class="input100" style="padding-left:30px; border-radius:20px;" type="text" name="first_name" placeholder="First name" v-bind:value="user.first_name">
+						<span class="focus-input100"></span>
+					</div>
+					
+					<div class="wrap-input100 validate-input">
+						<label>{{ 'last_name' | localize }}</label>
+						<input class="input100" style="padding-left:30px; border-radius:20px;" type="text" name="last_name" placeholder="Last name" v-bind:value="user.last_name">
+						<span class="focus-input100"></span>
+					</div>
+					
+					<div class="common-button-container">
+						<button class="common-button">
+							{{ 'save' | localize }}
+						</button>
+					</div>
+				</form>	
+			</div>
 		</div>
+		
+		<center>
+			<table>
+				<tr v-for="events_chunk of $options.filters.chunk(events, 5)">
+					<td v-for="event of events_chunk">
+						<event_list_item v-bind:event="event"></event_list_item>
+					</td>
+				</tr>
+			</table>
+		</center>
 	</div>
 	
 	<script src="../js/libs/jquery.js"></script>

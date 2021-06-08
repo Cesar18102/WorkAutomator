@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 using Constants;
 using Dto;
@@ -101,11 +103,20 @@ namespace WorkAutomatorLogic.Services
             return await Execute(async () => {
                 using (UnitOfWork db = new UnitOfWork())
                 {
-                    if (dto.Data.Id.Value != dto.Session.UserId)
-                        throw new NotPermittedException($"READ Account #{dto.Session.UserId}");
-
                     AccountEntity account = await db.GetRepo<AccountEntity>().FirstOrDefault(acc => acc.id == dto.Data.Id.Value);
                     return account.ToModel<WorkerModel>();
+                }
+            });
+        }
+
+        [DbPermissionAspect(Action = InteractionDbType.READ, Table = DbTable.Account)]
+        public async Task<AccountModel[]> GetFreeAccounts(AuthorizedDto<IdDto> dto)
+        {
+            return await Execute(async () => {
+                using (UnitOfWork db = new UnitOfWork())
+                {
+                    IList<AccountEntity> freeAccounts = await db.GetRepo<AccountEntity>().Get(acc => acc.company_id == null);
+                    return ModelEntityMapper.Mapper.Map<IList<AccountModel>>(freeAccounts).ToArray();
                 }
             });
         }

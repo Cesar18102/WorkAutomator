@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 using Constants;
 
@@ -58,8 +60,8 @@ namespace WorkAutomatorLogic.Services
                     if (reviewer != null && !reviewer.Bosses.Contains(initiator) && reviewer != initiator)
                         throw new NotPermittedException($"Boss for reviewer Account #{reviewer.id}");
 
-                    task.assignee_account_id = assignee.id;
-                    task.reviewer_account_id = reviewer.id;
+                    task.assignee_account_id = assignee?.id;
+                    task.reviewer_account_id = reviewer?.id;
 
                     await db.Save();
 
@@ -105,6 +107,23 @@ namespace WorkAutomatorLogic.Services
 
                     await db.Save();
                     return task.ToModel<TaskModel>();
+                }
+            });
+        }
+
+        [DbPermissionAspect(Action = InteractionDbType.READ, Table = DbTable.Task)]
+        public async Task<TaskModel[]> GetMyTasks(AuthorizedDto<IdDto> dto)
+        {
+            return await Execute(async () => {
+                using (UnitOfWork db = new UnitOfWork())
+                {
+                    IList<TaskEntity> tasks = await db.GetRepo<TaskEntity>().Get(
+                        task => task.assignee_account_id == dto.Session.UserId || 
+                                task.reviewer_account_id == dto.Session.UserId ||
+                                task.creator_account_id == dto.Session.UserId
+                    );
+
+                    return ModelEntityMapper.Mapper.Map<IList<TaskModel>>(tasks).ToArray();
                 }
             });
         }

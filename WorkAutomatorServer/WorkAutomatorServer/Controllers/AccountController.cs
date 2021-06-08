@@ -52,5 +52,13 @@ namespace WorkAutomatorServer.Controllers
         {
             return await Execute(boss => AccountService.RemoveBoss(boss), dto);
         }
+
+        [HttpPost]
+        [WireHeadersAspect]
+        [AuthorizedAspect]
+        public async Task<HttpResponseMessage> GetFreeAccounts([FromBody] AuthorizedDto<IdDto> dto)
+        {
+            return await Execute(acc => AccountService.GetFreeAccounts(acc), dto);
+        }
     }
 }

@@ -37,8 +37,86 @@
 						{{ 'save' | localize }}
 					</button>
 				</div>
+				
+				<br/>
+				
+				<div v-if="freeAccounts.length != 0">
+					<span>Hire a worker</span>
+					<select id="hire_worker_select" style="font-size: 1em;">
+						<option v-for="account of freeAccounts" v-bind:value="account.id"> {{ account.login }} </option>
+					</select>
+					
+					<div class="common-button-container" style="display: inline-block;">
+						<button class="common-button" onclick="hire()" type="button">
+							Hire
+						</button>
+					</div>
+				</div>
+				
+				<br/>
+				
+				<div v-for="worker of company.members">
+					<worker_list_item v-bind:worker="worker"></worker_list_item>
+				</div>
 			</form>
 		</div>
+		
+		<div class="modal" v-if="permissions_account">
+		    <div class="modal-content" style="height: 100%; overflow-y: scroll;">
+				<div>
+					<center><span>Edit permissions of {{ permissions_account.login }}</span></center>
+					
+					<center><span>Db permissions</span></center>
+					<div v-for="db_permission of db_permissions" style="margin-bottom: 1em;">
+						<label><b> {{ db_permission.table }} </b></label>
+						<div style="display: inline-block" v-for="permission of db_permission.permissions">
+							&nbsp;
+							<label><i> {{ permission.db_interaction_type }} </i></label>
+							<input type="checkbox" v-model="permission.granted"></input>
+						</div>
+					</div>
+					
+					<center><span>Pipeline item permissions</span></center>
+					<div v-for="pipeline_item_permission of pipeline_item_permissions" style="margin-bottom: 1em;">
+						<label> {{ pipeline_item_permission.prefab.name }} #{{ pipeline_item_permission.id }} </label>
+						<input type="checkbox" v-model="pipeline_item_permission.granted"></input>
+					</div>
+					
+					<center><span>Storage cell permissions</span></center>
+					<div v-for="storage_cell_permission of storage_cell_permissions" style="margin-bottom: 1em;">
+						<label> {{ storage_cell_permission.prefab.name }} #{{ storage_cell_permission.id }} </label>
+						<input type="checkbox" v-model="storage_cell_permission.granted"></input>
+					</div>
+					
+					<center><span>Detector permissions</span></center>
+					<div v-for="detector_permission of detector_permissions" style="margin-bottom: 1em;">
+						<label> {{ detector_permission.prefab.name }} #{{ detector_permission.id }} </label>
+						<input type="checkbox" v-model="detector_permission.granted"></input>
+					</div>
+					
+					<center><span>Manufactory permissions</span></center>
+					<div v-for="manufactory_permission of manufactory_permissions" style="margin-bottom: 1em;">
+						<label> Manufactory #{{ manufactory_permission.id }} </label>
+						<input type="checkbox" v-model="manufactory_permission.granted"></input>
+					</div>
+					
+					<center>
+						<div class="common-button-container" style="display: inline-block; width: 40%;">
+							<button onclick="savePermissions()" class="common-button">
+								Save
+							</button>
+						</div>
+						
+						<div class="common-button-container" style="display: inline-block; width: 40%;">
+							<button onclick="cancelPermissions()" class="common-button">
+								Cancel
+							</button>
+						</div>
+					</center>
+				</div>
+			</div>
+		</div>
+		
 	</div>
 	
 	<script src="../js/libs/jquery.js"></script>

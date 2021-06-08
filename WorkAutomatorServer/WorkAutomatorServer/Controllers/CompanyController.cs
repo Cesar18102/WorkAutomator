@@ -18,6 +18,7 @@ namespace WorkAutomatorServer.Controllers
     public class CompanyController : ControllerBase
     {
         private static ICompanyService CompanyService = LogicDependencyHolder.Dependencies.Resolve<ICompanyService>();
+        private static IPermissionService PermissionService = LogicDependencyHolder.Dependencies.Resolve<IPermissionService>();
 
         [HttpPost]
         [WireHeadersAspect]
@@ -77,6 +78,14 @@ namespace WorkAutomatorServer.Controllers
         public async Task<HttpResponseMessage> SetupPlan([FromBody] AuthorizedDto<SetupPlanDto> dto)
         {
             return await Execute(plan => CompanyService.SetupPlan(plan), dto);
+        }
+
+        [HttpPost]
+        [WireHeadersAspect]
+        [AuthorizedAspect]
+        public async Task<HttpResponseMessage> GetDbPermissions([FromBody] AuthorizedDto<IdDto> dto)
+        {
+            return await Execute(PermissionService.GetDbPermissions);
         }
     }
 }

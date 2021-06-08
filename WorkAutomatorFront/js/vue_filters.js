@@ -30,4 +30,3 @@ Vue.filter(
 		return res;
 	}
 );
-

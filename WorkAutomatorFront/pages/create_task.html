@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>New Task</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" type="text/css" href="../css/main.css">
+	<link rel="stylesheet" type="text/css" href="../css/main_page.css">
+</head>
+<body>
+	
+	<nav id="header" class="menu one">
+		<custom-header></custom-header>
+	</nav>
+	
+	<div class="comp_reg" id="task_reg_form">
+		<div class="wrap-login100 reg_form">
+
+			<form id="task_registration_form" class="login100-form validate-form reg_form_form">
+				<span class="login100-form-title">
+					Task Registration
+				</span>
+
+				<div class="wrap-input100 validate-input">
+					<input class="input100" type="text" name="name" v-model="name" placeholder="Name">
+					<span class="focus-input100"></span>
+				</div>
+				
+				<div class="wrap-input100 validate-input">
+					<span>Assignee</span>
+					<select id="assignee_select" style="font-size: 1em;">
+						<option value="null"> *None* </option>
+						<option v-for="member of members" v-bind:value="member.id"> {{ member.login }} </option>
+					</select>
+				</div>
+				
+				<div class="wrap-input100 validate-input">
+					<span>Reviewer</span>
+					<select id="reviewer_select" style="font-size: 1em;">
+						<option value="null"> *None* </option>
+						<option v-for="member of members" v-bind:value="member.id"> {{ member.login }} </option>
+					</select>
+				</div>
+				
+				<div class="common-button-container">
+					<button type="submit" class="common-button">
+						Create
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	
+	<script src="../js/libs/jquery.js"></script>
+	<script src="../js/libs/vue.js"></script>
+	<script src="../js/vue_filters.js"></script>
+	<script src="../js/libs/sha256.js"></script>
+	<script src="../js/cookie.js"></script>
+	<script src="../js/localize.js"></script>
+	<script src="../js/session.js"></script>
+	<script src="../js/role.js"></script>
+	<script src="../js/header.js"></script>
+	<script src="../js/create_task.js"></script>
+	
+	<div id="err"><err></err></div>
+	<script src="../js/error.js"></script>
+	
+	<script src="../js/main.js">
+	
+		$(".five li ul").hide();
+		$(".five li:has('.submenu')").hover(
+		function(){
+			$(".five li ul").stop().fadeToggle(300);}
+		);
+	
+	</script>
+
+</body>
+</html>

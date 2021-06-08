@@ -50,6 +50,14 @@ namespace WorkAutomatorServer.Controllers
         [HttpPost]
         [WireHeadersAspect]
         [AuthorizedAspect]
+        public async Task<HttpResponseMessage> GetMy([FromBody] AuthorizedDto<IdDto> dto)
+        {
+            return await Execute(task => TaskService.GetMyTasks(task), dto);
+        }
+
+        [HttpPost]
+        [WireHeadersAspect]
+        [AuthorizedAspect]
         [RequiredMaskAspect("dto.Data.Id")]
         public async Task<HttpResponseMessage> NotifyReviewed([FromBody] AuthorizedDto<ReviewTaskDto> dto)
         {

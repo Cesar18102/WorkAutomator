@@ -12,5 +12,6 @@ namespace WorkAutomatorLogic.ServiceInterfaces
         Task<AccountModel> UpdateProfile(AuthorizedDto<AccountDto> dto);
         Task<WorkerModel> AddBoss(AuthorizedDto<SetRemoveBossDto> dto);
         Task<WorkerModel> RemoveBoss(AuthorizedDto<SetRemoveBossDto> dto);
+        Task<AccountModel[]> GetFreeAccounts(AuthorizedDto<IdDto> dto);
     }
 }

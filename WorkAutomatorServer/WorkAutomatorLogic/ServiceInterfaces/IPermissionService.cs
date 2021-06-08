@@ -10,5 +10,6 @@ namespace WorkAutomatorLogic.ServiceInterfaces
     {
         Task<bool> IsLegal(Interaction interaction);
         Task CheckLegal(Interaction interaction);
+        Task<PermissionDbModel[]> GetDbPermissions();
     }
 }

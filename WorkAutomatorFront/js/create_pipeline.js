@@ -60,6 +60,7 @@ var MODEL = {
 			dataType : "json",
 			success : function(response) {
 				MODEL.detectors.push(response.data);
+				MODEL.is_tracked_detector_fault_prefabs_window_shown = false;
 			},
 			error : function(response) {
 				throw JSON.stringify({ex: response.responseJSON.error.exception, source: "Create Detector"});
@@ -310,7 +311,7 @@ var MODEL = {
 			data : JSON.stringify(dto),
 			dataType : "json",
 			success : function(response) {
-				let countSetup = 0;
+				let count = 0;
 				let hasError = false;
 				
 				let placed_detectors = MODEL.detectors.filter(detector => detector.pipeline_item);
@@ -329,9 +330,8 @@ var MODEL = {
 						data : JSON.stringify(setupDetectorDto),
 						dataType : "json",
 						success : function(response) {
-							countSetup++;
-							
-							if(countSetup == placed_detectors) {
+							count++;
+							if(count = MODEL.detectors.length) {
 								document.location = "../pages/pipelines.html";
 							}
 						},
@@ -345,6 +345,32 @@ var MODEL = {
 					
 					SESSION.putToAjaxRequest(setupDetectorRequest);
 					$.ajax(setupDetectorRequest);
+				}
+				
+				let unplaced_detectors = MODEL.detectors.filter(detector => !detector.pipeline_item);
+				for(let unplaced_detector of unplaced_detectors) {
+					let unsetDetectorRequest = {
+						type :  "POST",
+						contentType : "application/json",
+						url : "https://workautomatorback.azurewebsites.net/api/PipelineItem/UnsetDetector",
+						data : JSON.stringify({ data : { id : unplaced_detector.id } }),
+						dataType : "json",
+						success : function(response) {
+							count++;
+							if(count = MODEL.detectors.length) {
+								document.location = "../pages/pipelines.html";
+							}
+						},
+						error : function(response) {
+							if(!hasError) {
+								hasError = true;
+								throw JSON.stringify({ex: response.responseJSON.error.exception, source: "Unset Detector"});
+							}
+						}
+					};
+					
+					SESSION.putToAjaxRequest(unsetDetectorRequest);
+					$.ajax(unsetDetectorRequest);
 				}
 			},
 			error : function(response) {
@@ -518,7 +544,7 @@ Vue.component("detector_list_item", {
 			<button class="common-button" v-on:click="place">Place on {{ $root.selected_pipeline_item.prefab.name }} #{{ $root.selected_pipeline_item.id }}</button>
 		</div>
 		<div class="common-button-container" style="display: inline-block;" v-if="detector.pipeline_item">
-			<button class="common-button" v-on:click="unplace">Unplace from {{ $root.selected_pipeline_item.prefab.name }} #{{ $root.selected_pipeline_item.id }}</button>
+			<button class="common-button" v-on:click="unplace">Unplace from {{ detector.pipeline_item.prefab.name }} #{{ detector.pipeline_item.id }}</button>
 		</div>
 	</div>`
 });
