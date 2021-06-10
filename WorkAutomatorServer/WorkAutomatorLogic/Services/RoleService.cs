@@ -85,6 +85,10 @@ namespace WorkAutomatorLogic.Services
                     ManufactoryEntity[] manufactoryPermissions = account.Roles.SelectMany(r => r.ManufactoryPermissions).Where(
                         manufactory => role.Data.ManufactoryIds.Contains(manufactory.id)
                     ).ToArray();
+
+                    if (roleEntity.ManufactoryPermissions == null)
+                        roleEntity.ManufactoryPermissions = new List<ManufactoryEntity>();
+
                     foreach (ManufactoryEntity manufactoryToRemove in roleEntity.ManufactoryPermissions.Except(manufactoryPermissions).ToArray())
                         roleEntity.ManufactoryPermissions.Remove(manufactoryToRemove);
                     foreach(ManufactoryEntity manufactoryToAdd in manufactoryPermissions.Except(roleEntity.ManufactoryPermissions).ToArray())
@@ -94,6 +98,10 @@ namespace WorkAutomatorLogic.Services
                     PipelineItemEntity[] pipelineItemPermissions = account.Roles.SelectMany(r => r.PipelineItemPermissions).Where(
                         pipelineItem => role.Data.PipelineItemIds.Contains(pipelineItem.id)
                     ).ToArray();
+
+                    if (roleEntity.PipelineItemPermissions == null)
+                        roleEntity.PipelineItemPermissions = new List<PipelineItemEntity>();
+
                     foreach (PipelineItemEntity pipelineItemToRemove in roleEntity.PipelineItemPermissions.Except(pipelineItemPermissions).ToArray())
                         roleEntity.PipelineItemPermissions.Remove(pipelineItemToRemove);
                     foreach (PipelineItemEntity pipelineItemToAdd in pipelineItemPermissions.Except(roleEntity.PipelineItemPermissions).ToArray())
@@ -103,6 +111,10 @@ namespace WorkAutomatorLogic.Services
                     StorageCellEntity[] storageCellPermissions = account.Roles.SelectMany(r => r.StorageCellPermissions).Where(
                         storageCell => role.Data.StorageCellIds.Contains(storageCell.id)
                     ).ToArray();
+
+                    if (roleEntity.StorageCellPermissions == null)
+                        roleEntity.StorageCellPermissions = new List<StorageCellEntity>();
+
                     foreach (StorageCellEntity storageCellToRemove in roleEntity.StorageCellPermissions.Except(storageCellPermissions).ToArray())
                         roleEntity.StorageCellPermissions.Remove(storageCellToRemove);
                     foreach (StorageCellEntity storageCellToAdd in storageCellPermissions.Except(roleEntity.StorageCellPermissions).ToArray())
@@ -112,6 +124,10 @@ namespace WorkAutomatorLogic.Services
                     DetectorEntity[] detectorPermissions = account.Roles.SelectMany(r => r.DetectorPermissions).Where(
                         detector => role.Data.DetectorIds.Contains(detector.id)
                     ).ToArray();
+
+                    if (roleEntity.DetectorPermissions == null)
+                        roleEntity.DetectorPermissions = new List<DetectorEntity>();
+
                     foreach (DetectorEntity detectorToRemove in roleEntity.DetectorPermissions.Except(detectorPermissions).ToArray())
                         roleEntity.DetectorPermissions.Remove(detectorToRemove);
                     foreach (DetectorEntity detectorToAdd in detectorPermissions.Except(roleEntity.DetectorPermissions).ToArray())
@@ -121,6 +137,10 @@ namespace WorkAutomatorLogic.Services
                     DbPermissionEntity[] dbPermissions = account.Roles.SelectMany(r => r.DbPermissions).Where(
                         dbPermission => role.Data.DbPermissionIds.Contains(dbPermission.id)
                     ).ToArray();
+
+                    if (roleEntity.DbPermissions == null)
+                        roleEntity.DbPermissions = new List<DbPermissionEntity>();
+
                     foreach (DbPermissionEntity dbPermissionToRemove in roleEntity.DbPermissions.Except(dbPermissions).ToArray())
                         roleEntity.DbPermissions.Remove(dbPermissionToRemove);
                     foreach (DbPermissionEntity dbPermissionToAdd in dbPermissions.Except(roleEntity.DbPermissions).ToArray())
