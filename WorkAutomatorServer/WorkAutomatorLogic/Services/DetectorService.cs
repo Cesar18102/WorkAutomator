@@ -209,6 +209,9 @@ namespace WorkAutomatorLogic.Services
 
                         if (isFaultOccured)
                         {
+                            if (detector.detector_fault_events.Any(f => f.detector_fault_prefab_id == faultPrefab.id && !f.is_fixed))
+                                continue;
+
                             int? assigneeAccountId = detector.DetectorPrefab.company.Members.FirstOrDefault(
                                 member => member.Roles.SelectMany(r => r.PipelineItemPermissions)
                                     .SelectMany(pip => pip.Detectors).Contains(detector)

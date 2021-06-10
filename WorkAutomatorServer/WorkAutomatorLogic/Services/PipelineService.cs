@@ -239,6 +239,9 @@ namespace WorkAutomatorLogic.Services
                         c => c.owner_id == dto.Data.CompanyId.Value
                     );
 
+                    int[] pipelineItemIds = dto.Data.PipelineItemPlacements.Select(p => p.PipelineItemId.Value).ToArray();
+                    int[] storageCellIds = dto.Data.StorageCellPlacements.Select(s => s.StorageCellId.Value).ToArray();
+
                     IList<PipelineItemEntity> pipelineItems = await db.GetRepo<PipelineItemEntity>().Get(
                         pipelineItem => pipelineItem.PipelineItemPrefab.company_id == company.owner_id
                     );
@@ -247,18 +250,21 @@ namespace WorkAutomatorLogic.Services
                         storageCell => storageCell.StorageCellPrefab.company_id == company.owner_id
                     );
 
-                    this.ValidatePipelineItems(pipelineItems, null);
-                    this.ValidateStorageCells(storageCells, null);
+                    PipelineItemEntity[] updatedPipelineItems = pipelineItems.Where(p => pipelineItemIds.Contains(p.id)).ToArray();
+                    StorageCellEntity[] updatedStorageCells = storageCells.Where(s => storageCellIds.Contains(s.id)).ToArray();
 
-                    this.UpdatePipelineItemPlacements(company, pipelineItems, dto.Data.PipelineItemPlacements);
-                    this.UpdateStorageCellPlacements(company, storageCells, dto.Data.StorageCellPlacements);
+                    this.ValidatePipelineItems(updatedPipelineItems, null);
+                    this.ValidateStorageCells(updatedStorageCells, null);
+
+                    this.UpdatePipelineItemPlacements(company, updatedPipelineItems, dto.Data.PipelineItemPlacements);
+                    this.UpdateStorageCellPlacements(company, updatedStorageCells, dto.Data.StorageCellPlacements);
 
                     PipelineEntity pipeline = new PipelineEntity();
                     pipeline.company_id = company.owner_id;
 
                     await db.GetRepo<PipelineEntity>().Create(pipeline);
 
-                    this.UpdatePipelineConnections(pipelineItems, storageCells, dto.Data, pipeline);
+                    this.UpdatePipelineConnections(updatedPipelineItems, updatedStorageCells, dto.Data, pipeline);
 
                     await db.Save();
 
@@ -279,20 +285,28 @@ namespace WorkAutomatorLogic.Services
                         p => p.id == dto.Data.Id.Value
                     );
 
+                    int companyId = pipeline.Company.owner_id;
+
+                    int[] pipelineItemIds = dto.Data.PipelineItemPlacements.Select(p => p.PipelineItemId.Value).ToArray();
+                    int[] storageCellIds = dto.Data.StorageCellPlacements.Select(s => s.StorageCellId.Value).ToArray();
+
                     IList<PipelineItemEntity> pipelineItems = await db.GetRepo<PipelineItemEntity>().Get(
-                        pipelineItem => pipelineItem.PipelineItemPrefab.company_id == pipeline.company_id
+                        pipelineItem => pipelineItem.PipelineItemPrefab.company_id == companyId
                     );
 
                     IList<StorageCellEntity> storageCells = await db.GetRepo<StorageCellEntity>().Get(
-                        storageCell => storageCell.StorageCellPrefab.company_id == pipeline.company_id
+                        storageCell => storageCell.StorageCellPrefab.company_id == companyId
                     );
 
-                    this.ValidatePipelineItems(pipelineItems, pipeline.id);
-                    this.ValidateStorageCells(storageCells, pipeline.id);
+                    PipelineItemEntity[] updatedPipelineItems = pipelineItems.Where(p => pipelineItemIds.Contains(p.id)).ToArray();
+                    StorageCellEntity[] updatedStorageCells = storageCells.Where(s => storageCellIds.Contains(s.id)).ToArray();
 
-                    this.UpdatePipelineItemPlacements(pipeline.Company, pipelineItems, dto.Data.PipelineItemPlacements);
-                    this.UpdateStorageCellPlacements(pipeline.Company, storageCells, dto.Data.StorageCellPlacements);
-                    this.UpdatePipelineConnections(pipelineItems, storageCells, dto.Data, pipeline);
+                    this.ValidatePipelineItems(updatedPipelineItems, pipeline.id);
+                    this.ValidateStorageCells(updatedStorageCells, pipeline.id);
+
+                    this.UpdatePipelineItemPlacements(pipeline.Company, updatedPipelineItems, dto.Data.PipelineItemPlacements);
+                    this.UpdateStorageCellPlacements(pipeline.Company, updatedStorageCells, dto.Data.StorageCellPlacements);
+                    this.UpdatePipelineConnections(updatedPipelineItems, updatedStorageCells, dto.Data, pipeline);
 
                     await db.Save();
 

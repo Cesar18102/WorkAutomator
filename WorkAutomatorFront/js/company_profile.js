@@ -23,7 +23,7 @@ function savePermissions() {
 	let workerAccount = MODEL.permissions_account;
 	let role = workerAccount.roles.find(
 		r => r.name == ("COMPANY #" + SESSION.getCompanyId() + " OWNER") || 
-			 r.name == ("COMPANY #" + SESSION.getCompanyId() + " MEMBER #" + SESSION.getUserId())
+			 r.name == ("COMPANY #" + SESSION.getCompanyId() + " MEMBER #" + workerAccount.id)
 	);
 	
 	let dto = {

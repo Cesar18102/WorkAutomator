@@ -101,7 +101,12 @@ namespace WorkAutomatorLogic.Services
                         throw new NotPermittedException($"Reviewer of task #{task.id}");
 
                     if (dto.Data.ReviewResult.Value)
+                    {
                         task.is_reviewed = true;
+
+                        if (task.AssociatedFault != null)
+                            task.AssociatedFault.is_fixed = true;
+                    }
                     else
                         task.is_done = false;
 

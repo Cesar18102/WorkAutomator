@@ -1,17 +1,34 @@
-AP_CONFIG = { ssid = "esp8266_2", pwd = "11111111", auth = wifi.WPA2_PSK, max = 1 }
+AP_CONFIG = { ssid = "esp8266_enter_leave_point", pwd = "11111111", auth = wifi.WPA2_PSK, max = 1 }
 IP_CONFIG = { ip = "192.168.1.1", netmask = "255.255.255.252", gateway = "192.168.1.1" }
 PORT_LISTENING = 80
 
-DETECTOR_ID = 5
-DATA_PREFAB_ID = 3
-
-SERVER_URL = "http://workautomatorback.azurewebsites.net/api/Detector/ProvideData"
+SERVER_URL = "http://workautomatorback.azurewebsites.net/api/"
 APP_JSON_CONTENT_TYPE = 'Content-Type: application/json\r\n'
+
+ADD_ENTER_EVENT_DATA_ENDPOINT = "Location/TryEnter"
+ADD_LEAVE_EVENT_DATA_ENDPOINT = "Location/TryLeave"
 
 REQUEST_ERROR_DELAY = 1000
 
-SEND_DATA_TIMER = nil
-SEND_DATA_INTERVAL = 5000
+USER_ID = 2
+ENTER_LEAVE_POINT_ID = 2
+
+CHECK_INTERVAL = 500
+RECOVERY_INTERVAL = 1000
+
+RESULT_YES_PIN = 4
+RESULT_NO_PIN = 3
+
+ENTER_INFO = { 
+  name = "enter", check_pin = 1, 
+  endpoint = ADD_ENTER_EVENT_DATA_ENDPOINT, 
+  check_timer = nil, recovery_timer = nil 
+}
+LEAVE_INFO = { 
+  name = "leave", check_pin = 2, 
+  endpoint = ADD_LEAVE_EVENT_DATA_ENDPOINT, 
+  check_timer = nil, recovery_timer = nil 
+}
 
 function connect_ap(ssid, pwd, callback)
   print("connecting to "..ssid)
@@ -178,32 +195,61 @@ end
 
 ----------------------------------------------
 
-function send_data() 
-  print("generating data")
+function init_check_event_loop(info)
+  print("checking started for "..info.name)
+  info.check_timer = set_interval(function() check_event(info) end, CHECK_INTERVAL)
+end
 
-  value = tostring(math.random() * 100)
-  value_base64 = encoder.toBase64(value)
+function check_event(info) 
+  print("check iteration for "..info.name)
+  if get_pin_state(info.check_pin) then
+    print(info.name.." was used")
+    info.check_timer:unregister();
 
-  dto = {
-    id = DETECTOR_ID,
-	data = {{
-		id = DATA_PREFAB_ID,
-		data_base64 = value_base64
-	}}
-  }
-  
-  data_sending = sjson.encode(dto)
-  print(data_sending)
-  
-  send_post(SERVER_URL, nil, data_sending, function() print("send success") end, true)
+    dto = {
+	  enter_leave_point_id = ENTER_LEAVE_POINT_ID,
+      account_id = USER_ID
+    }
+        
+    send_post(
+      SERVER_URL..info.endpoint, nil, sjson.encode(dto),
+      function(data) check_event_callback(info, data) end, true
+    )
+  end
+end
+
+function check_event_callback(info, data)
+  if data.error == nil or data.error == sjson.NULL or data.error == "NULL" then
+    print(info.name.." was successful")
+    set_pin_state(RESULT_YES_PIN, true);
+  else
+    print(info.name.." failed")
+    set_pin_state(RESULT_NO_PIN, true);
+  end
+
+  print("recovery started for "..info.name)
+  info.recovery_timer = set_interval(function() check_event_recovery(info) end, RECOVERY_INTERVAL)
+end
+
+function check_event_recovery(info)
+  print("recovery iteration for "..info.name)
+  if not get_pin_state(info.check_pin) then
+    print("recovery finished for "..info.name)
+    
+    info.recovery_timer:unregister()
+    info.check_timer = set_interval(function() check_event(info) end, CHECK_INTERVAL)
+
+    set_pin_state(RESULT_YES_PIN, false);
+    set_pin_state(RESULT_NO_PIN, false);
+  end
 end
 
 ------------------------------------
 
 print("start")
 
---set_pin_state(RESULT_YES_PIN, false);
---set_pin_state(RESULT_NO_PIN, false);
+set_pin_state(RESULT_YES_PIN, false);
+set_pin_state(RESULT_NO_PIN, false);
 
 wifi.setmode(wifi.SOFTAP)
 wifi.ap.config(AP_CONFIG)
@@ -216,8 +262,8 @@ server = net.createServer(net.TCP)
 print("server set up")
 
 local function ap_conncted_callback(e)
-  print("started sending data")
-  SEND_DATA_TIMER = set_interval(function() send_data() end, SEND_DATA_INTERVAL)
+  init_check_event_loop(ENTER_INFO)
+  init_check_event_loop(LEAVE_INFO)
 end
 
 local function creds_recieved_callback(ssid, pwd)
